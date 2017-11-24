@@ -42,7 +42,6 @@ function writeRow(newReport) {
 }
 
 function writeEmptyFile(newReport) {
-    var Excel = require('exceljs');
     var workbook = new Excel.Workbook();
     var sheet = workbook.addWorksheet('Efforts');
     filename = getFileName();

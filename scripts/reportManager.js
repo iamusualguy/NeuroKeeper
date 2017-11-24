@@ -47,7 +47,11 @@ class reportManager {
         const notificationInterval = this.settings.notificationTime * oneHour;
         this.notificationTimer = setInterval(this._notifyUser.bind(this), notificationInterval);
 
-        this._updateTrackedTime();
+        debugger;
+        getStatistics.then(statObj => {
+            this.statistics = statObj;
+            this._updateTrackedTime();
+        });
     }
 
     getReport() {
@@ -114,14 +118,14 @@ class reportManager {
     }
 
     _updateTrackedTime() {
-        const trackedDay = ((100 * this.trackedCounter) / 8) || 0.1;
-        const trackedWeek = (100 * this.trackedCounter) / 40 || 0.1;
+        const trackedDay = ((100 * this.statistics.TodayEffort) / this.settings.workTime) || 0.1;
+        const trackedWeek = ((100 * this.statistics.WeekEffort) / (this.settings.workTime * 5)) || 0.1;
 
         const y = this._start_day.getFullYear(), m = this._start_day.getMonth();
         const firstDay = new Date(y, m, 1);
         const lastDay = new Date(y, m + 1, 0);
         const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1,2,3,4,5]);
-        const trackedMonth = ((100 * this.trackedCounter) / (8 * daysInMonth)) || 0.1;
+        const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * daysInMonth)) || 0.1;
 
         progress.update([trackedDay, trackedWeek, trackedMonth]);
     }
