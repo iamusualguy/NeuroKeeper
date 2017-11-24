@@ -28,7 +28,7 @@ function prepareData() {
 
             DataToArrays(DATA, Dictionary);
             //   console.log(DATA);
-            
+
             console.log(Dictionary);
         });
 }
@@ -52,7 +52,49 @@ function DataToArrays(data, dictionary) {
         arrays.push([WeekDays, Hours, Description]);
 
     });
-    console.log(arrays);
+    ArraysToObject(arrays);
+}
+
+function ArraysToObject(arrays) {
+var res = [];
+    for (var i = 0; i < arrays.length - 3; i++) {
+        let obj = {};
+        let input = [];
+        let output = [];
+
+        input = arrays[i + 2][0].concat(arrays[i + 2][1]);
+
+        let descR = arrays[i][2].concat(arrays[i][2]);
+        if (descR.length < 50) {
+            for (; ;) {
+                descR.push(0);
+                if (descR.length >= 50) break;
+            }
+        }
+        else {
+            descR.slice(0, 50);
+        }
+
+        input = input.concat(descR);
+
+        output = arrays[i+2][2];
+
+        if (output.length < 25) {
+            for (; ;) {
+                output.push(0);
+                if (output.length >= 25) break;
+            }
+        }
+        else {
+            output.slice(0, 25);
+        }
+
+        obj.input = input;
+        obj.output = output;
+
+        res.push(obj);
+    }
+console.log(res);
 }
 
 function addHoursToDate(d, h) {
