@@ -1,7 +1,10 @@
 //const Excel = require('exceljs');
 
-function prepareData() {
+var Dictionary = [];
 
+
+function prepareData() {
+let allDesc = "";
     let filename = "file.xlsx";
     var workbook = new Excel.Workbook();
     workbook.xlsx.readFile(filename)
@@ -17,10 +20,14 @@ function prepareData() {
                 rowData.Time = row.getCell('C').value;
                 rowData.Date = row.getCell('D').value;
 
+                allDesc+=rowData.Desc ;
+
                 DATA.push(rowData);
             }
             DataToArrays(DATA);
          //   console.log(DATA);
+         Dictionary = GenerateDictionary(allDesc);
+         console.log(Dictionary);
         });
 }
 
