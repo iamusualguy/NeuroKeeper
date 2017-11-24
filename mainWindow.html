@@ -8,23 +8,28 @@
 </head>
 
 <body>
-    <div id="main-block">
-        <div>
+    <div class="common-wrap">
+        <div class="main-block">
             <div>
-                <select>
-                    <option>First task</option>
-                    <option>Second task</option>
-                </select>
-                <input type="text" placeholder="Report time">
-                <input type="text" placeholder="Date">
+                <div>
+                    <select>
+                        <option>First task</option>
+                        <option>Second task</option>
+                    </select>
+                    <input type="text" placeholder="Report time">
+                    <input type="text" placeholder="Date">
+                </div>
+                <div>
+                    <input class="report-input" type="text" placeholder="New report">
+                </div>
             </div>
-            <div>
-                <input type="text" placeholder="New report">
-            </div>
+            <button onclick="writeRow()">save</button>
+            <div class="worked-block">5.1</div>
         </div>
-        <button onclick="writeRow()">save</button>
-        <div id="worked-block">5.1</div>
+
+        <button class="settings-button">...</button>
     </div>
+
 </body>
 <script src="./scripts/excel.js">
     require('./script/excel.js')
