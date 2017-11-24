@@ -22,6 +22,8 @@ function createStatisticsWindow() {
         skipTaskbar: true
     });
 
+    statisticsWindow.webContents.openDevTools();
+
     // Load HTML into the window.
     statisticsWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'statisticsWindow.html'),
