@@ -10,7 +10,24 @@ const { app, BrowserWindow } = electron;
 
 let mainWindow;
 
+function getProjects() {
+    xlsj = require("xls-to-json");
+    xlsj({
+        input: "template.xls",  // input xls 
+        output: "output.json", // output json 
+        sheet: "Projects"  // specific sheetname 
+    }, function (err, result) {
+        if (err) {
+            console.error(err);
+        } else {
+            console.log(result);
+        }
+    });
+}
+
 function createWindow() {
+
+    getProjects();
 
     // Create the browser window.
     mainWindow = new BrowserWindow({
@@ -42,6 +59,6 @@ app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
-      app.quit();
+        app.quit();
     }
-  });  //закрытие окна и сворачивание в док если это OS X
+});  //закрытие окна и сворачивание в док если это OS X
