@@ -6,7 +6,7 @@ const url = require('url');
 const xlsj = require("xls-to-json");
 const storage = require('electron-json-storage');
 
-const { BrowserWindow, dialog } = electron;
+const { app, BrowserWindow, dialog } = electron;
 
 let settingsWindow;
 let currentSettings;
@@ -55,19 +55,21 @@ function getProjects(inputFilePath) {
 }
 
 function loadSettings() {
-    storage.get('neuro-keeper-settings', function(error, data) {
-        if (error) {
-            console.log(error);
-            currentSettings = defaultSettings;
-        }
+    return new Promise((resolve, reject) => {
+        storage.get('neuro-keeper-settings', function(error, data) {
+            if (error) {
+                console.log(error);
+                currentSettings = defaultSettings;
+            }
 
-        if (!data.filePath) {
-            currentSettings = defaultSettings;
-        } else {
-            currentSettings = data;
-        }
+            if (!data.filePath) {
+                currentSettings = defaultSettings;
+            } else {
+                currentSettings = data;
+            }
 
-        settingsWindow.webContents.send('settings:present', currentSettings);
+            resolve();
+        });
     });
 }
 
