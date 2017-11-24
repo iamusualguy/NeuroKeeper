@@ -33,34 +33,36 @@ function createStatisticsWindow() {
 }
 
 function createWindow() {
+    settings.loadSettings().then(() => {
+        tray = new Tray(__dirname + '/icon.png');
+        // Create the browser window.
+        mainWindow = new BrowserWindow({
+            width: 650,
+            height: 150,
+            frame: false,
+            resizable: false,
+            skipTaskbar: true,
+            show: false,
+            alwaysOnTop: settings.getSettings().topMost,
+        });
+        mainWindow.setVisibleOnAllWorkspaces(true);
 
-    tray = new Tray(__dirname + '/icon.png');
-    // Create the browser window.
-    mainWindow = new BrowserWindow({
-        width: 650,
-        height: 150,
-        frame: false,
-        resizable: false,
-        skipTaskbar: true,
-        show: false,
+        mainWindow.webContents.openDevTools();
+
+        tray.setToolTip('Report Keeper')
+        const trayContextMenu = createContextMenu(mainWindow)
+        tray.setContextMenu(trayContextMenu)
+        tray.on('click', () => {
+            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+        })
+
+        // and load the index.html of the app.
+        mainWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'mainWindow.html'),
+            protocol: 'file',
+            slashes: true
+        }));
     });
-    mainWindow.setVisibleOnAllWorkspaces(true);
-
-    mainWindow.webContents.openDevTools();
-
-    tray.setToolTip('Report Keeper')
-    const trayContextMenu = createContextMenu(mainWindow)
-    tray.setContextMenu(trayContextMenu)
-    tray.on('click', () => {
-        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
-    })
-
-    // and load the index.html of the app.
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'mainWindow.html'),
-        protocol: 'file',
-        slashes: true
-    }));
 }
 
 function createContextMenu(appWindow) {
@@ -110,11 +112,19 @@ ipcMain.on('statistics:open', (e, args) => {
 });
 
 ipcMain.on('settings:opened', (e, args) => {
-    settings.loadSettings();
+    settings.openSettings();
 });
 
 ipcMain.on('settings:uploadProjects', (e, args) => {
     settings.uploadProjects();
+});
+
+ipcMain.on('settings:cancel', (e, args) => {
+    settings.cancelSettings();
+});
+
+ipcMain.on('settings:save', (e, args) => {
+    settings.saveSettings(args, app);
 });
 
 ipcMain.on('mainWindow:hide', (e, args) => {
@@ -126,17 +136,10 @@ ipcMain.on('mainWindow:show', (e, args) => {
 });
 
 ipcMain.on('main:opened', (e, args) => {
-    mainWindow.webContents.send('settings:returnDefault', settings.defaultSettings);
-});
-
-ipcMain.on('settings:cancel', (e, args) => {
-    settings.cancelSettings();
-});
-
-ipcMain.on('settings:save', (e, args) => {
-    settings.saveSettings(args);
+    mainWindow.webContents.send('settings:returnDefault', settings.getSettings());
 });
 
 ipcMain.on('settings:selectPath', (e, args) => {
     settings.selectPath();
 });
+

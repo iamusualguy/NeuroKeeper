@@ -1,4 +1,4 @@
-const AutoLaunch = require('auto-launch');
+const AutoLaunch = require('auto-launch');
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
@@ -7,6 +7,7 @@ const url = require('url');
 const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
+let currentSettings;
 
 function cancelSettings() {
     settingsWindow.close();
@@ -32,12 +33,12 @@ function createSettingsWindow(mainWindow) {
 }
 
 function getProjects(inputFilePath) {
-    const getProjectsPromise = new Promise((resolve, reject) => { 
-        
+    const getProjectsPromise = new Promise((resolve, reject) => {
+
         xlsj = require("xls-to-json");
         xlsj({
             input: inputFilePath,  // input xls 
-            output: "output.json", // output json 
+            output: null, // output json 
             sheet: "Projects"  // specific sheetname 
         }, function (err, result) {
             if (err) {
@@ -54,59 +55,69 @@ function getProjects(inputFilePath) {
 }
 
 function loadSettings() {
-    fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
-        if (err) {
-            console.log(err);
-            currentSettings = defaultSettings;
-        } else {
-            try {
-                currentSettings = JSON.parse(data);
-            } catch (e) {
-                currentSettings = defaultSettings;
+    return new Promise((resolve, reject) => {
+        fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
+            if (err) {
+                console.log(err);
+                currentSettings = null;
+            } else {
+                try {
+                    currentSettings = JSON.parse(data);
+                } catch (e) {
+                    currentSettings = null;
+                }
             }
-        }
-
-        settingsWindow.webContents.send('settings:present', currentSettings);
+            resolve();
+        });
     });
 }
 
-function saveSettings(settingsToSave) {
-    fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settingsToSave), function(err) {
-        if (err) {
-            return console.log(err);
-        } else {
-            console.log("Settings have been successfully saved.");
-        }
-    });
+function saveSettings(settingsToSave, app) {
+    const settings = JSON.stringify(settingsToSave);
 
-    var autoLauncher = new AutoLaunch({
-        name: 'neuro-reports'
-    });
+    if (settings != JSON.stringify(currentSettings)) {
+        fs.writeFile(path.join(__dirname, 'settings.json'), settings, function (err) {
+            if (err) {
+                return console.log(err);
+            } else {
+                console.log("Settings have been successfully saved.");
+            }
+            var autoLauncher = new AutoLaunch({
+                name: 'neuro-reports'
+            });
 
-    autoLauncher.isEnabled().then((result) => {
-        if (!result && settingsToSave.autoLaunch) {
-            autoLauncher.enable();
-        } else if (result && !settingsToSave.autoLaunch) {
-            autoLauncher.disable();
-        }
-    });
-
+            autoLauncher.isEnabled().then((result) => {
+                if (!result && settingsToSave.autoLaunch) {
+                    autoLauncher.enable();
+                } else if (result && !settingsToSave.autoLaunch) {
+                    autoLauncher.disable();
+                }
+            });
+            app.relaunch();
+            app.quit();
+        });
+        currentSettings = settingsToSave;
+    }
     settingsWindow.close();
 }
 
 function selectPath() {
     dialog.showOpenDialog({
         properties: ['openDirectory']
-        },
+    },
         (directoryPaths) => {
             settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0]);
         });
 }
 
+function openSettings() {
+    settingsWindow.webContents.send('settings:present', getSettings());
+}
+
 function uploadProjects() {
     dialog.showOpenDialog({
         properties: ['openFile']
-        },
+    },
         (filePaths) => {
             const getProjectsPromise = getProjects(filePaths[0]);
             getProjectsPromise.then((projects) => {
@@ -163,7 +174,9 @@ defaultSettings = {
     autoLaunch: true
 };
 
-currentSettings = null;
+function getSettings() {
+    return currentSettings != null ? currentSettings : defaultSettings;
+}
 
 module.exports = {
     cancelSettings: cancelSettings,
@@ -172,7 +185,6 @@ module.exports = {
     saveSettings: saveSettings,
     selectPath: selectPath,
     uploadProjects: uploadProjects,
-
-    currentSettings: currentSettings,
-    defaultSettings: defaultSettings
+    getSettings: getSettings,
+    openSettings: openSettings,
 };

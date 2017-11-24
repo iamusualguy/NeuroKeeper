@@ -47,7 +47,7 @@
     const electron = require('electron');
     const $ = require('jquery');
     const { ipcRenderer } = electron;
-    const currentSettings = {};
+    let currentSettings = {};
     let multiselect;
     let uploadProjectsButton;
     let pathTextbox;
