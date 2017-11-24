@@ -2,12 +2,29 @@
 <html lang="en">
 
 <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Report Keeper</title>
+    <link rel="stylesheet" href="./styles/common.css">
 </head>
 
 <body>
-    <button onclick="writeRow()">excel</span>
-    </button>
+    <div id="main-block">
+        <div>
+            <div>
+                <select>
+                    <option>First task</option>
+                    <option>Second task</option>
+                </select>
+                <input type="text" placeholder="Report time">
+                <input type="text" placeholder="Date">
+            </div>
+            <div>
+                <input type="text" placeholder="New report">
+            </div>
+        </div>
+        <button onclick="writeRow()">save</button>
+        <div id="worked-block">5.1</div>
+    </div>
 </body>
 <script src="./scripts/excel.js">
     require('./script/excel.js')
