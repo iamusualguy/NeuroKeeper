@@ -17,24 +17,25 @@ const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 let mainWindow;
 
 function createStatisticsWindow() {
+    settings.loadSettings().then(() => {
+        statisticsWindow = new BrowserWindow({
+            width: 650,
+            height: 300,
+            title: 'Statistics',
+            parent: mainWindow,
+            modal: true,
+            skipTaskbar: true
+        });
 
-    statisticsWindow = new BrowserWindow({
-        width: 650,
-        height: 300,
-        title: 'Statistics',
-        parent: mainWindow,
-        modal: true,
-        skipTaskbar: true
+        statisticsWindow.webContents.openDevTools();
+
+        // Load HTML into the window.
+        statisticsWindow.loadURL(url.format({
+            pathname: path.join(__dirname, 'statisticsWindow.html'),
+            protocol: 'file',
+            slashes: true
+        }));
     });
-
-    statisticsWindow.webContents.openDevTools();
-
-    // Load HTML into the window.
-    statisticsWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'statisticsWindow.html'),
-        protocol: 'file',
-        slashes: true
-    }));
 }
 
 function createWindow() {
@@ -47,8 +48,8 @@ function createWindow() {
             frame: false,
             resizable: false,
             skipTaskbar: true,
-            show: false,
-            alwaysOnTop: settings.getSettings().topMost,
+              show: false,
+              alwaysOnTop: settings.getSettings().topMost,
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
@@ -57,6 +58,7 @@ function createWindow() {
         tray.setToolTip('Report Keeper')
         const trayContextMenu = createContextMenu(mainWindow)
         tray.setContextMenu(trayContextMenu)
+
         tray.on('click', () => {
             mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
         })
@@ -73,6 +75,11 @@ function createWindow() {
 function createContextMenu(appWindow) {
     return (
         Menu.buildFromTemplate([
+            {
+                label: 'Show/Hide', click: function () {
+                    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+                }
+            },
             {
                 label: 'Settings', click: function () {
                     settings.createSettingsWindow(mainWindow);
