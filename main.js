@@ -9,6 +9,14 @@ const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
+ipcMain.on('mainWindow:hide', (e, args) => {
+    hideMainWindow();
+});
+
+ipcMain.on('mainWindow:show', (e, args) => {
+    showMainWindow();
+});
+
 let mainWindow;
 
 function createWindow() {
@@ -56,6 +64,14 @@ function createContextMenu(appWindow) {
 			}
 		])
 	);
+}
+
+function hideMainWindow() {
+    mainWindow.hide();
+}
+
+function showMainWindow() {
+    mainWindow.show();
 }
 
 app.on('activate', () => {

@@ -9,16 +9,9 @@ defaultSettings = {
     theme: "Light",
 }
 
+const mainManager = new reportManager(defaultSettings);
+
 function saveNewReport() {
-    const newRepoprt = getReport();
+    const newRepoprt = mainManager.getReport();
     writeRow(newRepoprt);
-}
-
-function getReport() {
-    const reportTask = document.getElementById('task-input').value;
-    const reportDuration = document.getElementById('duration-input').value;
-    const reportText = document.getElementById('report-input').value;
-    const reportDate = document.getElementById('date-input').value;
-
-    return [reportTask, reportDuration, reportText,reportDate,reportDate];
 }
