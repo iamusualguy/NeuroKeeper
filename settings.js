@@ -4,12 +4,15 @@ const url = require('url');
 
 const { BrowserWindow } = electron;
 
-function createSettingsWindow() {
+function createSettingsWindow(mainWindow) {
     // Create setting window.
     settingsWindow = new BrowserWindow({
         width: 300,
         height: 500,
-        title: 'Settings'
+        title: 'Settings',
+        parent: mainWindow,
+        modal: true,
+        skipTaskbar: true
     });
 
     // Load HTML into the window.

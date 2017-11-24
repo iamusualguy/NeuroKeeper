@@ -40,29 +40,12 @@ function createWindow() {
     }));
 }
 
-function createSettingsWindow() {
-    // Create setting window.
-    settingsWindow = new BrowserWindow({
-        width: 300,
-        height: 500,
-        title: 'Settings',
-        skipTaskbar: true
-    });
-
-    // Load HTML into the window.
-    mainWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'settingsWindow.html'),
-        protocol: 'file',
-        slashes: true
-    }));
-}
-
 function createContextMenu(appWindow) {
 	return (
 		Menu.buildFromTemplate([
 			{
 				label: 'Settings', click: function () {
-					createSettingsWindow();
+					settings.createSettingsWindow(mainWindow);
 				}
 			},
 			{
@@ -92,7 +75,7 @@ app.on('window-all-closed', function () {
 });  //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('settings:open', (e, args) => {
-    settings.createSettingsWindow();
+    settings.createSettingsWindow(mainWindow);
 });
 
 ipcMain.on('settings:opened', (e, args) => {
