@@ -13,6 +13,11 @@ class reportManager {
         this.reportField = document.getElementById('report-input');
         this.dateField = document.getElementById('date-input');
 
+        this.workedFirstHour = document.querySelectorAll('.first-hour');
+        this.workedSecondHour = document.querySelectorAll('.second-hour');
+        this.workedFirstMinute = document.querySelectorAll('.first-minute');
+        this.workedSecondMinute = document.querySelectorAll('.second-minute');
+
         this.startNewDay();
         fillSelect(this.taskField, settings.projects);
         ipcRenderer.send('mainWindow:hide', {});
@@ -21,8 +26,7 @@ class reportManager {
     startNewDay() {
         this._start_day = new Date();
         this.trackedCounter = 0;
-        // need update worked time indicator
-        // this.workedTime.Text = "00:00";
+        this._updateWorkedTime("0", "0");
 
         this.resetFields();
 
@@ -30,7 +34,7 @@ class reportManager {
             clearInterval(this.minuteTimer);
         }
 
-        this.minuteTimer = setInterval(this.updateMinute.bind(this), oneMinute);
+        this.minuteTimer = setInterval(this._updateMinute.bind(this), oneMinute);
     }
 
     resetFields() {
@@ -45,7 +49,7 @@ class reportManager {
         }
 
         const notificationInterval = this.settings.notificationTime * oneHour;
-        this.notificationTimer = setInterval(this.notifyUser.bind(this), notificationInterval);
+        this.notificationTimer = setInterval(this._notifyUser.bind(this), notificationInterval);
 
         // need update tracked time indicator from this.trackedCounter
         // this.trackedTime.Text = this.trackedCounter.ToString();
@@ -60,23 +64,58 @@ class reportManager {
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
-    updateMinute() {
+    _updateMinute() {
         const elapsed = new Date() - this._start_task;
         this.durationField.value = roundNumber(elapsed / oneHour);
+
         const elapsed_day = new Date() - this._start_day;
-        // update this.workedTime from elapsed_day/oneHour
-        console.log("updateMinute");
-        ipcRenderer.send('mainWindow:show', {});
+        const workedHours = Math.floor(elapsed_day / oneHour);
+        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+
+        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
     }
     
-    notifyUser() {
+    _notifyUser() {
         ipcRenderer.send('mainWindow:show', {});
-        // set focus
+        this.reportField.focus();
+
         const elapsed = new Date() - this._start_task;
         this.durationField.value = roundNumber(elapsed / oneHour);
+
         const elapsed_day = new Date() - this._start_day;
-        // update this.workedTime from elapsed_day
-        console.log("notifyUser");
+        const workedHours = Math.floor(elapsed_day / oneHour);
+        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+        
+        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
+    }
+
+    _updateWorkedTime(workedHours, workedMinutes) {
+        let firstHour = "0";
+        let secondHour = workedHours[0];
+
+        if(workedHours.length > 1) {
+            firstHour = workedHours[0];
+            secondHour = workedHours[1];
+        }
+
+        let firstMinute = "0";
+        let secondMinute = workedMinutes[0];
+
+        if(workedMinutes.length > 1) {
+            firstMinute = workedMinutes[0];
+            secondMinute = workedMinutes[1];
+        }
+
+        this._updateWorkedDigit(this.workedFirstHour, firstHour);
+        this._updateWorkedDigit(this.workedSecondHour, secondHour);
+        this._updateWorkedDigit(this.workedFirstMinute, firstMinute);
+        this._updateWorkedDigit(this.workedSecondMinute, secondMinute);
+    }
+
+    _updateWorkedDigit(digitElements, digitValue) {
+        digitElements.forEach(element => {
+            element.innerHTML = digitValue;
+        });
     }
 }
 
@@ -93,7 +132,7 @@ function formatDate(date) {
 }
 
 function roundNumber(number) {
-    return number.toFixed(2);
+    return number.toFixed(1);
 }
 
 function fillSelect(selectField, projects) {
