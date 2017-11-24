@@ -13,6 +13,7 @@ function saveNewReport() {
         .then(() => {
             console.log('File is written');
             ipcRenderer.send('mainWindow:hide', {});
+            mainManager.resetFields();
         })
         .catch(err => alert("Error of record saving. Try to close report file and save record again.\r\n" + err));
     } else {
