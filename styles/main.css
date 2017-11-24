@@ -7,6 +7,7 @@
 .main-block {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     margin-bottom: 5px;
 }
 
@@ -16,6 +17,7 @@
 }
 
 input, button {
+    height: 25px;
     box-sizing: border-box;
 }
 
@@ -40,19 +42,20 @@ input, button {
 
 .save-button {
     width: 100px;
+    height: 55px;
     margin: 0 5px;
     cursor: pointer;
 }
 
 .worked-block {
-    width: 170px;
+    width: 160px;
     flex-shrink: 0;
     margin: auto 0;
 }
 
 .tracked-block {
-    width: 100px;
-    height: 100px;
+    width: 90px;
+    height: 90px;
 }
 
 .settings-button {
@@ -80,4 +83,12 @@ input, button {
     font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
     fill:black;
     font-size: 25px;
+}
+
+.flipTimer {
+    display: flex;
+}
+
+.flipTimer .hours {
+    margin-right: 4px;
 }
