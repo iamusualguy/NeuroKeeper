@@ -60,8 +60,8 @@ class reportManager {
     }
 
     updateMinute() {
-        const elapsed = new Date() - this._start;
-        this.durationField.value = Math.round(elapsed/oneHour);
+        const elapsed = new Date() - this._start_task;
+        this.durationField.value = Math.round(elapsed / oneHour * 100) / 100;
         const elapsed_day = new Date() - this._start_day;
         // update this.workedTime from elapsed_day/oneHour
         console.log("updateMinute");
@@ -70,10 +70,9 @@ class reportManager {
     
     notifyUser() {
         ipcRenderer.send('mainWindow:show', {});
-        // show window
         // set focus
-        const elapsed = new Date() - this._start;
-        this.durationField.value = Math.round(elapsed / oneHour);
+        const elapsed = new Date() - this._start_task;
+        this.durationField.value = Math.round(elapsed / oneHour * 100) / 100;
         const elapsed_day = new Date() - this._start_day;
         // update this.workedTime from elapsed_day
         console.log("notifyUser");
