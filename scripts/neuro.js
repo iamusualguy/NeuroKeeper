@@ -1,4 +1,19 @@
-const Excel = require('exceljs');
+//const Excel = require('exceljs');
+
+function prepareData() {
+    let filename = "reports.csv";
+    var workbook = new Excel.Workbook();
+    workbook.csv.readFile(filename)
+        .then(function (worksheet) {
+            debugger;
+            for (let i = 0; i < worksheet.rowCount; i++) {
+                let row = worksheet.getRow(i);
+                for (let io = 0; io < row.cellCount; io++) {
+                    console.log(row.getCell(io + 1).value);
+                }
+            }
+        });
+}
 
 function addHoursToDate(d, h) {
     d.setTime(d.getTime() + (h * 60 * 60 * 1000));
@@ -18,8 +33,8 @@ function WeekDayArray(d) {
 function HoursArray(d) {
     var data = [];
     var length = 23; // user defined length
-    
-    for(var i = 0; i < length; i++) {
+
+    for (var i = 0; i < length; i++) {
         data.push(0);
     }
 
