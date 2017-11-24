@@ -9,14 +9,6 @@ const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
-ipcMain.on('mainWindow:hide', (e, args) => {
-    hideMainWindow();
-});
-
-ipcMain.on('mainWindow:show', (e, args) => {
-    showMainWindow();
-});
-
 let mainWindow;
 
 function createWindow() {
@@ -100,4 +92,12 @@ ipcMain.on('settings:opened', (e, args) => {
 
 ipcMain.on('settings:uploadProjects', (e, args) => {
     settings.uploadProjects();
+});
+
+ipcMain.on('mainWindow:hide', (e, args) => {
+    hideMainWindow();
+});
+
+ipcMain.on('mainWindow:show', (e, args) => {
+    showMainWindow();
 });
