@@ -41,8 +41,10 @@ function createWindow() {
         height: 150,
         frame: false,
         resizable: false,
-        skipTaskbar: true
+        skipTaskbar: true,
+        show: false,
     });
+    mainWindow.setVisibleOnAllWorkspaces(true);
 
     mainWindow.webContents.openDevTools();
 
@@ -62,21 +64,21 @@ function createWindow() {
 }
 
 function createContextMenu(appWindow) {
-	return (
-		Menu.buildFromTemplate([
-			{
-				label: 'Settings', click: function () {
-					settings.createSettingsWindow(mainWindow);
-				}
-			},
-			{
-				label: 'Quit', click: function () {
-					app.isQuiting = true;
-					app.quit();
-				}
-			}
-		])
-	);
+    return (
+        Menu.buildFromTemplate([
+            {
+                label: 'Settings', click: function () {
+                    settings.createSettingsWindow(mainWindow);
+                }
+            },
+            {
+                label: 'Quit', click: function () {
+                    app.isQuiting = true;
+                    app.quit();
+                }
+            }
+        ])
+    );
 }
 
 function hideMainWindow() {

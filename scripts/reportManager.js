@@ -20,7 +20,6 @@ class reportManager {
 
         this.startNewDay();
         fillSelect(this.taskField, settings.projects);
-        ipcRenderer.send('mainWindow:hide', {});
     }
 
     startNewDay() {
