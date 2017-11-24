@@ -3,7 +3,7 @@ const Excel = require('exceljs');
 function getFileName() {
     var d = new Date();
     var filePath = mainManager.settings.filePath;
-    return filePath + "-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
+    return filePath + "\\report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
 }
 
 function writeRow(newReport) {

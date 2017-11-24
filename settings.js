@@ -166,7 +166,7 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: "template",
+    filePath: __dirname,
     notificationTime: 1,
     newFileEveryWeek: false,
     workTime: 8,
