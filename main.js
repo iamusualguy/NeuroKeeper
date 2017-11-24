@@ -7,6 +7,11 @@ const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
 
+const os = require('os');
+const storage = require('electron-json-storage');
+
+storage.setDataPath(os.tmpdir());
+
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
 let mainWindow;

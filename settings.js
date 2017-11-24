@@ -3,6 +3,8 @@ const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
+const xlsj = require("xls-to-json");
+const storage = require('electron-json-storage');
 
 const { BrowserWindow, dialog } = electron;
 
@@ -32,9 +34,7 @@ function createSettingsWindow(mainWindow) {
 }
 
 function getProjects(inputFilePath) {
-    const getProjectsPromise = new Promise((resolve, reject) => { 
-        
-        xlsj = require("xls-to-json");
+    const getProjectsPromise = new Promise((resolve, reject) => {
         xlsj({
             input: inputFilePath,  // input xls 
             output: "output.json", // output json 
@@ -54,6 +54,22 @@ function getProjects(inputFilePath) {
 }
 
 function loadSettings() {
+    storage.get('neuro-keeper-settings', function(error, data) {
+        if (error) {
+            console.log(error);
+            currentSettings = defaultSettings;
+        }
+
+        if (!data.filePath) {
+            currentSettings = defaultSettings;
+        } else {
+            currentSettings = data;
+        }
+
+        settingsWindow.webContents.send('settings:present', currentSettings);
+    });
+
+    /*
     fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
         if (err) {
             console.log(err);
@@ -68,9 +84,17 @@ function loadSettings() {
 
         settingsWindow.webContents.send('settings:present', currentSettings);
     });
+    */
 }
 
 function saveSettings(settingsToSave) {
+    storage.set('neuro-keeper-settings', settingsToSave, function(error) {
+        if (error) {
+            console.log(error);
+        }
+    });
+
+    /*
     fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settingsToSave), function(err) {
         if (err) {
             return console.log(err);
@@ -78,6 +102,7 @@ function saveSettings(settingsToSave) {
             console.log("Settings have been successfully saved.");
         }
     });
+    */
 
     var autoLauncher = new AutoLaunch({
         name: 'neuro-reports'
@@ -109,16 +134,18 @@ function uploadProjects() {
         },
         (filePaths) => {
             const getProjectsPromise = getProjects(filePaths[0]);
-            getProjectsPromise.then((projects) => {
-                settingsWindow.webContents.send('projects:reset', projects.map((value, index) => {
-                    return {
-                        name: value.Projects,
-                        enabled: true
-                    };
-                }));
-            }).catch((error) => {
-                console.log(error)
-            });
+            setTimeout(() => {
+                getProjectsPromise.then((projects) => {
+                    settingsWindow.webContents.send('projects:reset', projects.map((value, index) => {
+                        return {
+                            name: value.Projects,
+                            enabled: true
+                        };
+                    }));
+                }).catch((error) => {
+                    console.log(error)
+                });
+            }, 100);
         });
 }
 
