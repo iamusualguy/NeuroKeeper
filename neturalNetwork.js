@@ -31,7 +31,7 @@ function createNN() {
 	});
 }
 
-function createNN() {
+function createRNN() {
 
 	var net = new brain.recurrent.RNN({
 		activation: 'leaky-relu', // activation function
@@ -83,5 +83,6 @@ function openNN() {
 
 module.exports = {
 	createNN: createNN,
-	openNN: openNN
+	openNN: openNN,
+	createRNN: createRNN
 }

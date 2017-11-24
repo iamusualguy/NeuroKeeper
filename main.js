@@ -39,6 +39,7 @@ function createStatisticsWindow() {
     });
     // nn.createNN();
     // nn.openNN();
+    createRNN();
 }
 
 function createWindow() {
