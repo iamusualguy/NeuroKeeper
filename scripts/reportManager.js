@@ -21,7 +21,6 @@ class reportManager {
 
     startNewDay() {
         this._start_day = new Date();
-        this.trackedCounter = 0;
         this._updateWorkedTime("0", "0");
 
         this.resetFields();
@@ -47,8 +46,7 @@ class reportManager {
         const notificationInterval = this.settings.notificationTime * oneHour;
         this.notificationTimer = setInterval(this._notifyUser.bind(this), notificationInterval);
 
-        debugger;
-        getStatistics.then(statObj => {
+        getStatistics().then(statObj => {
             this.statistics = statObj;
             this._updateTrackedTime();
         });
