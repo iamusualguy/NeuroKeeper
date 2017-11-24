@@ -16,28 +16,29 @@
     </div>
     <div>
         <label>Path:</label>
-        <input type="text"></input>
+        <input id="path-textbox" type="text"></input>
     </div>
     <div>
         <label>Realtime:</label>
-        <input type="checkbox">
-        <input> |
-        <label>Top:</label>
-        <input type="checkbox">
-        <input> |
+        <input id="real-time-checkbox" type="checkbox"></input>
+
+        <label>Always on Top:</label>
+        <input id="on-top-checkbox" type="checkbox"></input>
+
         <label>Black Theme:</label>
-        <input type="checkbox">
-        <input>
+        <input id="black-theme-checkbox" type="checkbox"></input>
     </div>
     <div>
         Showtime:
-        <input type="text"></input>
-        :
-        <input type="text"></input>
+        <input id="show-time-hours-textbox" class="time-input" type="number"></input> hrs.
     </div>
     <div>
         Worktime:
-        <input type="text"></input>
+        <input id="work-time-hours-textbox" class="time-input" type="number"></input> hrs.
+    </div>
+    <div>
+        <button id="cancel-button">Cancel</button>
+        <button id="save-button">Save</button>
     </div>
 </body>
 
@@ -45,8 +46,18 @@
     const electron = require('electron');
     const $ = require('jquery');
     const { ipcRenderer } = electron;
+    const currentSettings = {};
     let multiselect;
     let uploadProjectsButton;
+    let pathTextbox;
+    let realTimeCheckbox;
+    let onTopCheckbox;
+    let blackThemeCheckbox;
+    let newFileEveryWeekCheckbox;
+    let showTimeHoursTextbox;
+    let workTimeHoursTextbox;
+    let cancelButton;
+    let saveButton;
 
     function onUploadProjectsButtonClicked(e) {
         e.preventDefault();
@@ -64,6 +75,9 @@
             }
             multiselect.appendChild(li);
         }
+
+        // Persist project for potential saving.
+        currentSettings.projects = projects;
     }
 
     ipcRenderer.on('projects:reset', (e, projects) => {
@@ -73,6 +87,15 @@
 
     ipcRenderer.on('settings:present', (e, settings) => {
         presentProjects(settings.projects);
+
+        pathTextbox.value = settings.filePath;
+        $(realTimeCheckbox).prop('checked', settings.realTime);
+        $(onTopCheckbox).prop('checked', settings.topMost);
+        $(blackThemeCheckbox).prop('checked', settings.theme != 'Light');
+        $(newFileEveryWeekCheckbox).prop('checked', settings.newFileEveryWeek);
+
+        showTimeHoursTextbox.value = settings.notificationTime;
+        workTimeHoursTextbox.value = settings.workTime;
     });
 
     $(() => {
@@ -84,6 +107,46 @@
         uploadProjectsButton = document.querySelector('#projects-from-template');
         uploadProjectsButton.addEventListener('click', onUploadProjectsButtonClicked);
 
+        pathTextbox = document.querySelector('#path-textbox');
+        realTimeCheckbox = document.querySelector('#real-time-checkbox');
+        onTopCheckbox = document.querySelector('#on-top-checkbox');
+        blackThemeCheckbox = document.querySelector('#black-theme-checkbox');
+
+        showTimeHoursTextbox = document.querySelector('#show-time-hours-textbox');
+        workTimeHoursTextbox = document.querySelector('#work-time-hours-textbox');
+        
+        cancelButton = document.querySelector('#cancel-button');
+
+        function onCancelButtonClicked(e) {
+            e.preventDefault();
+            ipcRenderer.send('settings:cancel', {});
+        }
+
+        cancelButton.addEventListener('click', onCancelButtonClicked);
+    
+        saveButton = document.querySelector('#save-button');
+
+        function onSaveButtonClicked(e) {
+            e.preventDefault();
+
+            // Get field values.
+            currentSettings.filePath = pathTextbox.value;
+            currentSettings.realTime = $(realTimeCheckbox).prop('checked');
+            currentSettings.topMost = $(onTopCheckbox).prop('checked');
+            currentSettings.newFileEveryWeek = $(newFileEveryWeekCheckbox).prop('checked');
+            currentSettings.theme = $(blackThemeCheckbox).prop('checked') ? 'Dark' : 'Light';
+
+            currentSettings.notificationTime = showTimeHoursTextbox.value;
+            currentSettings.workTime = workTimeHoursTextbox.value;
+            currentSettings.theme = blackThemeCheckbox.value ? "Dark" : "Light";
+
+            // Notify background about saving.
+            ipcRenderer.send('settings:save', currentSettings);
+        }
+
+        saveButton.addEventListener('click', onSaveButtonClicked);
+
+        // Notify background about page has been loaded.
         ipcRenderer.send('settings:opened', {});
     });
 

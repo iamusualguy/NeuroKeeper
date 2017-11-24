@@ -1,13 +1,20 @@
 const electron = require('electron');
+const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
 const { BrowserWindow } = electron;
 
+let settingsWindow;
+
+function cancelSettings() {
+    settingsWindow.close();
+}
+
 function createSettingsWindow(mainWindow) {
     // Create setting window.
     settingsWindow = new BrowserWindow({
-        width: 300,
+        width: 350,
         height: 500,
         title: 'Settings',
         parent: mainWindow,
@@ -45,6 +52,33 @@ function getProjects() {
     return getProjectsPromise;
 }
 
+function loadSettings() {
+    fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
+        let settingsToPresent;
+        
+        if (err) {
+            console.log(err);
+            settingsToPresent = defaultSettings;
+        } else {
+            settingsToPresent = JSON.parse(data);
+        }
+
+        settingsWindow.webContents.send('settings:present', settingsToPresent);
+    });
+}
+
+function saveSettings(settingsToSave) {
+    fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settingsToSave), function(err) {
+        if (err) {
+            return console.log(err);
+        } else {
+            console.log("Settings have been successfully saved.");
+        }
+    }); 
+
+    settingsWindow.close();
+}
+
 function uploadProjects() {
     const getProjectsPromise = getProjects();
     getProjectsPromise.then((projects) => {
@@ -57,10 +91,6 @@ function uploadProjects() {
     }).catch((error) => {
         console.log(error)
     });
-}
-
-function presentSettings() {
-    settingsWindow.webContents.send('settings:present', defaultSettings);
 }
 
 defaultSettings = {
@@ -95,8 +125,8 @@ defaultSettings = {
         },
     ],
     realTime: false,
-    topMost: false,
-    filePath: "",
+    topMost: true,
+    filePath: "template.xls",
     notificationTime: 1,
     newFileEveryWeek: false,
     workTime: 8,
@@ -104,8 +134,11 @@ defaultSettings = {
 };
 
 module.exports = {
-    defaultSettings: defaultSettings,
+    cancelSettings: cancelSettings,
     createSettingsWindow: createSettingsWindow,
-    presentSettings: presentSettings,
-    uploadProjects: uploadProjects
+    loadSettings: loadSettings,
+    saveSettings: saveSettings,
+    uploadProjects: uploadProjects,
+
+    defaultSettings: defaultSettings
 };
