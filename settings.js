@@ -56,7 +56,7 @@ function getProjects(inputFilePath) {
 
 function loadSettings() {
     return new Promise((resolve, reject) => {
-        storage.get('neuro-keeper-settings', function(error, data) {
+        storage.get('neuro-keeper-settings', function (error, data) {
             if (error) {
                 console.log(error);
                 currentSettings = null;
@@ -74,32 +74,31 @@ function loadSettings() {
 }
 
 function saveSettings(settingsToSave) {
-    if (JSON.stringify(settingsToSave) == JSON.stringify(currentSettings)) {
-        settingsWindow.close();
-    }
+    if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
 
-    storage.set('neuro-keeper-settings', settingsToSave, function(error) {
-        if (error) {
-            console.log(error);
-        }
-
-        var autoLauncher = new AutoLaunch({
-            name: 'neuro-reports'
-        });
-
-        autoLauncher.isEnabled().then((result) => {
-            if (!result && settingsToSave.autoLaunch) {
-                autoLauncher.enable();
-            } else if (result && !settingsToSave.autoLaunch) {
-                autoLauncher.disable();
+        storage.set('neuro-keeper-settings', settingsToSave, function (error) {
+            if (error) {
+                console.log(error);
             }
+
+            var autoLauncher = new AutoLaunch({
+                name: 'neuro-reports'
+            });
+
+            autoLauncher.isEnabled().then((result) => {
+                if (!result && settingsToSave.autoLaunch) {
+                    autoLauncher.enable();
+                } else if (result && !settingsToSave.autoLaunch) {
+                    autoLauncher.disable();
+                }
+            });
+
+            app.relaunch();
+            app.quit();
         });
-
-        app.relaunch();
-        app.quit();
-    });
-
-    currentSettings = settingsToSave;
+        currentSettings = settingsToSave;
+    }
+    settingsWindow.close();
 }
 
 function selectPath() {
