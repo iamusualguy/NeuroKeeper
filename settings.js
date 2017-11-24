@@ -124,7 +124,7 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: "template.xls",
+    filePath: "template",
     notificationTime: 1,
     newFileEveryWeek: false,
     workTime: 8,
