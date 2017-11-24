@@ -2,26 +2,23 @@
 <html lang="en">
 
 <head>
-    <link rel="import" href="https://rawgit.com/sitepoint-editors/multiselect-web-component/master/src/multiselect.html">
     <link rel="stylesheet" href="./styles/settings.css">
     <title></title>
 </head>
 
 <body>
+    <div class="projects-container">
+        <ul id="projects-list" class="tags">
+        </ul>
+    </div>
     <div>
-        <div id="container">
-            <x-multiselect id="projects-multiselect" placeholder="Select Value"></x-multiselect>
-            <button id="projects-from-template">U</button>
-        </div>
+        <button id="projects-from-template">Upload Template</button>
     </div>
     <div>
         <label>Path:</label>
         <input id="path-textbox" type="text"></input>
     </div>
     <div>
-        <label>Realtime:</label>
-        <input id="real-time-checkbox" type="checkbox"></input>
-
         <label>Always on Top:</label>
         <input id="on-top-checkbox" type="checkbox"></input>
 
@@ -50,7 +47,6 @@
     let multiselect;
     let uploadProjectsButton;
     let pathTextbox;
-    let realTimeCheckbox;
     let onTopCheckbox;
     let blackThemeCheckbox;
     let newFileEveryWeekCheckbox;
@@ -66,14 +62,30 @@
 
     function presentProjects(projects) {
         for (const project of projects) {
-            const li = document.createElement("li");
-            li.innerText = project.name;
+            const li = $('<li><a href="#" class="tag">' + project.name + '</a></li>');
+            $(multiselect).append(li);
+            li.on('click', (e) => {
+                let $target = $(e.target);
+                if ($target.is('li')) {
+                    $target = $target.find('a');
+                }
+
+                const currentProject = currentSettings.projects.find((project) => {
+                    return project.name == $target.text();
+                });
+
+                if ($target.hasClass('project-enabled')) {
+                    $target.removeClass('project-enabled');
+                    project.enabled = false;
+                } else {
+                    $target.addClass('project-enabled');
+                    project.enabled = true;
+                }
+            });
+            
             if (project.enabled) {
-                var selectedAttribute = document.createAttribute("selected");
-                selectedAttribute.value = "selected";
-                li.setAttributeNode(selectedAttribute);
+                li.find('a').addClass('project-enabled');
             }
-            multiselect.appendChild(li);
         }
 
         // Persist project for potential saving.
@@ -89,7 +101,6 @@
         presentProjects(settings.projects);
 
         pathTextbox.value = settings.filePath;
-        $(realTimeCheckbox).prop('checked', settings.realTime);
         $(onTopCheckbox).prop('checked', settings.topMost);
         $(blackThemeCheckbox).prop('checked', settings.theme != 'Light');
         $(newFileEveryWeekCheckbox).prop('checked', settings.newFileEveryWeek);
@@ -99,16 +110,12 @@
     });
 
     $(() => {
-        multiselect = document.querySelector('x-multiselect');
-        multiselect.addEventListener('change', function () {
-            console.log('Selected items:', this.selectedItems());
-        });
+        multiselect = document.querySelector('#projects-list');
 
         uploadProjectsButton = document.querySelector('#projects-from-template');
         uploadProjectsButton.addEventListener('click', onUploadProjectsButtonClicked);
 
         pathTextbox = document.querySelector('#path-textbox');
-        realTimeCheckbox = document.querySelector('#real-time-checkbox');
         onTopCheckbox = document.querySelector('#on-top-checkbox');
         blackThemeCheckbox = document.querySelector('#black-theme-checkbox');
 
@@ -131,14 +138,12 @@
 
             // Get field values.
             currentSettings.filePath = pathTextbox.value;
-            currentSettings.realTime = $(realTimeCheckbox).prop('checked');
             currentSettings.topMost = $(onTopCheckbox).prop('checked');
             currentSettings.newFileEveryWeek = $(newFileEveryWeekCheckbox).prop('checked');
             currentSettings.theme = $(blackThemeCheckbox).prop('checked') ? 'Dark' : 'Light';
 
             currentSettings.notificationTime = showTimeHoursTextbox.value;
             currentSettings.workTime = workTimeHoursTextbox.value;
-            currentSettings.theme = blackThemeCheckbox.value ? "Dark" : "Light";
 
             // Notify background about saving.
             ipcRenderer.send('settings:save', currentSettings);

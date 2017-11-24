@@ -54,16 +54,14 @@ function getProjects() {
 
 function loadSettings() {
     fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
-        let settingsToPresent;
-        
         if (err) {
             console.log(err);
-            settingsToPresent = defaultSettings;
+            currentSettings = defaultSettings;
         } else {
-            settingsToPresent = JSON.parse(data);
+            currentSettings = JSON.parse(data);
         }
 
-        settingsWindow.webContents.send('settings:present', settingsToPresent);
+        settingsWindow.webContents.send('settings:present', currentSettings);
     });
 }
 
@@ -133,6 +131,8 @@ defaultSettings = {
     theme: "Light",
 };
 
+currentSettings = null;
+
 module.exports = {
     cancelSettings: cancelSettings,
     createSettingsWindow: createSettingsWindow,
@@ -140,5 +140,6 @@ module.exports = {
     saveSettings: saveSettings,
     uploadProjects: uploadProjects,
 
+    currentSettings: currentSettings,
     defaultSettings: defaultSettings
 };
