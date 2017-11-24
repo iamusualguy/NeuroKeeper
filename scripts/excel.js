@@ -1,8 +1,16 @@
 const Excel = require('exceljs');
+const electron = require('electron');
+const {ipcRenderer} = electron;
+
+ipcRenderer.send('excel:getSettings',{});
+let currentSettings = null;
+ipcRenderer.on('settings:getSettings', (e, settings) => {
+    currentSettings = settings;
+});
 
 function getFileName() {
     var d = new Date();
-    var filePath = mainManager.settings.filePath;
+    var filePath = currentSettings.filePath;
     return filePath + "\\report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
 }
 

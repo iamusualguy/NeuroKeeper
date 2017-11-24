@@ -1,6 +1,6 @@
 let mainManager;
 
-ipcRenderer.on('settings:returnDefault', (e, settings) => {
+ipcRenderer.on('settings:returnCurrent', (e, settings) => {
     mainManager = new reportManager(settings);
 });
 

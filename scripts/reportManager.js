@@ -1,6 +1,3 @@
-const electron = require('electron');
-const {ipcRenderer} = electron;
-
 const oneHour = 3600000;
 const oneMinute = 60000;
 
