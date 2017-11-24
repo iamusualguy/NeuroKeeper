@@ -64,7 +64,7 @@ var res = [];
 
         input = arrays[i + 2][0].concat(arrays[i + 2][1]);
 
-        let descR = arrays[i][2].concat(arrays[i][2]);
+        let descR = arrays[i][2].concat(arrays[i+1][2]);
         if (descR.length < 50) {
             for (; ;) {
                 descR.push(0);
