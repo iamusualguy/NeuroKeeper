@@ -1,6 +1,6 @@
 let mainManager;
 
-ipcRenderer.on('settings:returnDefault', (e, settings) => {
+ipcRenderer.on('settings:returnCurrent', (e, settings) => {
     mainManager = new reportManager(settings);
 });
 
@@ -13,7 +13,6 @@ function saveNewReport() {
         .then(() => {
             console.log('File is written');
             ipcRenderer.send('mainWindow:hide', {});
-            mainManager.trackedCounter += +newRepoprt[1];
             mainManager.resetFields();
         })
         .catch(err => alert("Error of record saving. Try to close report file and save record again.\r\n" + err));
