@@ -14,6 +14,7 @@ class reportManager {
         this.dateField = document.getElementById('date-input');
 
         this.startNewDay();
+        fillSelect(this.taskField, settings.projects);
         ipcRenderer.send('mainWindow:hide', {});
     }
 
@@ -21,7 +22,7 @@ class reportManager {
         this._start_day = new Date();
         this.trackedCounter = 0;
         // need update worked time indicator
-        // this.workedTime.Text = "0:00";
+        // this.workedTime.Text = "00:00";
 
         this.resetFields();
 
@@ -56,12 +57,12 @@ class reportManager {
         const reportText = this.reportField.value;
         const reportDate = this.dateField.value;
     
-        return [reportTask, reportDuration, reportText,reportDate,reportDate];
+        return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
     updateMinute() {
-        const elapsed = new Date() - this._start;
-        this.durationField.value = Math.round(elapsed/oneHour);
+        const elapsed = new Date() - this._start_task;
+        this.durationField.value = roundNumber(elapsed / oneHour);
         const elapsed_day = new Date() - this._start_day;
         // update this.workedTime from elapsed_day/oneHour
         console.log("updateMinute");
@@ -70,10 +71,9 @@ class reportManager {
     
     notifyUser() {
         ipcRenderer.send('mainWindow:show', {});
-        // show window
         // set focus
-        const elapsed = new Date() - this._start;
-        this.durationField.value = Math.round(elapsed / oneHour);
+        const elapsed = new Date() - this._start_task;
+        this.durationField.value = roundNumber(elapsed / oneHour);
         const elapsed_day = new Date() - this._start_day;
         // update this.workedTime from elapsed_day
         console.log("notifyUser");
@@ -92,11 +92,17 @@ function formatDate(date) {
     return mm + '/' + dd + '/' + yy;
 }
 
-
- function setWindow(window) {
-    mainWindow = window;
+function roundNumber(number) {
+    return number.toFixed(2);
 }
 
-module.exports = {
-    setWindow: setWindow,
+function fillSelect(selectField, projects) {
+    const projectNames = projects.filter(project => project.enabled).map(project => project.name);
+
+    projectNames.forEach(projectName => {
+        let option = document.createElement("option");
+        option.value = projectName;
+        option.text = projectName;
+        selectField.appendChild(option);
+    });
 }

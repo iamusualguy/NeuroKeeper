@@ -45,9 +45,9 @@ input, button {
 }
 
 .worked-block {
-    width: 220px;
-    height: 100px;
-    background: #ffffdd
+    width: 170px;
+    flex-shrink: 0;
+    margin: auto 0;
 }
 
 .tracked-block {
@@ -63,21 +63,21 @@ input, button {
 
 .ccontainer {
     text-align: center;
-  }
-  
-  .ccontainer div {
+}
+
+.ccontainer div {
     display: inline-block;
     width: 90px;
-  }
-  
-  .rbc-label-start {
+}
+
+.rbc-label-start {
     font-family: fontawesome;
     font-weight: bold;
     font-size: 20px;
-  }
-  
-  .rbc-center-text {
+}
+
+.rbc-center-text {
     font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
     fill:black;
     font-size: 25px;
-  }
+}

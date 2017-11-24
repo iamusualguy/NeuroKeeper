@@ -4,7 +4,8 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>Report Keeper</title>
-    <link rel="stylesheet" href="./styles/common.css">
+    <link rel="stylesheet" href="./styles/main.css">
+    <link href="styles/flipTimer.css" rel="stylesheet">
 </head>
 
 <body>
@@ -12,10 +13,7 @@
         <div class="main-block">
             <div class="report-block">
                 <div class="time-block">
-                    <select id="task-input" class="task-input">
-                        <option>First task</option>
-                        <option>Second task</option>
-                    </select>
+                    <select id="task-input" class="task-input"></select>
                     <input id="duration-input" class="duration-input" type="text" placeholder="Report time">
                     <input id="date-input" class="date-input" type="text" placeholder="Date">
                 </div>
@@ -24,19 +22,82 @@
                 </div>
             </div>
             <button class="save-button" onclick="saveNewReport()">save</button>
-            <div class="worked-block">5.1</div>
-            <div class="tracked-block">10.1</div>
+            <div class="worked-block">
+                <div class="flipTimer">
+                    <div class="hours">
+                        <div class="digit-set">
+                            <div class="digit active">
+                                <div class="digit-top">
+                                    <span class="digit-wrap">1</span>
+                                </div>
+                                <div class="shadow-top"></div>
+                                <div class="digit-bottom">
+                                    <span class="digit-wrap">1</span>
+                                </div>
+                                <div class="shadow-bottom"></div>
+                            </div>
+                        </div><!--
+                     --><div class="digit-set">
+                            <div class="digit active">
+                                <div class="digit-top">
+                                    <span class="digit-wrap">4</span>
+                                </div>
+                                <div class="shadow-top"></div>
+                                <div class="digit-bottom">
+                                    <span class="digit-wrap">4</span>
+                                </div>
+                                <div class="shadow-bottom"></div>
+                            </div>
+                        </div>
+                    </div><!--
+                  --><div class="minutes">
+                        <div class="digit-set">
+                            <div class="digit active">
+                                <div class="digit-top">
+                                    <span class="digit-wrap">8</span>
+                                </div>
+                                <div class="shadow-top"></div>
+                                <div class="digit-bottom">
+                                    <span class="digit-wrap">8</span>
+                                </div>
+                                <div class="shadow-bottom"></div>
+                            </div>
+                        </div><!--
+                    --><div class="digit-set">
+                            <div class="digit active">
+                                <div class="digit-top">
+                                    <span class="digit-wrap">8</span>
+                                </div>
+                                <div class="shadow-top"></div>
+                                <div class="digit-bottom">
+                                    <span class="digit-wrap">8</span>
+                                </div>
+                                <div class="shadow-bottom"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tracked-block">
+                <div class="ccontainer">
+                    <div class="progress"></div>
+                </div>
+            </div>
         </div>
 
         <button class="settings-button">...</button>
     </div>
 
 </body>
+<script src="./scripts/jquery-1.11.3.min.js"></script>
 <script src="./scripts/excel.js"></script>
 <script src="./scripts/reportManager.js"></script>
 <script src="./scripts/mainWindowScript.js"></script>
 <script src="./scripts/neuro.js"></script>
+<script src="./scripts/d3.js"></script>
+<script src="./scripts/radial-progress-chart.js"></script>
 <script>
+    const $ = require('jquery');
     const settingsButton = document.querySelector('.settings-button');
     settingsButton.addEventListener('click', onSettingsButtonClicked);
 
@@ -44,5 +105,23 @@
         e.preventDefault();
         ipcRenderer.send('settings:open', {});
     }
+
+    $(() => {
+        ipcRenderer.send('main:opened', {});
+    });
 </script>
+<script> 
+    var progress = new RadialProgressChart('.progress', {
+        diameter: 100,
+        stroke: {
+            width: 20,
+            gap: 2
+        },
+        series: [12, 30, 56],
+        center: [function (p, c, v) {
+            return p + "-" + c
+        }, "3 m"]
+    });
+</script>
+
 </html>

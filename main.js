@@ -102,6 +102,10 @@ ipcMain.on('mainWindow:show', (e, args) => {
     showMainWindow();
 });
 
+ipcMain.on('main:opened', (e, args) => {
+    mainWindow.webContents.send('settings:returnDefault', settings.defaultSettings);
+});
+
 ipcMain.on('settings:uploadProjects', (e, args) => {
     settings.uploadProjects();
 });
