@@ -1,0 +1,16 @@
+{
+  "name": "reportkeeper",
+  "version": "1.0.0",
+  "description": "Report Keeper crossplatform app.",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Anton Stepanov",
+  "license": "ISC",
+  "dependencies": {
+    "electron": "^1.7.9",
+    "exceljs": "^0.7.1"
+  }
+}
