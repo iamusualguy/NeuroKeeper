@@ -56,7 +56,7 @@ class reportManager {
         const reportText = this.reportField.value;
         const reportDate = this.dateField.value;
     
-        return [reportTask, reportDuration, reportText,reportDate,reportDate];
+        return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
     updateMinute() {

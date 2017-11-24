@@ -37,6 +37,7 @@
 <script src="./scripts/mainWindowScript.js"></script>
 <script src="./scripts/neuro.js"></script>
 <script>
+    const $ = require('jquery');
     const settingsButton = document.querySelector('.settings-button');
     settingsButton.addEventListener('click', onSettingsButtonClicked);
 
@@ -44,5 +45,9 @@
         e.preventDefault();
         ipcRenderer.send('settings:open', {});
     }
+
+    $(() => {
+        ipcRenderer.send('main:opened', {});
+    });
 </script>
 </html>

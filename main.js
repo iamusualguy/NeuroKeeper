@@ -101,3 +101,7 @@ ipcMain.on('mainWindow:hide', (e, args) => {
 ipcMain.on('mainWindow:show', (e, args) => {
     showMainWindow();
 });
+
+ipcMain.on('main:opened', (e, args) => {
+    mainWindow.webContents.send('settings:returnDefault', settings.defaultSettings);
+});

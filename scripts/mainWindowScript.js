@@ -1,17 +1,21 @@
-defaultSettings = {
-    projects: ["Internal.Communication","Internal.Development","Internal.Investigation","Internal.Testing","Internal.Estimation","Internal.Administration","Internal.Code review"],
-    realTime: false,
-    topMost: false,
-    filePath: "",
-    notificationTime: 1,
-    newFileEveryWeek: false,
-    workTime: 8,
-    theme: "Light",
-}
+let mainManager;
 
-const mainManager = new reportManager(defaultSettings);
+ipcRenderer.on('settings:returnDefault', (e, settings) => {
+    mainManager = new reportManager(settings);
+});
 
 function saveNewReport() {
     const newRepoprt = mainManager.getReport();
-    writeRow(newRepoprt);
+    if(newRepoprt.lenght === 5
+        && newRepoprt.each(reportElement => reportElement!= ""))
+    {
+        writeRow(newRepoprt)
+        .then(() => {
+            console.log('File is written');
+            ipcRenderer.send('mainWindow:hide', {});
+        })
+        .catch(err => alert("Error of record saving. Try to close report file and save record again.\r\n" + err));
+    } else {
+        alert("You didn't fill some field. Please fill all fields and save record again.");
+    }
 }
