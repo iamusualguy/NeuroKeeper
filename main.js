@@ -87,7 +87,7 @@ ipcMain.on('settings:open', (e, args) => {
 });
 
 ipcMain.on('settings:opened', (e, args) => {
-    settings.presentSettings();
+    settings.loadSettings();
 });
 
 ipcMain.on('settings:uploadProjects', (e, args) => {
@@ -104,4 +104,16 @@ ipcMain.on('mainWindow:show', (e, args) => {
 
 ipcMain.on('main:opened', (e, args) => {
     mainWindow.webContents.send('settings:returnDefault', settings.defaultSettings);
+});
+
+ipcMain.on('settings:uploadProjects', (e, args) => {
+    settings.uploadProjects();
+});
+
+ipcMain.on('settings:cancel', (e, args) => {
+    settings.cancelSettings();
+});
+
+ipcMain.on('settings:save', (e, args) => {
+    settings.saveSettings(args);
 });
