@@ -7,11 +7,11 @@ function getFileName() {
 }
 
 function writeRow(newReport) {
-console.log(newReport);
+    console.log(newReport);
     let workbook = new Excel.Workbook();
     let filename = getFileName();
     var fs = require('fs');
-    var promise = new Promise((resolve,reject) => {
+    var promise = new Promise((resolve, reject) => {
         fs.stat(filename, function (err, stat) {
             if (err == null) {
                 workbook.xlsx.readFile(filename)
@@ -22,7 +22,7 @@ console.log(newReport);
                     });
             } else if (err.code == 'ENOENT') {
                 // file does not exist
-                writeEmptyFile(newReport);resolve();
+                writeEmptyFile(newReport); resolve();
             } else {
                 reject('Some other error: ', err.code);
             }
@@ -50,6 +50,7 @@ function writeEmptyFile(newReport) {
 function getStatistics() {
     let workbook = new Excel.Workbook();
     let filename = getFileName();
+    let sObject = {};
     let stats = [];
     workbook.xlsx.readFile(filename)
         .then((book) => {
@@ -65,6 +66,68 @@ function getStatistics() {
                 stats.push(rowData);
             }
 
-            console.log(stats);
+            //console.log(stats);
+            sObject.TodayEffort =  getTodayEffort(stats);
+            sObject.WeekEffort = getWeekEffort(stats);
+            sObject.MonthEffort = getMonthEffort(stats);
         });
+}
+
+function getMonthEffort(stats) {
+    let trackedTime = 0;
+    stats.forEach(function (item, i, arr) {
+        if (item.StartedDate != null) {
+                trackedTime += item.Effort;
+        }
+    });
+
+    console.log(trackedTime);
+    return trackedTime;
+}
+
+function getWeekEffort(stats){
+let weekTime = 0;
+
+var curr = new Date; // get current date
+var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+var last = first + 6; // last day is the first day + 6
+
+
+
+var firstday = new Date(curr.setDate(first));
+var lastday = new Date(curr.setDate(last));
+
+firstday = firstday.setHours(0,0,0,0);
+lastday = lastday.setHours(23,59,59,999);
+
+stats.forEach(function (item, i, arr) {
+    if (item.StartedDate <= lastday && item.StartedDate >= firstday ) {
+        weekTime += item.Effort;
+    }
+});
+console.log(weekTime);
+return weekTime;
+}
+
+function getTodayEffort(stats) {
+    let trackedTime = 0;
+    stats.forEach(function (item, i, arr) {
+        if (item.StartedDate != null) {
+            let id = "" + item.StartedDate.getDate() +
+                item.StartedDate.getMonth() +
+                item.StartedDate.getFullYear();
+            let dn = new Date();
+
+            let cd = "" + dn.getDate() +
+                dn.getMonth() +
+                dn.getFullYear();
+
+            if (id === cd) {
+                trackedTime += item.Effort;
+            }
+        }
+    });
+
+    console.log(trackedTime);
+    return trackedTime;
 }
