@@ -1,13 +1,13 @@
-//const Excel = require('exceljs');
+const Excel = require('exceljs');
 
 var Dictionary = [];
 
 
 function prepareData() {
     let allDesc = "";
-    let filename = "file.xlsx";
+    let filename = "6file.xlsx";
     var workbook = new Excel.Workbook();
-    workbook.xlsx.readFile(filename)
+    return workbook.xlsx.readFile(filename)
         .then(function (book) {
             var DATA = [];
             worksheet = book.getWorksheet(1);
@@ -26,7 +26,7 @@ function prepareData() {
             }
             Dictionary = GenerateDictionary(allDesc);
 
-            DataToArrays(DATA, Dictionary);
+            return DataToArrays(DATA, Dictionary);
             //   console.log(DATA);
 
             console.log(Dictionary);
@@ -52,11 +52,11 @@ function DataToArrays(data, dictionary) {
         arrays.push([WeekDays, Hours, Description]);
 
     });
-    ArraysToObject(arrays);
+    return ArraysToObject(arrays);
 }
 
 function ArraysToObject(arrays) {
-var res = [];
+    var res = [];
     for (var i = 0; i < arrays.length - 3; i++) {
         let obj = {};
         let input = [];
@@ -64,7 +64,7 @@ var res = [];
 
         input = arrays[i + 2][0].concat(arrays[i + 2][1]);
 
-        let descR = arrays[i][2].concat(arrays[i+1][2]);
+        let descR = arrays[i][2].concat(arrays[i + 1][2]);
         if (descR.length < 50) {
             for (; ;) {
                 descR.push(0);
@@ -72,12 +72,12 @@ var res = [];
             }
         }
         else {
-            descR.slice(0, 50);
+            descR = descR.slice(0, 50);
         }
 
         input = input.concat(descR);
 
-        output = arrays[i+2][2];
+        output = arrays[i + 2][2];
 
         if (output.length < 25) {
             for (; ;) {
@@ -94,7 +94,8 @@ var res = [];
 
         res.push(obj);
     }
-console.log(res);
+    console.log(res);
+    return res;
 }
 
 function addHoursToDate(d, h) {
@@ -133,9 +134,47 @@ function GenerateDictionary(text) {
 
 function replaceWordToInt(text, dictionary) {
     text = text.replace(/[^a-zA-Z ]/g, "").toLowerCase();
-    var tArray = text.split(" ");
-    intWords = tArray.map(function (word, i) {
+    let tArray = text.split(" ");
+    return tArray.map((word) => {
         return dictionary.indexOf(word)
     })
-    return intWords;
+}
+
+function normilize(array) {
+    resSum = [];
+    array = array.map((v) => {
+        let obj = {};
+        let res = [];
+        let objSum = {};
+
+        let sum = v.input.reduce((a, b) => a + b, 0);
+        objSum.input = sum;
+        obj.input = v.input.map((val) => {
+            return val / sum;
+        });
+
+        sum = v.output.reduce((a, b) => a + b, 0);
+        objSum.output = sum;
+        obj.output = v.output.map((val) => {
+            return val / sum;
+        });
+        resSum.push(objSum);
+        return obj;
+    })
+    const res = [];
+    res.push(array);
+    res.push(resSum);
+    return res;
+}
+
+function toWords(array, sum) {
+    return array.map((val) => {
+        return Dictionary[Math.round(val*sum)];
+    })
+}
+
+module.exports = {
+    prepareData: prepareData,
+    normilize: normilize,
+    toWords: toWords,
 }

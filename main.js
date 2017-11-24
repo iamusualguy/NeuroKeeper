@@ -6,6 +6,7 @@ const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
+const nn = require("./neturalNetwork.js");
 
 const os = require('os');
 const storage = require('electron-json-storage');
@@ -36,6 +37,8 @@ function createStatisticsWindow() {
             slashes: true
         }));
     });
+    // nn.createNN();
+    // nn.openNN();
 }
 
 function createWindow() {
@@ -48,8 +51,8 @@ function createWindow() {
             frame: false,
             resizable: false,
             skipTaskbar: true,
-              show: false,
-              alwaysOnTop: settings.getSettings().topMost,
+            show: false,
+            alwaysOnTop: settings.getSettings().topMost,
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
