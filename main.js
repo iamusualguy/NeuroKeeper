@@ -6,7 +6,7 @@ const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 
-const { app, BrowserWindow, ipcMain } = electron;
+const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
 ipcMain.on('settings:open', (e, args) => {
     createSettingsWindow();
@@ -33,15 +33,24 @@ function createWindow() {
 
     getProjects();
 
+    tray = new Tray(__dirname + '/icon.png');
     // Create the browser window.
     mainWindow = new BrowserWindow({
         width: 650,
         height: 150,
         frame: false,
-        resizable: false
+        resizable: false,
+        skipTaskbar: true
     });
 
     mainWindow.webContents.openDevTools();
+
+    tray.setToolTip('Report Keeper')
+    const trayContextMenu = createContextMenu(mainWindow)
+    tray.setContextMenu(trayContextMenu)
+    tray.on('click', () => {
+        mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+    })
 
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
@@ -56,7 +65,8 @@ function createSettingsWindow() {
     settingsWindow = new BrowserWindow({
         width: 300,
         height: 500,
-        title: 'Settings'
+        title: 'Settings',
+        skipTaskbar: true
     });
 
     // Load HTML into the window.
@@ -65,6 +75,24 @@ function createSettingsWindow() {
         protocol: 'file',
         slashes: true
     }));
+}
+
+function createContextMenu(appWindow) {
+	return (
+		Menu.buildFromTemplate([
+			{
+				label: 'Settings', click: function () {
+					createSettingsWindow();
+				}
+			},
+			{
+				label: 'Quit', click: function () {
+					app.isQuiting = true;
+					app.quit();
+				}
+			}
+		])
+	);
 }
 
 app.on('activate', () => {
