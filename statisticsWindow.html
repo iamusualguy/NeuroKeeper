@@ -23,78 +23,92 @@
 
 </body>
 <script src="./scripts/excel.js"></script>
-<script src="./scripts/jquery-1.11.3.min.js"></script>
 <script src="./scripts/d3.js"></script>
 <script src="./scripts/radial-progress-chart.js"></script>
 
 <script>
-    var data = [
-        { day: 'M' },
-        { day: 'T' },
-        { day: 'W' },
-        { day: 'T' },
-        { day: 'F' },
-        { day: 'S' },
-        { day: 'S' }
-    ];
-    var dateFormatter = d3.time.format("%A, %B %d, %Y");
+    
+    const $ = require('jquery');
+    let currentSettings = null;
 
-    d3.select('.week').selectAll('li')
-        .data(data).enter()
-        .append('li').on('click', function (d) {
-            // Update active class, date and main chart
-            d3.selectAll('.circle').classed('active', false);
-            d3.select(this).select('.circle').classed('active', true);
-            d3.select('.date').text(d.date);
-            mainChart.update(d.series);
-        })
-        .append('div').attr('class', 'circle').text(function (d) {
-            return d.day;
-        })
-        .each(function (d, i) {
-            getStatistics().then((d)=>{console.log(d)});
-            debugger;
-            d.date = dateFormatter(getDate(i));
-            d.series = [{
-                value: getRandom(),
-                color: ['red', '#7CFC00']
-            }];
-            new RadialProgressChart(this.parentNode, {
-                diameter: 40,
-                stroke: {
-                    width: 5,
-                    gap: 1
-                },
-                shadow: {
-                    width: 1
-                },
-                series: d.series,
-                center: function (d) {
-                    return d;
-                }
+    $(() => {
+        const {ipcRenderer} = electron;
+
+        var data = [
+            { day: 'M' },
+            { day: 'T' },
+            { day: 'W' },
+            { day: 'T' },
+            { day: 'F' },
+            { day: 'S' },
+            { day: 'S' }
+        ];
+
+        var dateFormatter = d3.time.format("%A, %B %d, %Y");
+
+        ipcRenderer.send('statistics:opened', {});
+                
+        ipcRenderer.on('settings:sent', (e, settings) => {
+            currentSettings = settings;
+
+            d3.select('.week').selectAll('li')
+            .data(data).enter()
+            .append('li').on('click', function (d) {
+                // Update active class, date and main chart
+                d3.selectAll('.circle').classed('active', false);
+                d3.select(this).select('.circle').classed('active', true);
+                d3.select('.date').text(d.date);
+                mainChart.update(d.series);
+            })
+            .append('div').attr('class', 'circle').text(function (d) {
+                return d.day;
+            })
+            .each(function (d, i) {
+                getStatistics().then((d)=>{console.log(d)});
+                debugger;
+                d.date = dateFormatter(getDate(i));
+                d.series = [{
+                    value: getRandom(),
+                    color: ['red', '#7CFC00']
+                }];
+                new RadialProgressChart(this.parentNode, {
+                    diameter: 40,
+                    stroke: {
+                        width: 5,
+                        gap: 1
+                    },
+                    shadow: {
+                        width: 1
+                    },
+                    series: d.series,
+                    center: function (d) {
+                        return d;
+                    }
+                });
             });
+
+            // Return some chronological dates
+            function getDate(i) {
+
+                var curr = new Date(); // get current date
+                var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+                var last = first + 6; // last day is the first day + 6
+
+                var firstday = new Date(curr.setDate(first));
+                //  var date = new Date();
+                //  date.setDate(date.getDate() + i);
+                return firstday;
+            }
+
+            // Random int between 20-80
+            function getRandom() {
+                return Math.round(Math.random() * 60) + 20;
+            }
+
+            // Select monday by default
+            document.querySelector('li').click();
         });
-
-    // Return some chronological dates
-    function getDate(i) {
-
-        var curr = new Date(); // get current date
-        var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-        var last = first + 6; // last day is the first day + 6
-
-        var firstday = new Date(curr.setDate(first));
-        //  var date = new Date();
-        //  date.setDate(date.getDate() + i);
-        return firstday;
-    }
-
-    // Random int between 20-80
-    function getRandom() {
-        return Math.round(Math.random() * 60) + 20;
-    }
-
-    // Select monday by default
-    document.querySelector('li').click();
+    });
 </script>
 
 </html>

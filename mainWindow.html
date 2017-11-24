@@ -100,19 +100,7 @@
 <script src="./scripts/neuro.js"></script>
 <script>
     const $ = require('jquery');
-    const statisticsButton = document.querySelector('.statistics-button');
-    statisticsButton.addEventListener('click', onStatisticsButtonClicked);
 
-    function onStatisticsButtonClicked(e) {
-        e.preventDefault();
-        ipcRenderer.send('statistics:open', {});
-    }
-
-    $(() => {
-        ipcRenderer.send('main:opened', {});
-    });
-</script>
-<script> 
     let progress = new RadialProgressChart('.progress', {
         diameter: 100,
         stroke: {
@@ -123,6 +111,25 @@
         center: [function (p, c, v) {
             return p;
         }]
+    });
+
+    $(() => {
+        ipcRenderer.send('main:opened', {});
+
+        ipcRenderer.on('settings:sent', (e, settings) => {
+            currentSettings = settings;
+
+            mainManager = new reportManager(currentSettings);
+        });
+
+        const statisticsButton = document.querySelector('.statistics-button');
+
+        function onStatisticsButtonClicked(e) {
+            e.preventDefault();
+            ipcRenderer.send('statistics:open', {});
+        }
+
+        statisticsButton.addEventListener('click', onStatisticsButtonClicked);
     });
 </script>
 

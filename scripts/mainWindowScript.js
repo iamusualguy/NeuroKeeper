@@ -1,8 +1,6 @@
-let mainManager;
-
-ipcRenderer.on('settings:returnCurrent', (e, settings) => {
-    mainManager = new reportManager(settings);
-});
+const {ipcRenderer} = electron;
+let mainManager = null;
+let currentSettings = null;
 
 function saveNewReport() {
     const newRepoprt = mainManager.getReport();

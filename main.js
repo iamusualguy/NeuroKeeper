@@ -141,14 +141,15 @@ ipcMain.on('mainWindow:show', (e, args) => {
 });
 
 ipcMain.on('main:opened', (e, args) => {
-    mainWindow.webContents.send('settings:returnCurrent', settings.getSettings());
+    const settingsToSend = settings.getSettings();
+    mainWindow.webContents.send('settings:sent', settingsToSend);
 });
 
 ipcMain.on('settings:selectPath', (e, args) => {
     settings.selectPath();
 });
 
-ipcMain.on('excel:getSettings', (e, args) => {
-    mainWindow.webContents.send('settings:getSettings', settings.getSettings());
+ipcMain.on('statistics:opened', (e, args) => {
+    const settingsToSend = settings.getSettings();
+    statisticsWindow.webContents.send('settings:sent', settingsToSend);
 });
-

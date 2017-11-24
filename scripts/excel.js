@@ -1,12 +1,5 @@
 const Excel = require('exceljs');
 const electron = require('electron');
-const {ipcRenderer} = electron;
-
-ipcRenderer.send('excel:getSettings',{});
-let currentSettings = null;
-ipcRenderer.on('settings:getSettings', (e, settings) => {
-    currentSettings = settings;
-});
 
 function getFileName() {
     var d = new Date();
