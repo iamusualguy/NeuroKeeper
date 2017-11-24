@@ -34,5 +34,16 @@
 <script src="./scripts/excel.js">
     require('./script/excel.js')
 </script>
+<script>
+    const electron = require('electron');
+    const {ipcRenderer} = electron;
 
+    const settingsButton = document.querySelector('.settings-button');
+    settingsButton.addEventListener('click', onSettingsButtonClicked);
+
+    function onSettingsButtonClicked(e) {
+        e.preventDefault();
+        ipcRenderer.send('settings:open', {});
+    }
+</script>
 </html>

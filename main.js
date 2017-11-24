@@ -6,7 +6,11 @@ const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 
-const { app, BrowserWindow } = electron;
+const { app, BrowserWindow, ipcMain } = electron;
+
+ipcMain.on('settings:open', (e, args) => {
+    createSettingsWindow();
+});
 
 let mainWindow;
 
@@ -42,6 +46,22 @@ function createWindow() {
     // and load the index.html of the app.
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+}
+
+function createSettingsWindow() {
+    // Create setting window.
+    settingsWindow = new BrowserWindow({
+        width: 300,
+        height: 500,
+        title: 'Settings'
+    });
+
+    // Load HTML into the window.
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'settingsWindow.html'),
         protocol: 'file',
         slashes: true
     }));
