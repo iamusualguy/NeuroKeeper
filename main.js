@@ -5,6 +5,7 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 var $ = require('jquery');
+const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
@@ -110,3 +111,11 @@ app.on('window-all-closed', function () {
         app.quit();
     }
 });  //закрытие окна и сворачивание в док если это OS X
+
+ipcMain.on('settings:open', (e, args) => {
+    settings.createSettingsWindow();
+});
+
+ipcMain.on('settings:opened', (e, args) => {
+    settings.presentSettings();
+});

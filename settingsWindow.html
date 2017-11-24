@@ -2,11 +2,66 @@
 <html lang="en">
 
 <head>
+    <link rel="import" href="https://rawgit.com/sitepoint-editors/multiselect-web-component/master/src/multiselect.html">
+    <link rel="stylesheet" href="./styles/settings.css">
     <title></title>
 </head>
 
 <body>
-
+    <div>
+        <div id="container">
+            <x-multiselect id="projects-multiselect" placeholder="Select Value"></x-multiselect>
+            <button>Upload</button>
+        </div>
+    </div>
+    <div>
+        <label>Path:</label>
+        <input type="text"></input>
+    </div>
+    <div>
+        <label>Realtime:</label>
+        <input type="checkbox">
+        <input> |
+        <label>Top:</label>
+        <input type="checkbox">
+        <input> |
+        <label>Black Theme:</label>
+        <input type="checkbox">
+        <input>
+    </div>
+    <div>
+        Showtime:
+        <input type="text"></input>
+        :
+        <input type="text"></input>
+    </div>
+    <div>
+        Worktime:
+        <input type="text"></input>
+    </div>
 </body>
+
+<script>
+    const electron = require('electron');
+    const $ = require('jquery');
+    const { ipcRenderer } = electron;
+    const multiselect = document.querySelector('x-multiselect');
+
+    $(() => {
+        ipcRenderer.send('settings:opened', {});
+    });
+
+    ipcRenderer.on('projects:add', function(e, projects) {
+        for (const project of projects) {
+            const li = document.createElement("li");
+            li.innerText = project;
+            multiselect.appendChild(li);
+        }
+    });
+    
+    multiselect.addEventListener('change', function () {
+        console.log('Selected items:', this.selectedItems());
+    });
+</script>
 
 </html>
