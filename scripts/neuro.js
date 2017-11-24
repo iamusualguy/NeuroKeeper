@@ -1,18 +1,26 @@
 //const Excel = require('exceljs');
 
 function prepareData() {
+
     let filename = "file.xlsx";
     var workbook = new Excel.Workbook();
     workbook.xlsx.readFile(filename)
         .then(function (book) {
-            debugger;
+            var DATA = [];
             worksheet = book.getWorksheet(1);
-            for (let i = 0; i < worksheet.rowCount; i++) {
+
+            for (let i = 1; i < worksheet.rowCount; i++) {
                 let row = worksheet.getRow(i);
-                for (let io = 0; io < row.cellCount; io++) {
-                    console.log(row.getCell(io + 1).value);
-                }
+                let rowData = {};
+                rowData.Task = row.getCell('A').value;
+                rowData.Desc = row.getCell('B').value;
+                rowData.Time = row.getCell('C').value;
+                rowData.Date = row.getCell('D').value;
+                
+                DATA.push(rowData);
             }
+
+            console.log(DATA);
         });
 }
 
