@@ -11,6 +11,25 @@ const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
 let mainWindow;
 
+function createStatisticsWindow() {
+
+    statisticsWindow = new BrowserWindow({
+        width: 650,
+        height: 300,
+        title: 'Statistics',
+        parent: mainWindow,
+        modal: true,
+        skipTaskbar: true
+    });
+
+    // Load HTML into the window.
+    statisticsWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'statisticsWindow.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+}
+
 function createWindow() {
 
     tray = new Tray(__dirname + '/icon.png');
@@ -82,8 +101,8 @@ app.on('window-all-closed', function () {
     }
 });  //закрытие окна и сворачивание в док если это OS X
 
-ipcMain.on('settings:open', (e, args) => {
-    settings.createSettingsWindow(mainWindow);
+ipcMain.on('statistics:open', (e, args) => {
+    createStatisticsWindow(mainWindow);
 });
 
 ipcMain.on('settings:opened', (e, args) => {
