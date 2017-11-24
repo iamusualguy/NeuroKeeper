@@ -16,12 +16,33 @@ function prepareData() {
                 rowData.Desc = row.getCell('B').value;
                 rowData.Time = row.getCell('C').value;
                 rowData.Date = row.getCell('D').value;
-                
+
                 DATA.push(rowData);
             }
-
-            console.log(DATA);
+            DataToArrays(DATA);
+         //   console.log(DATA);
         });
+}
+
+function DataToArrays(data) {
+    let arrays = [];
+    let flagDate = new Date();
+
+    data.forEach(function (item, i, arr) {
+        let itemDate = new Date(item.Date);
+        if (itemDate.getDate() + itemDate.getFullYear() != flagDate.getDate() + flagDate.getFullYear() ) {
+            flagDate = itemDate;
+            flagDate = addHoursToDate(flagDate,9);
+        }
+
+        let Hours = getHoursArray(flagDate);
+        let WeekDays = getWeekDayArray(new Date(item.Date));
+        flagDate = addHoursToDate(flagDate, item.Time);
+//console.log(flagDate+" - "+itemDate+" = "+item.Time);
+        arrays.push([WeekDays, Hours]);
+
+    });
+    console.log(arrays);
 }
 
 function addHoursToDate(d, h) {
@@ -31,7 +52,7 @@ function addHoursToDate(d, h) {
 
 //get weekday array 
 //param: Date()
-function WeekDayArray(d) {
+function getWeekDayArray(d) {
     let res = [0, 0, 0, 0, 0, 0, 0];
     res[d.getDay() - 1] = 1;
     return res;
@@ -39,7 +60,7 @@ function WeekDayArray(d) {
 
 //get hours array 
 //param: Date()
-function HoursArray(d) {
+function getHoursArray(d) {
     var data = [];
     var length = 23; // user defined length
 
