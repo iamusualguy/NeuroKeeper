@@ -6,8 +6,8 @@ ipcRenderer.on('settings:returnDefault', (e, settings) => {
 
 function saveNewReport() {
     const newRepoprt = mainManager.getReport();
-    if(newRepoprt.lenght === 5
-        && newRepoprt.each(reportElement => reportElement!= ""))
+    if(newRepoprt.length === 5
+        && newRepoprt.every(reportElement => reportElement!= ""))
     {
         writeRow(newRepoprt)
         .then(() => {
