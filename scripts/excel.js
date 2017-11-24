@@ -7,7 +7,7 @@ function getFileName() {
 }
 
 function writeRow(newReport) {
-
+console.log(newReport);
     let workbook = new Excel.Workbook();
     let filename = getFileName();
     var fs = require('fs');
@@ -35,7 +35,6 @@ function writeRow(newReport) {
 
 function writeEmptyFile(newReport) {
     var Excel = require('exceljs');
-
     var workbook = new Excel.Workbook();
     var sheet = workbook.addWorksheet('Efforts');
     filename = getFileName();
