@@ -1,11 +1,11 @@
 const Excel = require('exceljs');
 
-function writeRow() {
+function writeRow(newReport) {
     let workbook = new Excel.Workbook();
     let filename = 'template.xlsx';
     workbook.xlsx.readFile(filename)
         .then(() => {
-            workbook.getWorksheet("Efforts").addRow(["Internal.Development", "1", "test desc","12/12/2017","12/12/2017"]);
+            workbook.getWorksheet("Efforts").addRow(newReport);
             return workbook.xlsx.writeFile(filename);
         })
         .then(() => {
