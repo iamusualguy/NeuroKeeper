@@ -9,30 +9,9 @@ const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
-ipcMain.on('settings:open', (e, args) => {
-    createSettingsWindow();
-});
-
 let mainWindow;
 
-function getProjects() {
-    xlsj = require("xls-to-json");
-    xlsj({
-        input: "template.xls",  // input xls 
-        output: "output.json", // output json 
-        sheet: "Projects"  // specific sheetname 
-    }, function (err, result) {
-        if (err) {
-            console.error(err);
-        } else {
-            console.log(result);
-        }
-    });
-}
-
 function createWindow() {
-
-    getProjects();
 
     tray = new Tray(__dirname + '/icon.png');
     // Create the browser window.
@@ -118,4 +97,8 @@ ipcMain.on('settings:open', (e, args) => {
 
 ipcMain.on('settings:opened', (e, args) => {
     settings.presentSettings();
+});
+
+ipcMain.on('settings:uploadProjects', (e, args) => {
+    settings.uploadProjects();
 });

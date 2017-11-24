@@ -20,19 +20,76 @@ function createSettingsWindow() {
     }));
 }
 
+function getProjects() {
+    const getProjectsPromise = new Promise((resolve, reject) => { 
+        
+        xlsj = require("xls-to-json");
+        xlsj({
+            input: "template.xls",  // input xls 
+            output: "output.json", // output json 
+            sheet: "Projects"  // specific sheetname 
+        }, function (err, result) {
+            if (err) {
+                console.error(err);
+                reject(err);
+            } else {
+                console.log(result);
+                resolve(result);
+            }
+        });
+    });
+
+    return getProjectsPromise;
+}
+
+function uploadProjects() {
+    const getProjectsPromise = getProjects();
+    getProjectsPromise.then((projects) => {
+        settingsWindow.webContents.send('projects:reset', projects.map((value, index) => {
+            return {
+                name: value.Projects,
+                enabled: true
+            };
+        }));
+    }).catch((error) => {
+        console.log(error)
+    });
+}
+
 function presentSettings() {
-    settingsWindow.webContents.send('projects:add', defaultSettings.projects);
+    settingsWindow.webContents.send('settings:present', defaultSettings);
 }
 
 defaultSettings = {
     projects: [
-        'Internal.Communication',
-        'Internal.Development',
-        'Internal.Investigation',
-        'Internal.Testing',
-        'Internal.Estimation',
-        'Internal.Administration',
-        'Internal.Code review'
+        {
+            name: 'Internal.Communication',
+            enabled: true
+        },
+        {
+            name: 'Internal.Development',
+            enabled: true
+        },
+        {
+            name: 'Internal.Investigation',
+            enabled: true
+        },
+        {
+            name: 'Internal.Testing',
+            enabled: true
+        },
+        {
+            name: 'Internal.Estimation',
+            enabled: true
+        },
+        {
+            name: 'Internal.Administration',
+            enabled: true
+        },
+        {
+            name: 'Internal.Code review',
+            enabled: true
+        },
     ],
     realTime: false,
     topMost: false,
@@ -46,5 +103,6 @@ defaultSettings = {
 module.exports = {
     defaultSettings: defaultSettings,
     createSettingsWindow: createSettingsWindow,
-    presentSettings: presentSettings
+    presentSettings: presentSettings,
+    uploadProjects: uploadProjects
 };

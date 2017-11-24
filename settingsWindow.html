@@ -11,7 +11,7 @@
     <div>
         <div id="container">
             <x-multiselect id="projects-multiselect" placeholder="Select Value"></x-multiselect>
-            <button>Upload</button>
+            <button id="projects-from-template">U</button>
         </div>
     </div>
     <div>
@@ -45,23 +45,48 @@
     const electron = require('electron');
     const $ = require('jquery');
     const { ipcRenderer } = electron;
-    const multiselect = document.querySelector('x-multiselect');
+    let multiselect;
+    let uploadProjectsButton;
+
+    function onUploadProjectsButtonClicked(e) {
+        e.preventDefault();
+        ipcRenderer.send('settings:uploadProjects', {});
+    }
+
+    function presentProjects(projects) {
+        for (const project of projects) {
+            const li = document.createElement("li");
+            li.innerText = project.name;
+            if (project.enabled) {
+                var selectedAttribute = document.createAttribute("selected");
+                selectedAttribute.value = "selected";
+                li.setAttributeNode(selectedAttribute);
+            }
+            multiselect.appendChild(li);
+        }
+    }
+
+    ipcRenderer.on('projects:reset', (e, projects) => {
+        $(multiselect).children('li').remove();
+        presentProjects(projects);
+    });
+
+    ipcRenderer.on('settings:present', (e, settings) => {
+        presentProjects(settings.projects);
+    });
 
     $(() => {
+        multiselect = document.querySelector('x-multiselect');
+        multiselect.addEventListener('change', function () {
+            console.log('Selected items:', this.selectedItems());
+        });
+
+        uploadProjectsButton = document.querySelector('#projects-from-template');
+        uploadProjectsButton.addEventListener('click', onUploadProjectsButtonClicked);
+
         ipcRenderer.send('settings:opened', {});
     });
 
-    ipcRenderer.on('projects:add', function(e, projects) {
-        for (const project of projects) {
-            const li = document.createElement("li");
-            li.innerText = project;
-            multiselect.appendChild(li);
-        }
-    });
-    
-    multiselect.addEventListener('change', function () {
-        console.log('Selected items:', this.selectedItems());
-    });
 </script>
 
 </html>
