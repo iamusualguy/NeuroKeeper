@@ -51,8 +51,7 @@ class reportManager {
         const notificationInterval = this.settings.notificationTime * oneHour;
         this.notificationTimer = setInterval(this._notifyUser.bind(this), notificationInterval);
 
-        // need update tracked time indicator from this.trackedCounter
-        // this.trackedTime.Text = this.trackedCounter.ToString();
+        this._updateTrackedTime();
     }
 
     getReport() {
@@ -116,6 +115,19 @@ class reportManager {
         digitElements.forEach(element => {
             element.innerHTML = digitValue;
         });
+    }
+
+    _updateTrackedTime() {
+        const trackedDay = ((100 * this.trackedCounter) / 8) || 0.1;
+        const trackedWeek = (100 * this.trackedCounter) / 40 || 0.1;
+
+        const y = this._start_day.getFullYear(), m = this._start_day.getMonth();
+        const firstDay = new Date(y, m, 1);
+        const lastDay = new Date(y, m + 1, 0);
+        const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1,2,3,4,5]);
+        const trackedMonth = ((100 * this.trackedCounter) / (8 * daysInMonth)) || 0.1;
+
+        progress.update([trackedDay, trackedWeek, trackedMonth]);
     }
 }
 
