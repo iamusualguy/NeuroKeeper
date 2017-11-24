@@ -8,11 +8,43 @@ border: 1px solid gray;
 overflow: auto;
 height: 210px;
 padding: 5px;
-margin: 5px;
+margin-bottom: 5px;
+}
+
+.settings-container {
+margin-bottom: 5px;
+}
+
+.settings-separated-container {
+margin-bottom: 15px;
+text-align: center;
+}
+
+#path-textbox {
+font-size: 14px;
+width: 272px;
+}
+
+.settings-checkbox {
+height: 20px;
+vertical-align: bottom;
+width: 20px;
+}
+
+.label-container {
+display: inline-block;
+width: 90px;
+}
+
+.controls-container {
+bottom: 0;
+margin: 10px;
+position: absolute;
+right: 0;
 }
 
 .tags {
-font: 12px/1.5
+font: 12px/1.5;
 list-style: none;
 margin: 0;
 overflow: hidden; 
