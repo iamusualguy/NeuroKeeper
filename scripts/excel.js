@@ -52,7 +52,7 @@ function getStatistics() {
     let filename = getFileName();
     let sObject = {};
     let stats = [];
-    workbook.xlsx.readFile(filename)
+   return workbook.xlsx.readFile(filename)
         .then((book) => {
             worksheet = book.getWorksheet('Efforts');
             for (let i = 2; i < worksheet.rowCount; i++) {
@@ -67,9 +67,13 @@ function getStatistics() {
             }
 
             //console.log(stats);
-            sObject.TodayEffort =  getTodayEffort(stats);
+            sObject.TodayEffort = getTodayEffort(stats);
             sObject.WeekEffort = getWeekEffort(stats);
             sObject.MonthEffort = getMonthEffort(stats);
+            sObject.WeekDescriptions = getWeekDescriptions(stats);
+
+           // console.log(sObject);
+           return sObject;
         });
 }
 
@@ -77,36 +81,34 @@ function getMonthEffort(stats) {
     let trackedTime = 0;
     stats.forEach(function (item, i, arr) {
         if (item.StartedDate != null) {
-                trackedTime += item.Effort;
+            trackedTime += item.Effort;
         }
     });
 
-    console.log(trackedTime);
+ //   console.log(trackedTime);
     return trackedTime;
 }
 
-function getWeekEffort(stats){
-let weekTime = 0;
+function getWeekEffort(stats) {
+    let weekTime = 0;
 
-var curr = new Date; // get current date
-var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-var last = first + 6; // last day is the first day + 6
+    var curr = new Date; // get current date
+    var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
 
+    var firstday = new Date(curr.setDate(first));
+    var lastday = new Date(curr.setDate(last));
 
+    firstday = firstday.setHours(0, 0, 0, 0);
+    lastday = lastday.setHours(23, 59, 59, 999);
 
-var firstday = new Date(curr.setDate(first));
-var lastday = new Date(curr.setDate(last));
-
-firstday = firstday.setHours(0,0,0,0);
-lastday = lastday.setHours(23,59,59,999);
-
-stats.forEach(function (item, i, arr) {
-    if (item.StartedDate <= lastday && item.StartedDate >= firstday ) {
-        weekTime += item.Effort;
-    }
-});
-console.log(weekTime);
-return weekTime;
+    stats.forEach(function (item, i, arr) {
+        if (item.StartedDate <= lastday && item.StartedDate >= firstday) {
+            weekTime += item.Effort;
+        }
+    });
+  //  console.log(weekTime);
+    return weekTime;
 }
 
 function getTodayEffort(stats) {
@@ -128,6 +130,39 @@ function getTodayEffort(stats) {
         }
     });
 
-    console.log(trackedTime);
+  //  console.log(trackedTime);
     return trackedTime;
+}
+
+function getWeekDescriptions(stats) {
+
+    let weekDesc = [[], [], [], [], [], [], []]; // <--- это гармонь
+
+    var curr = new Date; // get current date
+    var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
+    var last = first + 6; // last day is the first day + 6
+
+    var firstday = new Date(curr.setDate(first));
+    var lastday = new Date(curr.setDate(last));
+
+    firstday = firstday.setHours(0, 0, 0, 0);
+    lastday = lastday.setHours(23, 59, 59, 999);
+
+    stats.forEach(function (item, i, arr) {
+        if (item.StartedDate <= lastday && item.StartedDate >= firstday) {
+            weekDesc[item.StartedDate.getDay()].push(item);
+        }
+    });
+
+    var wekDayCacl = weekDesc.map(function (day) {
+        var result = day.reduce(function (sum, current) {
+            return sum + current.Effort;
+        }, 0);
+
+        return result;
+    });
+
+   // console.log(weekDesc);
+   // console.log(wekDayCacl);
+    return {daySumm: wekDayCacl,dayList: weekDesc};
 }

@@ -90,6 +90,8 @@
 
 </body>
 <script src="./scripts/jquery-1.11.3.min.js"></script>
+<script src="./scripts/moment.js"></script>
+<script src="./scripts/moment-weekday-calc.js"></script>
 <script src="./scripts/excel.js"></script>
 <script src="./scripts/reportManager.js"></script>
 <script src="./scripts/mainWindowScript.js"></script>
@@ -111,16 +113,16 @@
     });
 </script>
 <script> 
-    var progress = new RadialProgressChart('.progress', {
+    let progress = new RadialProgressChart('.progress', {
         diameter: 100,
         stroke: {
             width: 20,
             gap: 2
         },
-        series: [12, 30, 56],
+        series: [0.1, 0.1, 0.1],
         center: [function (p, c, v) {
-            return p + "-" + c
-        }, "3 m"]
+            return p;
+        }]
     });
 </script>
 
