@@ -10,21 +10,22 @@
 <body>
     <div class="common-wrap">
         <div class="main-block">
-            <div>
-                <div>
-                    <select>
+            <div class="report-block">
+                <div class="time-block">
+                    <select class="task-input">
                         <option>First task</option>
                         <option>Second task</option>
                     </select>
-                    <input type="text" placeholder="Report time">
-                    <input type="text" placeholder="Date">
+                    <input class="duration-input" type="text" placeholder="Report time">
+                    <input class="date-input" type="text" placeholder="Date">
                 </div>
                 <div>
                     <input class="report-input" type="text" placeholder="New report">
                 </div>
             </div>
-            <button onclick="writeRow()">save</button>
+            <button class="save-button" onclick="writeRow()">save</button>
             <div class="worked-block">5.1</div>
+            <div class="tracked-block">10.1</div>
         </div>
 
         <button class="settings-button">...</button>
