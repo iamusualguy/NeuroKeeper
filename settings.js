@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 
-const { BrowserWindow } = electron;
+const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
 
@@ -30,12 +30,12 @@ function createSettingsWindow(mainWindow) {
     }));
 }
 
-function getProjects() {
+function getProjects(inputFilePath) {
     const getProjectsPromise = new Promise((resolve, reject) => { 
         
         xlsj = require("xls-to-json");
         xlsj({
-            input: "template.xls",  // input xls 
+            input: inputFilePath,  // input xls 
             output: "output.json", // output json 
             sheet: "Projects"  // specific sheetname 
         }, function (err, result) {
@@ -77,18 +77,32 @@ function saveSettings(settingsToSave) {
     settingsWindow.close();
 }
 
+function selectPath() {
+    dialog.showOpenDialog({
+        properties: ['openDirectory']
+        },
+        (directoryPaths) => {
+            settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0]);
+        });
+}
+
 function uploadProjects() {
-    const getProjectsPromise = getProjects();
-    getProjectsPromise.then((projects) => {
-        settingsWindow.webContents.send('projects:reset', projects.map((value, index) => {
-            return {
-                name: value.Projects,
-                enabled: true
-            };
-        }));
-    }).catch((error) => {
-        console.log(error)
-    });
+    dialog.showOpenDialog({
+        properties: ['openFile']
+        },
+        (filePaths) => {
+            const getProjectsPromise = getProjects(filePaths[0]);
+            getProjectsPromise.then((projects) => {
+                settingsWindow.webContents.send('projects:reset', projects.map((value, index) => {
+                    return {
+                        name: value.Projects,
+                        enabled: true
+                    };
+                }));
+            }).catch((error) => {
+                console.log(error)
+            });
+        });
 }
 
 defaultSettings = {
@@ -138,6 +152,7 @@ module.exports = {
     createSettingsWindow: createSettingsWindow,
     loadSettings: loadSettings,
     saveSettings: saveSettings,
+    selectPath: selectPath,
     uploadProjects: uploadProjects,
 
     currentSettings: currentSettings,

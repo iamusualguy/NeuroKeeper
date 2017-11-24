@@ -17,6 +17,7 @@
     <div class="settings-container">
         <label>Path:</label>
         <input id="path-textbox" type="text"></input>
+        <button id="path-button">...</button>
     </div>
     <div class="settings-separated-container">
         <label>Always on Top:</label>
@@ -60,6 +61,11 @@
         ipcRenderer.send('settings:uploadProjects', {});
     }
 
+    function onPathButtonClicked(e) {
+        e.preventDefault();
+        ipcRenderer.send('settings:selectPath', {});
+    }
+
     function presentProjects(projects) {
         for (const project of projects) {
             const li = $('<li><a href="#" class="tag">' + project.name + '</a></li>');
@@ -97,6 +103,10 @@
         presentProjects(projects);
     });
 
+    ipcRenderer.on('settings:pathSelected', (e, directoryPath) => {
+        pathTextbox.value = directoryPath;
+    });
+
     ipcRenderer.on('settings:present', (e, settings) => {
         presentProjects(settings.projects);
 
@@ -114,6 +124,9 @@
 
         uploadProjectsButton = document.querySelector('#projects-from-template');
         uploadProjectsButton.addEventListener('click', onUploadProjectsButtonClicked);
+
+        pathButton = document.querySelector('#path-button');
+        pathButton.addEventListener('click', onPathButtonClicked);
 
         pathTextbox = document.querySelector('#path-textbox');
         onTopCheckbox = document.querySelector('#on-top-checkbox');

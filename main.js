@@ -125,14 +125,14 @@ ipcMain.on('main:opened', (e, args) => {
     mainWindow.webContents.send('settings:returnDefault', settings.defaultSettings);
 });
 
-ipcMain.on('settings:uploadProjects', (e, args) => {
-    settings.uploadProjects();
-});
-
 ipcMain.on('settings:cancel', (e, args) => {
     settings.cancelSettings();
 });
 
 ipcMain.on('settings:save', (e, args) => {
     settings.saveSettings(args);
+});
+
+ipcMain.on('settings:selectPath', (e, args) => {
+    settings.selectPath();
 });
