@@ -1,4 +1,4 @@
-const AutoLaunch = require('auto-launch');
+const AutoLaunch = require('auto-launch');
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +9,7 @@ const storage = require('electron-json-storage');
 const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
+let currentSettings;
 
 function cancelSettings() {
     settingsWindow.close();
@@ -37,7 +38,7 @@ function getProjects(inputFilePath) {
     const getProjectsPromise = new Promise((resolve, reject) => {
         xlsj({
             input: inputFilePath,  // input xls 
-            output: "output.json", // output json 
+            output: null, // output json 
             sheet: "Projects"  // specific sheetname 
         }, function (err, result) {
             if (err) {
@@ -68,23 +69,6 @@ function loadSettings() {
 
         settingsWindow.webContents.send('settings:present', currentSettings);
     });
-
-    /*
-    fs.readFile(path.join(__dirname, 'settings.json'), 'utf8', (err, data) => {
-        if (err) {
-            console.log(err);
-            currentSettings = defaultSettings;
-        } else {
-            try {
-                currentSettings = JSON.parse(data);
-            } catch (e) {
-                currentSettings = defaultSettings;
-            }
-        }
-
-        settingsWindow.webContents.send('settings:present', currentSettings);
-    });
-    */
 }
 
 function saveSettings(settingsToSave) {
@@ -92,46 +76,43 @@ function saveSettings(settingsToSave) {
         if (error) {
             console.log(error);
         }
+
+        var autoLauncher = new AutoLaunch({
+            name: 'neuro-reports'
+        });
+
+        autoLauncher.isEnabled().then((result) => {
+            if (!result && settingsToSave.autoLaunch) {
+                autoLauncher.enable();
+            } else if (result && !settingsToSave.autoLaunch) {
+                autoLauncher.disable();
+            }
+        });
+
+        app.relaunch();
+        app.quit();
     });
 
-    /*
-    fs.writeFile(path.join(__dirname, 'settings.json'), JSON.stringify(settingsToSave), function(err) {
-        if (err) {
-            return console.log(err);
-        } else {
-            console.log("Settings have been successfully saved.");
-        }
-    });
-    */
-
-    var autoLauncher = new AutoLaunch({
-        name: 'neuro-reports'
-    });
-
-    autoLauncher.isEnabled().then((result) => {
-        if (!result && settingsToSave.autoLaunch) {
-            autoLauncher.enable();
-        } else if (result && !settingsToSave.autoLaunch) {
-            autoLauncher.disable();
-        }
-    });
-
-    settingsWindow.close();
+    currentSettings = settingsToSave;
 }
 
 function selectPath() {
     dialog.showOpenDialog({
         properties: ['openDirectory']
-        },
+    },
         (directoryPaths) => {
             settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0]);
         });
 }
 
+function openSettings() {
+    settingsWindow.webContents.send('settings:present', getSettings());
+}
+
 function uploadProjects() {
     dialog.showOpenDialog({
         properties: ['openFile']
-        },
+    },
         (filePaths) => {
             const getProjectsPromise = getProjects(filePaths[0]);
             setTimeout(() => {
@@ -182,7 +163,7 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: "template",
+    filePath: __dirname,
     notificationTime: 1,
     newFileEveryWeek: false,
     workTime: 8,
@@ -190,7 +171,9 @@ defaultSettings = {
     autoLaunch: true
 };
 
-currentSettings = null;
+function getSettings() {
+    return currentSettings != null ? currentSettings : defaultSettings;
+}
 
 module.exports = {
     cancelSettings: cancelSettings,
@@ -199,7 +182,6 @@ module.exports = {
     saveSettings: saveSettings,
     selectPath: selectPath,
     uploadProjects: uploadProjects,
-
-    currentSettings: currentSettings,
-    defaultSettings: defaultSettings
+    getSettings: getSettings,
+    openSettings: openSettings,
 };
