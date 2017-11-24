@@ -11,7 +11,7 @@
         <ul id="projects-list" class="tags">
         </ul>
     </div>
-    <div class="settings-separated-container">
+    <div class="settings-separated-container centered">
         <button id="projects-from-template">Upload Template</button>
     </div>
     <div class="settings-container">
@@ -20,11 +20,14 @@
         <button id="path-button">...</button>
     </div>
     <div class="settings-separated-container">
-        <label>Always on Top:</label>
+        <label>On Top:</label>
         <input id="on-top-checkbox" type="checkbox" class="settings-checkbox"></input>
 
         <label>Black Theme:</label>
         <input id="black-theme-checkbox" type="checkbox" class="settings-checkbox"></input>
+
+        <label>Auto-start:</label>
+        <input id="auto-start-checkbox" type="checkbox" class="settings-checkbox"></input>
     </div>
     <div class="settings-container">
         <div class="label-container">Showtime:</div>
@@ -50,6 +53,7 @@
     let pathTextbox;
     let onTopCheckbox;
     let blackThemeCheckbox;
+    let autoStartCheckbox;
     let newFileEveryWeekCheckbox;
     let showTimeHoursTextbox;
     let workTimeHoursTextbox;
@@ -114,6 +118,7 @@
         $(onTopCheckbox).prop('checked', settings.topMost);
         $(blackThemeCheckbox).prop('checked', settings.theme != 'Light');
         $(newFileEveryWeekCheckbox).prop('checked', settings.newFileEveryWeek);
+        $(autoStartCheckbox).prop('checked', settings.autoLaunch);
 
         showTimeHoursTextbox.value = settings.notificationTime;
         workTimeHoursTextbox.value = settings.workTime;
@@ -131,6 +136,7 @@
         pathTextbox = document.querySelector('#path-textbox');
         onTopCheckbox = document.querySelector('#on-top-checkbox');
         blackThemeCheckbox = document.querySelector('#black-theme-checkbox');
+        autoStartCheckbox = document.querySelector('#auto-start-checkbox');
 
         showTimeHoursTextbox = document.querySelector('#show-time-hours-textbox');
         workTimeHoursTextbox = document.querySelector('#work-time-hours-textbox');
@@ -154,6 +160,7 @@
             currentSettings.topMost = $(onTopCheckbox).prop('checked');
             currentSettings.newFileEveryWeek = $(newFileEveryWeekCheckbox).prop('checked');
             currentSettings.theme = $(blackThemeCheckbox).prop('checked') ? 'Dark' : 'Light';
+            currentSettings.autoLaunch = $(autoStartCheckbox).prop('checked');
 
             currentSettings.notificationTime = showTimeHoursTextbox.value;
             currentSettings.workTime = workTimeHoursTextbox.value;

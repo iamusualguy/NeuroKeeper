@@ -6,7 +6,8 @@ margin: 10px;
 .projects-container {
 border: 1px solid gray;
 overflow: auto;
-height: 210px;
+min-height: 100px;
+max-height: 220px;
 padding: 5px;
 margin-bottom: 5px;
 }
@@ -17,6 +18,9 @@ margin-bottom: 5px;
 
 .settings-separated-container {
 margin-bottom: 15px;
+}
+
+.centered {
 text-align: center;
 }
 

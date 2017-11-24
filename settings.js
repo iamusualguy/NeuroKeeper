@@ -1,3 +1,4 @@
+const AutoLaunch = require('auto-launch');
 const electron = require('electron');
 const fs = require('fs');
 const path = require('path');
@@ -58,7 +59,11 @@ function loadSettings() {
             console.log(err);
             currentSettings = defaultSettings;
         } else {
-            currentSettings = JSON.parse(data);
+            try {
+                currentSettings = JSON.parse(data);
+            } catch (e) {
+                currentSettings = defaultSettings;
+            }
         }
 
         settingsWindow.webContents.send('settings:present', currentSettings);
@@ -72,7 +77,19 @@ function saveSettings(settingsToSave) {
         } else {
             console.log("Settings have been successfully saved.");
         }
-    }); 
+    });
+
+    var autoLauncher = new AutoLaunch({
+        name: 'neuro-reports'
+    });
+
+    autoLauncher.isEnabled().then((result) => {
+        if (!result && settingsToSave.autoLaunch) {
+            autoLauncher.enable();
+        } else if (result && !settingsToSave.autoLaunch) {
+            autoLauncher.disable();
+        }
+    });
 
     settingsWindow.close();
 }
@@ -143,6 +160,7 @@ defaultSettings = {
     newFileEveryWeek: false,
     workTime: 8,
     theme: "Light",
+    autoLaunch: true
 };
 
 currentSettings = null;
