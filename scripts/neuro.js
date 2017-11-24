@@ -1,11 +1,12 @@
 //const Excel = require('exceljs');
 
 function prepareData() {
-    let filename = "reports.csv";
+    let filename = "file.xlsx";
     var workbook = new Excel.Workbook();
-    workbook.csv.readFile(filename)
-        .then(function (worksheet) {
+    workbook.xlsx.readFile(filename)
+        .then(function (book) {
             debugger;
+            worksheet = book.getWorksheet(1);
             for (let i = 0; i < worksheet.rowCount; i++) {
                 let row = worksheet.getRow(i);
                 for (let io = 0; io < row.cellCount; io++) {
