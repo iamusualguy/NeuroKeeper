@@ -59,11 +59,11 @@ function loadSettings() {
         storage.get('neuro-keeper-settings', function(error, data) {
             if (error) {
                 console.log(error);
-                currentSettings = defaultSettings;
+                currentSettings = null;
             }
 
             if (!data.filePath) {
-                currentSettings = defaultSettings;
+                currentSettings = null;
             } else {
                 currentSettings = data;
             }
@@ -74,6 +74,10 @@ function loadSettings() {
 }
 
 function saveSettings(settingsToSave) {
+    if (JSON.stringify(settingsToSave) == JSON.stringify(currentSettings)) {
+        settingsWindow.close();
+    }
+
     storage.set('neuro-keeper-settings', settingsToSave, function(error) {
         if (error) {
             console.log(error);
