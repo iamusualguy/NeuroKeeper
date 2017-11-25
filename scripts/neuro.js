@@ -58,7 +58,7 @@ function prepareData() {
                 rowData.Time = row.getCell('C').value;
                 rowData.Date = row.getCell('D').value;
 
-                allDesc += rowData.Desc;
+                allDesc += " "+rowData.Desc;
 
                 DATA.push(rowData);
             }

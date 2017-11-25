@@ -85,6 +85,8 @@ function getNextString() {
 			//console.log(resNeed);
 			//	}
 			res = res.filter((v, i, a) => a.indexOf(v) === i)
+
+			res = res.slice(getRandomInt(1, 8),getRandomInt(13, 25));
 			console.log(res);
 			return res.join(" ");
 		});
