@@ -33,7 +33,7 @@ function createStatisticsWindow() {
 
      //   statisticsWindow.webContents.openDevTools();
      let pos = mainWindow.getPosition();
-     statisticsWindow.setPosition(pos[0], pos[1]+140);
+     statisticsWindow.setPosition(pos[0], pos[1]+135);
      statisticsWindow.setSize(650, 300, true);
 
         // Load HTML into the window.
@@ -51,7 +51,7 @@ function createWindow() {
         // Create the browser window.
         mainWindow = new BrowserWindow({
             width: 650,
-            height: 140,
+            height: 135,
             frame: false,
             resizable: false,
             skipTaskbar: true,
@@ -61,7 +61,7 @@ function createWindow() {
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
-       // mainWindow.webContents.openDevTools();
+        mainWindow.webContents.openDevTools();
 
         tray.setToolTip('Report Keeper')
         const trayContextMenu = createContextMenu(mainWindow)
