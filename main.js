@@ -46,7 +46,7 @@ function createWindow() {
         tray = new Tray(__dirname + '/icon.png');
         // Create the browser window.
         mainWindow = new BrowserWindow({
-            width: 650,
+            width: 635,
             height: 150,
             frame: false,
             resizable: false,
