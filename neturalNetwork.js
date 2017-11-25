@@ -31,9 +31,9 @@ function createNN() {
 	});
 }
 
-function createRNN() {
+function createLSTN() {
 
-	var net = new brain.recurrent.RNN({
+	var net = new brain.recurrent.LSTM({
 		activation: 'leaky-relu', // activation function
 		hiddenLayers: [180, 120, 60, 40], // hiddenLayers: [3, 4]
 		learningRate: 0.6 // общая степень обученности, полезна при обучении в несколько потоков
@@ -84,5 +84,5 @@ function openNN() {
 module.exports = {
 	createNN: createNN,
 	openNN: openNN,
-	createRNN: createRNN
+	createLSTN: createLSTN
 }

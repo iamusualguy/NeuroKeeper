@@ -37,9 +37,6 @@ function createStatisticsWindow() {
             slashes: true
         }));
     });
-    // nn.createNN();
-    // nn.openNN();
-    createRNN();
 }
 
 function createWindow() {
@@ -74,6 +71,9 @@ function createWindow() {
             slashes: true
         }));
     });
+        // nn.createNN();
+    // nn.openNN();
+    //nn.createLSTN();
 }
 
 function createContextMenu(appWindow) {
