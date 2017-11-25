@@ -9,25 +9,26 @@ function createNN() {
 		learningRate: 0.6 // общая степень обученности, полезна при обучении в несколько потоков
 	});
 
-
 	neuro.prepareData().then(function (trainingSet) {
 		trainingSet = neuro.normilize(trainingSet);
-		net.train(trainingSet[0],
-			{
-				errorThresh: 0.005,  // error threshold to reach
-				iterations: 20000,   // maximum training iterations
-				log: true,           // console.log() progress periodically
-				logPeriod: 500,       // number of iterations between logging
-				//learningRate: 0.3    // learning rate
-			}
-		);
+		for (i = 0; i < 20; i++) {
+			net.train(trainingSet[0],
+				{
+					errorThresh: 0.005,  // error threshold to reach
+					iterations: 100,   // maximum training iterations
+					log: true,           // console.log() progress periodically
+					logPeriod: 10,       // number of iterations between logging
+					//learningRate: 0.3    // learning rate
+				}
+			);
 
-		let wstream = fs.createWriteStream('brain.json');
-		wstream.write(JSON.stringify(net.toJSON(), null, 2));
-		wstream.end();
+			let wstream = fs.createWriteStream('brain.json');
+			wstream.write(JSON.stringify(net.toJSON(), null, 2));
+			wstream.end();
 
-		//var output = net.run([1, 0]);  // [0.987]
-		console.log(output);
+			//var output = net.run([1, 0]);  // [0.987]
+			//console.log(output);
+		}
 	});
 }
 

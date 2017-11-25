@@ -19,16 +19,16 @@ function cancelSettings() {
 
 function createSettingsWindow(mainWindow) {
     // Create setting window.
-settingsWindow = new BrowserWindow({
-    width: 350,
-    height: 400,
-    title: 'Settings',
-    parent: mainWindow,
-    modal: true,
-    frame: false,
-    skipTaskbar: true,
-    backgroundColor: '#333',
-}); 
+    settingsWindow = new BrowserWindow({
+        width: 350,
+        height: 400,
+        title: 'Settings',
+        parent: mainWindow,
+        modal: true,
+        frame: false,
+        skipTaskbar: true,
+        backgroundColor: '#333',
+    });
 
     // Load HTML into the window.
     settingsWindow.loadURL(url.format({
@@ -78,8 +78,7 @@ function loadSettings() {
 }
 
 function saveSettings(settingsToSave, timeStamp, app) {
-    if (!timeStamp)
-    {
+    if (!timeStamp) {
         settingsToSave.timeStamp = currentSettings.timeStamp;
     }
     if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
@@ -118,7 +117,9 @@ function selectPath() {
         properties: ['openDirectory']
     },
         (directoryPaths) => {
-            settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
+            if (directoryPaths) {
+                settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
+            }
         });
 }
 
@@ -131,6 +132,7 @@ function uploadProjects() {
         properties: ['openFile']
     },
         (filePaths) => {
+            if (!filePaths) return;
             const getProjectsPromise = getProjects(filePaths[0]);
             setTimeout(() => {
                 getProjectsPromise.then((projects) => {
