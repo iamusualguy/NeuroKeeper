@@ -16,19 +16,25 @@ storage.setDataPath(os.tmpdir());
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
 let mainWindow;
+let statisticsWindow;
 
 function createStatisticsWindow() {
     settings.loadSettings().then(() => {
         statisticsWindow = new BrowserWindow({
             width: 650,
-            height: 300,
+            height: 0,
             title: 'Statistics',
-            parent: mainWindow,
-            modal: true,
-            skipTaskbar: true
+         //   parent: mainWindow,
+            frame: false,
+         //   modal: true,
+            skipTaskbar: true,
+            backgroundColor: '#333',
         });
 
-        statisticsWindow.webContents.openDevTools();
+     //   statisticsWindow.webContents.openDevTools();
+     let pos = mainWindow.getPosition();
+     statisticsWindow.setPosition(pos[0], pos[1]+135);
+     statisticsWindow.setSize(650, 300, true);
 
         // Load HTML into the window.
         statisticsWindow.loadURL(url.format({
@@ -37,8 +43,6 @@ function createStatisticsWindow() {
             slashes: true
         }));
     });
-    // nn.createNN();
-    // nn.openNN();
 }
 
 function createWindow() {
@@ -46,13 +50,14 @@ function createWindow() {
         tray = new Tray(__dirname + '/icon.png');
         // Create the browser window.
         mainWindow = new BrowserWindow({
-            width: 635,
-            height: 150,
+            width: 650,
+            height: 135,
             frame: false,
             resizable: false,
             skipTaskbar: true,
-            show: false,
+            show: true,
             alwaysOnTop: settings.getSettings().topMost,
+            backgroundColor: '#333',
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
@@ -73,6 +78,9 @@ function createWindow() {
             slashes: true
         }));
     });
+    // nn.createNN();
+    // nn.openNN();
+    //nn.createLSTN();
 }
 
 function createContextMenu(appWindow) {
@@ -123,7 +131,9 @@ app.on('window-all-closed', function () {
 });  //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('statistics:open', (e, args) => {
-    createStatisticsWindow(mainWindow);
+   // createStatisticsWindow();
+
+   statisticsWindow && statisticsWindow.isVisible() ? statisticsWindow.close() : createStatisticsWindow();
 });
 
 ipcMain.on('settings:opened', (e, args) => {
@@ -139,7 +149,7 @@ ipcMain.on('settings:cancel', (e, args) => {
 });
 
 ipcMain.on('settings:save', (e, args) => {
-    settings.saveSettings(args, app);
+    settings.saveSettings(args[0],args[1], app);
 });
 
 ipcMain.on('mainWindow:hide', (e, args) => {

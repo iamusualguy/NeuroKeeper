@@ -4,7 +4,7 @@ const electron = require('electron');
 function getFileName() {
     var d = new Date();
     var filePath = currentSettings.filePath;
-    return filePath + "\\report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
+    return "report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
 }
 
 function writeRow(newReport) {
@@ -18,12 +18,12 @@ function writeRow(newReport) {
                 workbook.xlsx.readFile(filename)
                     .then(() => {
                         workbook.getWorksheet("Efforts").addRow(newReport);
-                        workbook.xlsx.writeFile(filename);
-                        resolve();
+                        resolve(workbook.xlsx.writeFile(filename));
+                        
                     });
             } else if (err.code == 'ENOENT') {
                 // file does not exist
-                writeEmptyFile(newReport); resolve();
+                resolve( writeEmptyFile(newReport) );
             } else {
                 reject('Some other error: ', err.code);
             }
@@ -41,7 +41,9 @@ function writeEmptyFile(newReport) {
     return workbook.xlsx.writeFile(filename)
         .then(function () {
             workbook.getWorksheet("Efforts").addRow(["Project-Task", "Effort", "Description", "Started Date", "Completion Date"]);
-            workbook.getWorksheet("Efforts").addRow(newReport);
+            if (newReport != null) {
+                workbook.getWorksheet("Efforts").addRow(newReport);
+            }
             return workbook.xlsx.writeFile(filename);
             console.log('Array added and file saved.')
         });
@@ -52,29 +54,46 @@ function getStatistics() {
     let filename = getFileName();
     let sObject = {};
     let stats = [];
-   return workbook.xlsx.readFile(filename)
-        .then((book) => {
-            worksheet = book.getWorksheet('Efforts');
-            for (let i = 2; i < worksheet.rowCount; i++) {
-                let row = worksheet.getRow(i);
-                let rowData = {};
-                rowData.ProjectTask = row.getCell('A').value;
-                rowData.Effort = row.getCell('B').value;
-                rowData.Description = row.getCell('C').value;
-                rowData.StartedDate = row.getCell('D').value;
+    var fs = require('fs');
+    var promise = new Promise((resolve, reject) => {
+        fs.stat(filename, function (err, stat) {
+            if (err == null) {
+                resolve(workbook.xlsx.readFile(filename)
+                    .then((book) => {
+                        worksheet = book.getWorksheet('Efforts');
+                        for (let i = 2; i <= worksheet.rowCount; i++) {
+                            let row = worksheet.getRow(i);
+                            let rowData = {};
+                            rowData.ProjectTask = row.getCell('A').value;
+                            rowData.Effort = row.getCell('B').value;
+                            rowData.Description = row.getCell('C').value;
+                            rowData.StartedDate = row.getCell('D').value;
 
-                stats.push(rowData);
+                            stats.push(rowData);
+                        }
+
+                        //console.log(stats);
+                        sObject.TodayEffort = getTodayEffort(stats);
+                        sObject.WeekEffort = getWeekEffort(stats);
+                        sObject.MonthEffort = getMonthEffort(stats);
+                        sObject.WeekDescriptions = getWeekDescriptions(stats);
+
+                        // console.log(sObject);
+                        return sObject;
+                    }))
             }
+            else if (err.code == 'ENOENT') {
+                // file does not exist
 
-            //console.log(stats);
-            sObject.TodayEffort = getTodayEffort(stats);
-            sObject.WeekEffort = getWeekEffort(stats);
-            sObject.MonthEffort = getMonthEffort(stats);
-            sObject.WeekDescriptions = getWeekDescriptions(stats);
-
-           // console.log(sObject);
-           return sObject;
+                sObject.TodayEffort = 0;
+                sObject.WeekEffort = 0;
+                sObject.MonthEffort = 0;
+                writeEmptyFile(null); resolve(sObject);
+            }
         });
+    });
+
+    return promise;
 }
 
 function getMonthEffort(stats) {
@@ -85,7 +104,7 @@ function getMonthEffort(stats) {
         }
     });
 
- //   console.log(trackedTime);
+    //   console.log(trackedTime);
     return trackedTime;
 }
 
@@ -107,7 +126,7 @@ function getWeekEffort(stats) {
             weekTime += item.Effort;
         }
     });
-  //  console.log(weekTime);
+    //  console.log(weekTime);
     return weekTime;
 }
 
@@ -130,7 +149,7 @@ function getTodayEffort(stats) {
         }
     });
 
-  //  console.log(trackedTime);
+    //  console.log(trackedTime);
     return trackedTime;
 }
 
@@ -162,7 +181,7 @@ function getWeekDescriptions(stats) {
         return result;
     });
 
-   // console.log(weekDesc);
-   // console.log(wekDayCacl);
-    return {daySumm: wekDayCacl,dayList: weekDesc};
+    // console.log(weekDesc);
+    // console.log(wekDayCacl);
+    return { daySumm: wekDayCacl, dayList: weekDesc };
 }

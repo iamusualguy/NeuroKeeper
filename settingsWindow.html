@@ -166,7 +166,7 @@
             currentSettings.workTime = workTimeHoursTextbox.value;
 
             // Notify background about saving.
-            ipcRenderer.send('settings:save', currentSettings);
+            ipcRenderer.send('settings:save', [currentSettings, null]);
         }
 
         saveButton.addEventListener('click', onSaveButtonClicked);

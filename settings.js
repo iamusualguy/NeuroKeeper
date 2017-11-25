@@ -6,7 +6,7 @@ const url = require('url');
 const xlsj = require("xls-to-json");
 const storage = require('electron-json-storage');
 
-const { app, BrowserWindow, dialog } = electron;
+const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
 let currentSettings;
@@ -15,15 +15,19 @@ function cancelSettings() {
     settingsWindow.close();
 }
 
+
+
 function createSettingsWindow(mainWindow) {
     // Create setting window.
     settingsWindow = new BrowserWindow({
         width: 350,
-        height: 500,
+        height: 400,
         title: 'Settings',
         parent: mainWindow,
         modal: true,
-        skipTaskbar: true
+        frame: false,
+        skipTaskbar: true,
+        backgroundColor: '#333',
     });
 
     // Load HTML into the window.
@@ -73,7 +77,10 @@ function loadSettings() {
     });
 }
 
-function saveSettings(settingsToSave) {
+function saveSettings(settingsToSave, timeStamp, app) {
+    if (!timeStamp) {
+        settingsToSave.timeStamp = currentSettings.timeStamp;
+    }
     if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
 
         storage.set('neuro-keeper-settings', settingsToSave, function (error) {
@@ -93,12 +100,16 @@ function saveSettings(settingsToSave) {
                 }
             });
 
-            app.relaunch();
-            app.quit();
+            if (!timeStamp) {
+                app.relaunch();
+                app.quit();
+            }
         });
         currentSettings = settingsToSave;
     }
-    settingsWindow.close();
+    if (settingsWindow) {
+        settingsWindow.close();
+    }
 }
 
 function selectPath() {
@@ -106,7 +117,9 @@ function selectPath() {
         properties: ['openDirectory']
     },
         (directoryPaths) => {
-            settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0]);
+            if (directoryPaths) {
+                settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
+            }
         });
 }
 
@@ -119,6 +132,7 @@ function uploadProjects() {
         properties: ['openFile']
     },
         (filePaths) => {
+            if (!filePaths) return;
             const getProjectsPromise = getProjects(filePaths[0]);
             setTimeout(() => {
                 getProjectsPromise.then((projects) => {
@@ -168,12 +182,13 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: __dirname,
-    notificationTime: 1,
+    filePath: __dirname + "\\",
+    notificationTime: 1.0,
     newFileEveryWeek: false,
-    workTime: 8,
-    theme: "Light",
-    autoLaunch: true
+    workTime: 8.0,
+    theme: "Dark",
+    autoLaunch: true,
+    timeStamp: new Date()
 };
 
 function getSettings() {

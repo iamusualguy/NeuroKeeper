@@ -12,12 +12,9 @@
     <div class="container">
         <ul class="week"></ul>
         <hr>
-        <div class="date"></div>
-        <div class="report">
-            CRMMobile.Development 0,5 Addressed by PR comments (PR 148717) 30.11.2017
-        </div>
-        <div class="report">
-            CRMMobile.Development 0,5 Addressed by PR comments (PR 148717) 30.11.2017
+        <!-- <div class="date"></div>-->
+        <div id="list">
+           
         </div>
     </div>
 
@@ -27,69 +24,78 @@
 <script src="./scripts/radial-progress-chart.js"></script>
 
 <script>
-    
+
     const $ = require('jquery');
     let currentSettings = null;
 
     $(() => {
-        const {ipcRenderer} = electron;
-
-        var data = [
-            { day: 'M' },
-            { day: 'T' },
-            { day: 'W' },
-            { day: 'T' },
-            { day: 'F' },
-            { day: 'S' },
-            { day: 'S' }
-        ];
+        const { ipcRenderer } = electron;
 
         var dateFormatter = d3.time.format("%A, %B %d, %Y");
 
         ipcRenderer.send('statistics:opened', {});
-                
+
         ipcRenderer.on('settings:sent', (e, settings) => {
             currentSettings = settings;
 
-            d3.select('.week').selectAll('li')
-            .data(data).enter()
-            .append('li').on('click', function (d) {
-                // Update active class, date and main chart
-                d3.selectAll('.circle').classed('active', false);
-                d3.select(this).select('.circle').classed('active', true);
-                d3.select('.date').text(d.date);
-                mainChart.update(d.series);
-            })
-            .append('div').attr('class', 'circle').text(function (d) {
-                return d.day;
-            })
-            .each(function (d, i) {
-                getStatistics().then((d)=>{console.log(d)});
-                debugger;
-                d.date = dateFormatter(getDate(i));
-                d.series = [{
-                    value: getRandom(),
-                    color: ['red', '#7CFC00']
-                }];
-                new RadialProgressChart(this.parentNode, {
-                    diameter: 40,
-                    stroke: {
-                        width: 5,
-                        gap: 1
-                    },
-                    shadow: {
-                        width: 1
-                    },
-                    series: d.series,
-                    center: function (d) {
-                        return d;
-                    }
+            getStatistics().then((stat) => {
+                //   console.log(d)
+                var data = [
+                    { day: 'S' },
+                    { day: 'M' },
+                    { day: 'T' },
+                    { day: 'W' },
+                    { day: 'T' },
+                    { day: 'F' },
+                    { day: 'S' },
+                ];
+
+                data.map((d, i) => {
+                    d.list = stat.WeekDescriptions.dayList[i];
+                    d.summ = stat.WeekDescriptions.daySumm[i];
                 });
+                d3.select('.week').selectAll('li')
+                    .data(data).enter()
+                    .append('li').on('click', function (d) {
+                        // Update active class, date and main chart
+                        d3.selectAll('.circle').classed('active', false);
+                        d3.select(this).select('.circle').classed('active', true);
+                        d3.select('.date').text(d.date);
+                      //  mainChart.update(d.series);
+
+                        renderList(d.list);
+                    })
+                    .append('div').attr('class', 'circle').text(function (d) {
+                         // Select monday by default
+            $('li').click();
+                        return d.day;
+                    })
+                    .each(function (d, i) {
+
+                        d.date = dateFormatter(getDate(i));
+                        d.series = [{
+                            value: d.summ,
+                            color: ['red', '#7CFC00']
+                        }];
+                        new RadialProgressChart(this.parentNode, {
+                            diameter: 40,
+                            stroke: {
+                                width: 5,
+                                gap: 1
+                            },
+                            shadow: {
+                                width: 1
+                            },
+                            max: currentSettings.workTime,
+                            series: d.series,
+                            center: (Math.round( d.summ * 10 ) / 10).toString()
+                            
+                        });
+                    });
             });
 
             // Return some chronological dates
             function getDate(i) {
-
                 var curr = new Date(); // get current date
                 var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
                 var last = first + 6; // last day is the first day + 6
@@ -100,13 +106,16 @@
                 return firstday;
             }
 
+            function renderList(list) {
+                $("#list").empty();
+                list.forEach((l) => { $("#list").append("<div class='report'>" + l.ProjectTask + " " + l.Effort + " " + l.Description + "</div>") });
+            }
             // Random int between 20-80
             function getRandom() {
                 return Math.round(Math.random() * 60) + 20;
             }
 
-            // Select monday by default
-            document.querySelector('li').click();
+           
         });
     });
 </script>

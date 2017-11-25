@@ -1,4 +1,4 @@
-const {ipcRenderer} = electron;
+//const {ipcRenderer} = electron;
 let mainManager = null;
 let currentSettings = null;
 

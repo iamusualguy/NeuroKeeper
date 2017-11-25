@@ -1,3 +1,5 @@
+const { ipcRenderer } = electron;
+
 const oneHour = 3600000;
 const oneMinute = 60000;
 
@@ -20,12 +22,24 @@ class reportManager {
     }
 
     startNewDay() {
-        this._start_day = new Date();
-        this._updateWorkedTime("0", "0");
+        const timestampDate = new Date(this.settings.timeStamp);
+        const timestamp = "" + timestampDate.getDay() + timestampDate.getMonth() + timestampDate.getFullYear();
+        const nowDate = "" + new Date().getDay() + new Date().getMonth() + new Date().getFullYear();
+        if (timestamp != nowDate) {
+            this.settings.timeStamp = new Date();
+            ipcRenderer.send('settings:save', [this.settings, true]);
+        }
+
+        this._start_day = new Date(this.settings.timeStamp);
+
+        const elapsed_day = new Date() - this._start_day;
+        const workedHours = Math.floor(elapsed_day / oneHour);
+        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
 
         this.resetFields();
 
-        if(this.minuteTimer) {
+        if (this.minuteTimer) {
             clearInterval(this.minuteTimer);
         }
 
@@ -33,13 +47,13 @@ class reportManager {
     }
 
     resetFields() {
-        this.durationField.value = "1.0";
+        this.durationField.value = this.settings.notificationTime;
         this.reportField.value = "";
         this.dateField.value = formatDate(this._start_day);
 
         this._start_task = new Date();
 
-        if(this.notificationTimer) {
+        if (this.notificationTimer) {
             clearInterval(this.notificationTimer);
         }
 
@@ -57,13 +71,14 @@ class reportManager {
         const reportDuration = parseFloat(this.durationField.value);
         const reportText = this.reportField.value;
         const reportDate = new Date(this.dateField.value);
-    
+
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
     _updateMinute() {
         const elapsed = new Date() - this._start_task;
-        this.durationField.value = roundNumber(elapsed / oneHour);
+        const durationMinutes = Math.round((elapsed % oneHour) / oneMinute);
+        this.durationField.value = roundNumber(elapsed / oneHour) + "." + (durationMinutes - durationMinutes % 6) / 6;
 
         const elapsed_day = new Date() - this._start_day;
         const workedHours = Math.floor(elapsed_day / oneHour);
@@ -71,26 +86,19 @@ class reportManager {
 
         this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
     }
-    
+
     _notifyUser() {
         ipcRenderer.send('mainWindow:show', {});
         this.reportField.focus();
 
-        const elapsed = new Date() - this._start_task;
-        this.durationField.value = roundNumber(elapsed / oneHour);
-
-        const elapsed_day = new Date() - this._start_day;
-        const workedHours = Math.floor(elapsed_day / oneHour);
-        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
-        
-        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
+        this._updateMinute();
     }
 
     _updateWorkedTime(workedHours, workedMinutes) {
         let firstHour = "0";
         let secondHour = workedHours[0];
 
-        if(workedHours.length > 1) {
+        if (workedHours.length > 1) {
             firstHour = workedHours[0];
             secondHour = workedHours[1];
         }
@@ -98,7 +106,7 @@ class reportManager {
         let firstMinute = "0";
         let secondMinute = workedMinutes[0];
 
-        if(workedMinutes.length > 1) {
+        if (workedMinutes.length > 1) {
             firstMinute = workedMinutes[0];
             secondMinute = workedMinutes[1];
         }
@@ -122,10 +130,12 @@ class reportManager {
         const y = this._start_day.getFullYear(), m = this._start_day.getMonth();
         const firstDay = new Date(y, m, 1);
         const lastDay = new Date(y, m + 1, 0);
-        const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1,2,3,4,5]);
+        const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1, 2, 3, 4, 5]);
         const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * daysInMonth)) || 0.1;
 
         progress.update([trackedDay, trackedWeek, trackedMonth]);
+
+        $(".rbc-center-text > tspan").text((Math.round(this.statistics.TodayEffort * 10) / 10).toString())
     }
 }
 
@@ -142,7 +152,7 @@ function formatDate(date) {
 }
 
 function roundNumber(number) {
-    return number.toFixed(1);
+    return number.toFixed(0);
 }
 
 function fillSelect(selectField, projects) {
