@@ -106,7 +106,7 @@ function selectPath() {
         properties: ['openDirectory']
     },
         (directoryPaths) => {
-            settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0]);
+            settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
         });
 }
 
@@ -168,12 +168,13 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: __dirname,
-    notificationTime: 1,
+    filePath: __dirname + "\\",
+    notificationTime: 1.0,
     newFileEveryWeek: false,
-    workTime: 8,
+    workTime: 8.0,
     theme: "Light",
-    autoLaunch: true
+    autoLaunch: true,
+    timeStamp: new Date(),
 };
 
 function getSettings() {

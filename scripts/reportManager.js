@@ -33,7 +33,7 @@ class reportManager {
     }
 
     resetFields() {
-        this.durationField.value = "1.0";
+        this.durationField.value = this.settings.notificationTime;
         this.reportField.value = "";
         this.dateField.value = formatDate(this._start_day);
 
