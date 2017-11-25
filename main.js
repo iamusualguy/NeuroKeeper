@@ -24,6 +24,7 @@ function createStatisticsWindow() {
             height: 300,
             title: 'Statistics',
             parent: mainWindow,
+            frame: false,
             modal: true,
             skipTaskbar: true,
             backgroundColor: '#333',

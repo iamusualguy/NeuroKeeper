@@ -25,6 +25,7 @@ settingsWindow = new BrowserWindow({
     title: 'Settings',
     parent: mainWindow,
     modal: true,
+    frame: false,
     skipTaskbar: true,
     backgroundColor: '#333',
 }); 
