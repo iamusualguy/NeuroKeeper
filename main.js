@@ -18,6 +18,15 @@ const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 let mainWindow;
 let statisticsWindow;
 
+function loadStatistics() {
+    // Load HTML into the window.
+    statisticsWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'statisticsWindow.html'),
+        protocol: 'file',
+        slashes: true
+    }));
+}
+
 function createStatisticsWindow() {
     settings.loadSettings().then(() => {
         statisticsWindow = new BrowserWindow({
@@ -36,12 +45,7 @@ function createStatisticsWindow() {
         statisticsWindow.setPosition(pos[0], pos[1] + 135);
         statisticsWindow.setSize(650, 300, true);
 
-        // Load HTML into the window.
-        statisticsWindow.loadURL(url.format({
-            pathname: path.join(__dirname, 'statisticsWindow.html'),
-            protocol: 'file',
-            slashes: true
-        }));
+        loadStatistics();
     });
 }
 
@@ -131,9 +135,19 @@ app.on('window-all-closed', function () {
 });  //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('statistics:open', (e, args) => {
-    // createStatisticsWindow();
 
-    statisticsWindow && statisticsWindow.isVisible() ? statisticsWindow.close() : createStatisticsWindow();
+    if (!statisticsWindow) {
+        createStatisticsWindow();
+        return;
+    }
+
+    if (statisticsWindow.isVisible()) {
+        statisticsWindow.hide();
+    }
+    else {
+        loadStatistics();
+        statisticsWindow.show();
+    }
 });
 
 ipcMain.on('settings:opened', (e, args) => {

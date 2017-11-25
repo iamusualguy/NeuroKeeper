@@ -186,7 +186,7 @@ function normilize(array) {
         obj.input = v.input.map((val) => {
             return val / sum;
         });
-        F
+
         if (v.output) {
             sum = v.output.reduce((a, b) => a + b, 0);
             objSum.output = sum;
