@@ -16,6 +16,7 @@ storage.setDataPath(os.tmpdir());
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
 let mainWindow;
+let statisticsWindow;
 
 function createStatisticsWindow() {
     settings.loadSettings().then(() => {
@@ -130,7 +131,9 @@ app.on('window-all-closed', function () {
 });  //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('statistics:open', (e, args) => {
-    createStatisticsWindow(mainWindow);
+   // createStatisticsWindow();
+
+   statisticsWindow && statisticsWindow.isVisible() ? statisticsWindow.close() : createStatisticsWindow();
 });
 
 ipcMain.on('settings:opened', (e, args) => {
