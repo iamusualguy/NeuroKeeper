@@ -18,3 +18,13 @@ function saveNewReport() {
         alert("You didn't fill some field. Please fill all fields and save record again.");
     }
 }
+
+function handlerNueralClick() {
+    if(arguments[0].event.button == 1){
+        e.preventDefault();
+        ipcRenderer.send('nn:get', {});
+        ipcMain.on('nn:to', (e, str) => {
+            neuralReport(str);
+        });
+    }
+}

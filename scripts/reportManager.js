@@ -75,6 +75,10 @@ class reportManager {
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
+    neuralReport(str){
+        this.reportField = str;
+    }
+
     _updateMinute() {
         const elapsed = new Date() - this._start_task;
         const durationMinutes = Math.round((elapsed % oneHour) / oneMinute);

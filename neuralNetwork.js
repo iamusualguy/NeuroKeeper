@@ -62,31 +62,39 @@ function createLSTN() {
 	});
 }
 
-function openNN() {
+function openNN(i) {
 	var net = new brain.NeuralNetwork();//{
 	//activation: 'relu', // activation function
 	//hiddenLayers: [120, 60], // hiddenLayers: [3, 4]
 	//learningRate: 0.6 // общая степень обученности, полезна при обучении в несколько потоков
 	//});
 
-	return net.fromJSON('./brain.json');
+	return net.fromJSON(require('./' + i + '.json'));
 }
 
 function getNextString() {
-	neuro.generateInput().then(function (inputData) {
-		inputData = neuro.normilize(inputData);
-		//for (i = 0; i > trainingSet[0].lenght; i++) {
-		var output = net.run(inputData[0][0].input);
-		var res = neuro.toWords(output, inputData[1][0].input);
-		//var resNeed = neuro.toWords(inputData[0][i].output, inputData[1][i].output)
-		console.log(res);
-		//Fconsole.log(resNeed);
-		//	}
-	});
+		neuro.gI().then((inputData) => {
+			console.log(inputData);
+			inputData = neuro.normilize(inputData);
+			var net = openNN(getRandomInt(1, 3));
+			//for (i = 0; i > trainingSet[0].lenght; i++) {
+			var output = net.run(inputData[0][0].input);
+			var res = neuro.toWords(output, inputData[1][0].input);
+			//var resNeed = neuro.toWords(inputData[0][i].output, inputData[1][i].output)
+			console.log(res);
+			//console.log(resNeed);
+			//	}
+			return res.filter((v, i, a) => a.indexOf(v) === i).join(" ");
+		})
+}
+
+function getRandomInt(min, max) {
+	return Math.floor(Math.random() * (max - min)) + min;
 }
 
 module.exports = {
 	createNN: createNN,
 	openNN: openNN,
-	createLSTN: createLSTN
+	createLSTN: createLSTN,
+	getNextString: getNextString
 }

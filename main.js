@@ -72,7 +72,7 @@ function createWindow() {
         tray.setContextMenu(trayContextMenu)
 
         tray.on('click', () => {
-            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
         })
 
         // and load the index.html of the app.
@@ -186,4 +186,8 @@ ipcMain.on('settings:selectPath', (e, args) => {
 ipcMain.on('statistics:opened', (e, args) => {
     const settingsToSend = settings.getSettings();
     statisticsWindow.webContents.send('settings:sent', settingsToSend);
+});
+
+ipcMain.on('nn:get', (e, args) => {
+    ipcMain.send("nn:to", nn.getNextString());
 });
