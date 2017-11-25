@@ -61,7 +61,7 @@ function getStatistics() {
                 resolve(workbook.xlsx.readFile(filename)
                     .then((book) => {
                         worksheet = book.getWorksheet('Efforts');
-                        for (let i = 2; i < worksheet.rowCount; i++) {
+                        for (let i = 2; i <= worksheet.rowCount; i++) {
                             let row = worksheet.getRow(i);
                             let rowData = {};
                             rowData.ProjectTask = row.getCell('A').value;

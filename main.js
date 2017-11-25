@@ -21,16 +21,19 @@ function createStatisticsWindow() {
     settings.loadSettings().then(() => {
         statisticsWindow = new BrowserWindow({
             width: 650,
-            height: 300,
+            height: 0,
             title: 'Statistics',
-            parent: mainWindow,
+         //   parent: mainWindow,
             frame: false,
-            modal: true,
+         //   modal: true,
             skipTaskbar: true,
             backgroundColor: '#333',
         });
 
      //   statisticsWindow.webContents.openDevTools();
+     let pos = mainWindow.getPosition();
+     statisticsWindow.setPosition(pos[0], pos[1]+140);
+     statisticsWindow.setSize(650, 300, true);
 
         // Load HTML into the window.
         statisticsWindow.loadURL(url.format({
@@ -57,7 +60,7 @@ function createWindow() {
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
-        mainWindow.webContents.openDevTools();
+       // mainWindow.webContents.openDevTools();
 
         tray.setToolTip('Report Keeper')
         const trayContextMenu = createContextMenu(mainWindow)
