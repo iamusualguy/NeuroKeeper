@@ -60,6 +60,7 @@ button {
 .task-input {
     flex-grow: 1;
     height: 25px;
+    max-width: 195px;
 }
 
 .duration-input {

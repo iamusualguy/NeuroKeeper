@@ -21,7 +21,7 @@ function createSettingsWindow(mainWindow) {
     // Create setting window.
     settingsWindow = new BrowserWindow({
         width: 350,
-        height: 400,
+        height: 460,
         title: 'Settings',
         parent: mainWindow,
         modal: true,
