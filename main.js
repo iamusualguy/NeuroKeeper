@@ -40,7 +40,7 @@ function createStatisticsWindow() {
             backgroundColor: '#333',
         });
 
-        //   statisticsWindow.webContents.openDevTools();
+        //statisticsWindow.webContents.openDevTools();
         let pos = mainWindow.getPosition();
         statisticsWindow.setPosition(pos[0], pos[1] + 135);
         statisticsWindow.setSize(650, 300, true);
@@ -65,7 +65,7 @@ function createWindow() {
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
 
         tray.setToolTip('Report Keeper')
         const trayContextMenu = createContextMenu(mainWindow)
@@ -169,7 +169,7 @@ ipcMain.on('settings:save', (e, args) => {
 
 ipcMain.on('mainWindow:hide', (e, args) => {
     hideMainWindow();
-    if (statisticsWindow.isVisible()) {
+    if (statisticsWindow && statisticsWindow.isVisible()) {
         statisticsWindow.hide();
     }
 });
