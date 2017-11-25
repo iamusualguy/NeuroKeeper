@@ -75,7 +75,7 @@ class reportManager {
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
-    neuralReport(str){
+    neuralReport(str) {
         this.reportField.value = str;
     }
 
@@ -89,8 +89,7 @@ class reportManager {
         let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
 
         // TODO fix by other way
-        if(workedMinutes === 60)
-        {
+        if (workedMinutes === 60) {
             workedHours += 1;
             workedMinutes = 0;
         }

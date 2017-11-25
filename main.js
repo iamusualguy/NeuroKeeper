@@ -112,6 +112,7 @@ function createContextMenu(appWindow) {
 
 function hideMainWindow() {
     mainWindow.hide();
+
 }
 
 function showMainWindow() {
@@ -168,6 +169,9 @@ ipcMain.on('settings:save', (e, args) => {
 
 ipcMain.on('mainWindow:hide', (e, args) => {
     hideMainWindow();
+    if (statisticsWindow.isVisible()) {
+        statisticsWindow.hide();
+    }
 });
 
 ipcMain.on('mainWindow:show', (e, args) => {
@@ -189,5 +193,5 @@ ipcMain.on('statistics:opened', (e, args) => {
 });
 
 ipcMain.on('nn:get', (e, args) => {
-    nn.getNextString().then((i)=>{mainWindow.webContents.send("nn:to", i );}); 
+    nn.getNextString().then((i) => { mainWindow.webContents.send("nn:to", i); });
 });
