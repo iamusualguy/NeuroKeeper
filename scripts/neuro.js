@@ -1,11 +1,45 @@
 //const Excel = require('exceljs');
 
-var Dictionary = [];
+var Dictionary ;
 
+function gI(){
+    return prepareData().then(function () {
+        return generateInput();
+    });
+}
+function generateInput() {
+    var DATA = [];
+    var workbook = new Excel.Workbook();
+    return workbook.xlsx.readFile("report-11-2017demo.xlsx")
+        .then((book) => {
+            worksheet = book.getWorksheet('Efforts');
+            for (let i = worksheet.rowCount; i >= 2; i--) {
+                let row = worksheet.getRow(i);
+                let rowData = {};
+                let proj = row.getCell('A').value;//s.substr(s.indexOf('.')+1,s.length)
+                if (proj != null  && row.getCell('B').value != null){
+                rowData.Task = proj.substr(proj.indexOf('.') + 1, proj.length);
+                rowData.Desc = row.getCell('C').value;
+                rowData.Time = row.getCell('B').value;
+                rowData.Date = row.getCell('D').value;
+
+                DATA.push(rowData);
+                }
+            }
+            var d = getHoursArray(new Date());
+            var t = getWeekDayArray(new Date());
+
+           var v = d.concat(t);
+           var o =  DataToArrays(DATA, Dictionary)[0].input;
+               o = o.slice(30);
+         return  v.concat(o);
+        });
+}
 
 function prepareData() {
     let allDesc = "";
     let filename = "6file.xlsx";
+    Dictionary = [];
     var workbook = new Excel.Workbook();
     return workbook.xlsx.readFile(filename)
         .then(function (book) {
