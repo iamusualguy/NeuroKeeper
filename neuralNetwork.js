@@ -73,7 +73,7 @@ function openNN(i) {
 }
 
 function getNextString() {
-		neuro.gI().then((inputData) => {
+	return neuro.gI().then((inputData) => {
 			console.log(inputData);
 			inputData = neuro.normilize(inputData);
 			var net = openNN(getRandomInt(1, 3));
@@ -84,8 +84,12 @@ function getNextString() {
 			console.log(res);
 			//console.log(resNeed);
 			//	}
-			return res.filter((v, i, a) => a.indexOf(v) === i).join(" ");
-		})
+			res = res.filter((v, i, a) => a.indexOf(v) === i)
+
+			res = res.slice(getRandomInt(1, 8),getRandomInt(13, 25));
+			console.log(res);
+			return res.join(" ");
+		});
 }
 
 function getRandomInt(min, max) {

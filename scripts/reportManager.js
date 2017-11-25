@@ -70,13 +70,13 @@ class reportManager {
         const reportTask = this.taskField.value;
         const reportDuration = parseFloat(this.durationField.value);
         const reportText = this.reportField.value;
-        const reportDate = new Date(this.dateField.value);
+        const reportDate = new Date(this.dateField.value + ' 12:00');
 
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
 
-    neuralReport(str){
-        this.reportField = str;
+    neuralReport(str) {
+        this.reportField.value = str;
     }
 
     _updateMinute() {
@@ -89,8 +89,7 @@ class reportManager {
         let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
 
         // TODO fix by other way
-        if(workedMinutes === 60)
-        {
+        if (workedMinutes === 60) {
             workedHours += 1;
             workedMinutes = 0;
         }
