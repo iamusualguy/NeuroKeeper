@@ -47,7 +47,7 @@ body {
       color: black;
       font-size: 15px;
       font-weight: 100;
-      text-align: center;
+      text-align: left;
       margin-bottom: 15px;
     }
 
@@ -83,5 +83,5 @@ body {
     .rbc-center-text {
       font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
       fill:black;
-      font-size: 13px;
+      font-size: 20px;
   }
