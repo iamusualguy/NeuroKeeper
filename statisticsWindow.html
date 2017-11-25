@@ -108,7 +108,13 @@
 
             function renderList(list) {
                 $("#list").empty();
-                list.forEach((l) => { $("#list").append("<div class='report'>" + l.ProjectTask + " " + l.Effort + " " + l.Description + "</div>") });
+                list.forEach((l) => {
+                    const project = "<div class='report-project'>" + l.ProjectTask + "</div>";
+                    const effort = "<div class='report-effort'>" + l.Effort + "</div>";
+                    const description = "<div class='report-description'>" + l.Description + "</div>";
+
+                    $("#list").append("<div class='report'>" + project + " " + effort + " " + description + "</div>");
+                });
             }
             // Random int between 20-80
             function getRandom() {

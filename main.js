@@ -72,7 +72,7 @@ function createWindow() {
         tray.setContextMenu(trayContextMenu)
 
         tray.on('click', () => {
-            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
         })
 
         // and load the index.html of the app.
@@ -112,6 +112,7 @@ function createContextMenu(appWindow) {
 
 function hideMainWindow() {
     mainWindow.hide();
+
 }
 
 function showMainWindow() {
@@ -168,6 +169,9 @@ ipcMain.on('settings:save', (e, args) => {
 
 ipcMain.on('mainWindow:hide', (e, args) => {
     hideMainWindow();
+    if (statisticsWindow.isVisible()) {
+        statisticsWindow.hide();
+    }
 });
 
 ipcMain.on('mainWindow:show', (e, args) => {
@@ -186,4 +190,8 @@ ipcMain.on('settings:selectPath', (e, args) => {
 ipcMain.on('statistics:opened', (e, args) => {
     const settingsToSend = settings.getSettings();
     statisticsWindow.webContents.send('settings:sent', settingsToSend);
+});
+
+ipcMain.on('nn:get', (e, args) => {
+    nn.getNextString().then((i) => { mainWindow.webContents.send("nn:to", i); });
 });

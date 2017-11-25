@@ -1,8 +1,8 @@
-//const Excel = require('exceljs');
+const Excel = require('exceljs');
 
-var Dictionary ;
+var Dictionary;
 
-function gI(){
+function gI() {
     return prepareData().then(function () {
         return generateInput();
     });
@@ -17,28 +17,27 @@ function generateInput() {
                 let row = worksheet.getRow(i);
                 let rowData = {};
                 let proj = row.getCell('A').value;//s.substr(s.indexOf('.')+1,s.length)
-                if (proj != null  && row.getCell('B').value != null){
-                rowData.Task = proj.substr(proj.indexOf('.') + 1, proj.length);
-                rowData.Desc = row.getCell('C').value;
-                rowData.Time = row.getCell('B').value;
-                rowData.Date = row.getCell('D').value;
+                if (proj != null && row.getCell('B').value != null) {
+                    rowData.Task = proj.substr(proj.indexOf('.') + 1, proj.length);
+                    rowData.Desc = row.getCell('C').value;
+                    rowData.Time = row.getCell('B').value;
+                    rowData.Date = row.getCell('D').value;
 
-                DATA.push(rowData);
+                    DATA.push(rowData);
                 }
             }
             var d = getHoursArray(new Date());
             var t = getWeekDayArray(new Date());
 
-           var v = d.concat(t);
-           var o =  DataToArrays(DATA, Dictionary)[randomIntFromInterval(5,worksheet.rowCount-5)].input;
-               o = o.slice(30);
-         return [{input: v.concat(o)}];
+            var v = d.concat(t);
+            var o = DataToArrays(DATA, Dictionary)[randomIntFromInterval(5, worksheet.rowCount - 5)].input;
+            o = o.slice(30);
+            return [{ input: v.concat(o) }];
         });
 }
 
-function randomIntFromInterval(min,max)
-{
-    return Math.floor(Math.random()*(max-min+1)+min);
+function randomIntFromInterval(min, max) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
 function prepareData() {
@@ -59,7 +58,7 @@ function prepareData() {
                 rowData.Time = row.getCell('C').value;
                 rowData.Date = row.getCell('D').value;
 
-                allDesc += rowData.Desc;
+                allDesc += " "+rowData.Desc;
 
                 DATA.push(rowData);
             }
@@ -218,4 +217,5 @@ module.exports = {
     prepareData: prepareData,
     normilize: normilize,
     toWords: toWords,
+    gI: gI,
 }
