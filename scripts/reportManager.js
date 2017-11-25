@@ -76,7 +76,7 @@ class reportManager {
     }
 
     neuralReport(str){
-        this.reportField = str;
+        this.reportField.value = str;
     }
 
     _updateMinute() {

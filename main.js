@@ -189,5 +189,5 @@ ipcMain.on('statistics:opened', (e, args) => {
 });
 
 ipcMain.on('nn:get', (e, args) => {
-    ipcMain.send("nn:to", nn.getNextString());
+    nn.getNextString().then((i)=>{mainWindow.webContents.send("nn:to", i );}); 
 });

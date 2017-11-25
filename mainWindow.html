@@ -18,7 +18,7 @@
                     <input id="date-input" class="date-input" type="text" placeholder="Date">
                 </div>
                 <div>
-                    <input id="report-input" class="report-input" type="text" placeholder="New report" onclick="handlerNueralClick()">
+                    <input id="report-input" class="report-input" type="text" placeholder="New report" />
                 </div>
             </div>
             <button class="save-button" onclick="saveNewReport()">save</button>
@@ -129,6 +129,12 @@
 
         statisticsButton.addEventListener('click', onStatisticsButtonClicked);
     });
+
+    $("#report-input").on("mousedown", function(event){
+    if(event.button==2){
+        handlerNueralClick();
+    }
+});
 </script>
 
 </html>
