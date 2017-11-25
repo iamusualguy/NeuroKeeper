@@ -4,7 +4,7 @@ const electron = require('electron');
 function getFileName() {
     var d = new Date();
     var filePath = currentSettings.filePath;
-    return "report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
+    return filePath+"report-" + (d.getMonth() + 1) + "-" + d.getFullYear() + ".xlsx";
 }
 
 function writeRow(newReport) {
