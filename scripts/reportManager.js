@@ -81,8 +81,15 @@ class reportManager {
         this.durationField.value = roundNumber(elapsed / oneHour) + "." + (durationMinutes - durationMinutes % 6) / 6;
 
         const elapsed_day = new Date() - this._start_day;
-        const workedHours = Math.floor(elapsed_day / oneHour);
-        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+        let workedHours = Math.floor(elapsed_day / oneHour);
+        let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+
+        // TODO fix by other way
+        if(workedMinutes === 60)
+        {
+            workedHours += 1;
+            workedMinutes = 0;
+        }
 
         this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
     }
