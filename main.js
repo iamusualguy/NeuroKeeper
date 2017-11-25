@@ -142,7 +142,7 @@ ipcMain.on('settings:cancel', (e, args) => {
 });
 
 ipcMain.on('settings:save', (e, args) => {
-    settings.saveSettings(args, app);
+    settings.saveSettings(args[0],args[1], app);
 });
 
 ipcMain.on('mainWindow:hide', (e, args) => {

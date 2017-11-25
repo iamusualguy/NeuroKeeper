@@ -6,7 +6,7 @@ const url = require('url');
 const xlsj = require("xls-to-json");
 const storage = require('electron-json-storage');
 
-const { app, BrowserWindow, dialog } = electron;
+const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
 let currentSettings;
@@ -76,7 +76,11 @@ function loadSettings() {
     });
 }
 
-function saveSettings(settingsToSave, timeStamp) {
+function saveSettings(settingsToSave, timeStamp, app) {
+    if (!timeStamp)
+    {
+        settingsToSave.timeStamp = currentSettings.timeStamp;
+    }
     if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
 
         storage.set('neuro-keeper-settings', settingsToSave, function (error) {
@@ -95,7 +99,7 @@ function saveSettings(settingsToSave, timeStamp) {
                     autoLauncher.disable();
                 }
             });
-            
+
             if (!timeStamp) {
                 app.relaunch();
                 app.quit();
@@ -179,7 +183,7 @@ defaultSettings = {
     notificationTime: 1.0,
     newFileEveryWeek: false,
     workTime: 8.0,
-    theme: "Light",
+    theme: "Dark",
     autoLaunch: true,
     timeStamp: new Date()
 };

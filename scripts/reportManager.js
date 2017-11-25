@@ -27,7 +27,7 @@ class reportManager {
         const nowDate = "" + new Date().getDay() + new Date().getMonth() + new Date().getFullYear();
         if (timestamp != nowDate) {
             this.settings.timeStamp = new Date();
-            ipcRenderer.send('settings:save', this.settings, true);
+            ipcRenderer.send('settings:save', [this.settings, true]);
         }
 
         this._start_day = new Date(this.settings.timeStamp);
