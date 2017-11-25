@@ -88,7 +88,7 @@
                             },
                             max: currentSettings.workTime,
                             series: d.series,
-                            center: d.summ.toString()
+                            center: (Math.round( d.summ * 10 ) / 10).toString()
                             
                         });
                     });

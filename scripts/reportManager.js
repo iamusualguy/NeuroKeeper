@@ -125,7 +125,7 @@ class reportManager {
         const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1,2,3,4,5]);
         const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * daysInMonth)) || 0.1;
 
-        progress.update([trackedDay, trackedWeek, trackedMonth]);
+        progress.update([(Math.round( trackedDay * 10 ) / 10), trackedWeek, trackedMonth]);
     }
 }
 

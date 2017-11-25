@@ -28,7 +28,7 @@ function createStatisticsWindow() {
             skipTaskbar: true
         });
 
-        statisticsWindow.webContents.openDevTools();
+     //   statisticsWindow.webContents.openDevTools();
 
         // Load HTML into the window.
         statisticsWindow.loadURL(url.format({
