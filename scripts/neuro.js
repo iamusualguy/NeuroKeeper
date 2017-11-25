@@ -32,7 +32,7 @@ function generateInput() {
            var v = d.concat(t);
            var o =  DataToArrays(DATA, Dictionary)[0].input;
                o = o.slice(30);
-         return  v.concat(o);
+         return [{input: v.concat(o)}];
         });
 }
 
