@@ -79,7 +79,7 @@ function loadSettings() {
 
 function saveSettings(settingsToSave, timeStamp, app) {
     if (!timeStamp) {
-        settingsToSave.timeStamp = currentSettings.timeStamp;
+        settingsToSave.timeStamp = currentSettings ? currentSettings.timeStamp : defaultSettings.timeStamp;
     }
     if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
 
