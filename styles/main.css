@@ -47,6 +47,10 @@ input, button {
     box-sizing: border-box;
 }
 
+button {
+    cursor: pointer;
+}
+
 .task-input {
     flex-grow: 1;
     height: 25px;
@@ -71,7 +75,7 @@ input, button {
     width: 100px;
     height: 55px;
     margin: 0 5px;
-    cursor: pointer;
+    border-right-width: 2px;
 }
 
 .worked-block {

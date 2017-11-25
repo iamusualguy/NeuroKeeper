@@ -124,3 +124,7 @@ color: white;
 input.time-input {
 width: 40px;
 }
+
+.controls-container button {
+    border-right-width: 2px;
+}
