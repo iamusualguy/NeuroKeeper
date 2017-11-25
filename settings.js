@@ -15,16 +15,19 @@ function cancelSettings() {
     settingsWindow.close();
 }
 
+
+
 function createSettingsWindow(mainWindow) {
     // Create setting window.
-    settingsWindow = new BrowserWindow({
-        width: 350,
-        height: 500,
-        title: 'Settings',
-        parent: mainWindow,
-        modal: true,
-        skipTaskbar: true
-    });
+settingsWindow = new BrowserWindow({
+    width: 350,
+    height: 400,
+    title: 'Settings',
+    parent: mainWindow,
+    modal: true,
+    skipTaskbar: true,
+    backgroundColor: '#333',
+}); 
 
     // Load HTML into the window.
     settingsWindow.loadURL(url.format({

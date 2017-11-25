@@ -13,11 +13,16 @@ input, select, textarea, button{
     background:#333;
 }
 
-input {
+input, button {
     outline: 0;
     border-width: 0 0 2px 0;
     border-color: white
   }
+
+  .rbc-center-text {
+    fill:white !important;
+    font-size: 35px !important;
+}
 
 
 .common-wrap {

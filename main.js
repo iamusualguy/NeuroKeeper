@@ -25,7 +25,8 @@ function createStatisticsWindow() {
             title: 'Statistics',
             parent: mainWindow,
             modal: true,
-            skipTaskbar: true
+            skipTaskbar: true,
+            backgroundColor: '#333',
         });
 
      //   statisticsWindow.webContents.openDevTools();
@@ -45,12 +46,13 @@ function createWindow() {
         // Create the browser window.
         mainWindow = new BrowserWindow({
             width: 650,
-            height: 150,
+            height: 140,
             frame: false,
             resizable: false,
             skipTaskbar: true,
-            show: false,
+            show: true,
             alwaysOnTop: settings.getSettings().topMost,
+            backgroundColor: '#333',
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
