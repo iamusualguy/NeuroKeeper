@@ -31,13 +31,19 @@ input, button {
 }
 
 .main-block {
+    -webkit-app-region: drag;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 5px;
 }
 
+.report-block {
+    -webkit-app-region: no-drag;    
+}
+
 .time-block {
+    -webkit-app-region: no-drag;    
     display: flex;
     margin-bottom: 5px;
 }
@@ -68,6 +74,7 @@ input, button {
 }
 
 .save-button {
+    -webkit-app-region: no-drag;
     width: 100px;
     height: 55px;
     margin: 0 5px;
@@ -75,17 +82,20 @@ input, button {
 }
 
 .worked-block {
+    -webkit-app-region: no-drag;
     width: 160px;
     flex-shrink: 0;
     margin: auto 0;
 }
 
 .tracked-block {
+    -webkit-app-region: no-drag;
     width: 90px;
     height: 90px;
 }
 
 .settings-button {
+    -webkit-app-region: no-drag;
     width: 100%;
     cursor: pointer;
     text-align: center;
