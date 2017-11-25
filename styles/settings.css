@@ -112,13 +112,17 @@ top: 7px;
 }
 
 .tag:hover {
-background-color: greenyellow
+background-color: rgb(37, 159, 207);
 color: white;
 }
 
 .tag.project-enabled {
-background-color: green;
+background-color: #4786A0;
 color: white;
+}
+
+.tag.project-enabled:hover {
+    background-color: rgb(57, 110, 131);
 }
 
 input.time-input {
