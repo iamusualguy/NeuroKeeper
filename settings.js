@@ -76,7 +76,7 @@ function loadSettings() {
     });
 }
 
-function saveSettings(settingsToSave) {
+function saveSettings(settingsToSave, timeStamp) {
     if (JSON.stringify(settingsToSave) != JSON.stringify(currentSettings)) {
 
         storage.set('neuro-keeper-settings', settingsToSave, function (error) {
@@ -95,13 +95,17 @@ function saveSettings(settingsToSave) {
                     autoLauncher.disable();
                 }
             });
-
-            app.relaunch();
-            app.quit();
+            
+            if (!timeStamp) {
+                app.relaunch();
+                app.quit();
+            }
         });
         currentSettings = settingsToSave;
     }
-    settingsWindow.close();
+    if (settingsWindow) {
+        settingsWindow.close();
+    }
 }
 
 function selectPath() {
@@ -177,7 +181,7 @@ defaultSettings = {
     workTime: 8.0,
     theme: "Light",
     autoLaunch: true,
-    timeStamp: new Date(),
+    timeStamp: new Date()
 };
 
 function getSettings() {

@@ -73,7 +73,7 @@ function createWindow() {
             slashes: true
         }));
     });
-        // nn.createNN();
+    // nn.createNN();
     // nn.openNN();
     //nn.createLSTN();
 }
