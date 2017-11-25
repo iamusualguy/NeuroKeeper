@@ -186,12 +186,14 @@ function normilize(array) {
         obj.input = v.input.map((val) => {
             return val / sum;
         });
-
-        sum = v.output.reduce((a, b) => a + b, 0);
-        objSum.output = sum;
-        obj.output = v.output.map((val) => {
-            return val / sum;
-        });
+        F
+        if (v.output) {
+            sum = v.output.reduce((a, b) => a + b, 0);
+            objSum.output = sum;
+            obj.output = v.output.map((val) => {
+                return val / sum;
+            });
+        }
         resSum.push(objSum);
         return obj;
     })
@@ -203,7 +205,7 @@ function normilize(array) {
 
 function toWords(array, sum) {
     return array.map((val) => {
-        return Dictionary[Math.round(val*sum)];
+        return Dictionary[Math.round(val * sum)];
     })
 }
 

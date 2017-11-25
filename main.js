@@ -6,7 +6,7 @@ const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
-const nn = require("./neturalNetwork.js");
+const nn = require("./neuralNetwork.js");
 
 const os = require('os');
 const storage = require('electron-json-storage');
@@ -24,17 +24,17 @@ function createStatisticsWindow() {
             width: 650,
             height: 0,
             title: 'Statistics',
-         //   parent: mainWindow,
+            //   parent: mainWindow,
             frame: false,
-         //   modal: true,
+            //   modal: true,
             skipTaskbar: true,
             backgroundColor: '#333',
         });
 
-     //   statisticsWindow.webContents.openDevTools();
-     let pos = mainWindow.getPosition();
-     statisticsWindow.setPosition(pos[0], pos[1]+135);
-     statisticsWindow.setSize(650, 300, true);
+        //   statisticsWindow.webContents.openDevTools();
+        let pos = mainWindow.getPosition();
+        statisticsWindow.setPosition(pos[0], pos[1] + 135);
+        statisticsWindow.setSize(650, 300, true);
 
         // Load HTML into the window.
         statisticsWindow.loadURL(url.format({
@@ -131,9 +131,9 @@ app.on('window-all-closed', function () {
 });  //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('statistics:open', (e, args) => {
-   // createStatisticsWindow();
+    // createStatisticsWindow();
 
-   statisticsWindow && statisticsWindow.isVisible() ? statisticsWindow.close() : createStatisticsWindow();
+    statisticsWindow && statisticsWindow.isVisible() ? statisticsWindow.close() : createStatisticsWindow();
 });
 
 ipcMain.on('settings:opened', (e, args) => {
@@ -149,7 +149,7 @@ ipcMain.on('settings:cancel', (e, args) => {
 });
 
 ipcMain.on('settings:save', (e, args) => {
-    settings.saveSettings(args[0],args[1], app);
+    settings.saveSettings(args[0], args[1], app);
 });
 
 ipcMain.on('mainWindow:hide', (e, args) => {
