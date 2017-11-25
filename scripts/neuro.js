@@ -30,10 +30,15 @@ function generateInput() {
             var t = getWeekDayArray(new Date());
 
            var v = d.concat(t);
-           var o =  DataToArrays(DATA, Dictionary)[0].input;
+           var o =  DataToArrays(DATA, Dictionary)[randomIntFromInterval(5,worksheet.rowCount-5)].input;
                o = o.slice(30);
          return [{input: v.concat(o)}];
         });
+}
+
+function randomIntFromInterval(min,max)
+{
+    return Math.floor(Math.random()*(max-min+1)+min);
 }
 
 function prepareData() {
