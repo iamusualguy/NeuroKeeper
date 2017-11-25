@@ -70,7 +70,7 @@ class reportManager {
         const reportTask = this.taskField.value;
         const reportDuration = parseFloat(this.durationField.value);
         const reportText = this.reportField.value;
-        const reportDate = new Date(this.dateField.value);
+        const reportDate = new Date(this.dateField.value + ' 12:00');
 
         return [reportTask, reportDuration, reportText, reportDate, reportDate];
     }
