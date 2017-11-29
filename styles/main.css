@@ -17,9 +17,9 @@ input, button {
     outline: 0;
     border-width: 0 0 2px 0;
     border-color: white
-  }
+}
 
-  .rbc-center-text {
+.rbc-center-text {
     fill:white !important;
     font-size: 35px !important;
 }
@@ -89,6 +89,21 @@ button {
 }
 
 .save-button:hover {
+    background:#444;
+}
+
+.manage-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 10px;
+}
+
+.manage-buttons button {
+    -webkit-app-region: no-drag;
+    border-right-width: 2px;
+}
+
+.manage-buttons button:hover {
     background:#444;
 }
 

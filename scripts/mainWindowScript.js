@@ -2,7 +2,7 @@
 let mainManager = null;
 let currentSettings = null;
 
-function saveNewReport() {
+function saveNewReportHandler() {
     const newRepoprt = mainManager.getReport();
     if (newRepoprt.length === 5
         && newRepoprt.every(reportElement => reportElement != "")) {
@@ -18,7 +18,19 @@ function saveNewReport() {
     }
 }
 
-function handlerNueralClick() {
+function startNewDayHandler() {
+    mainManager.startNewDay();
+}
+
+function minimazeHandler() {
+    ipcRenderer.send('mainWindow:hide', {});
+}
+
+function pauseDayHandler() {
+    console.log("pause Day");
+}
+
+function nueralClickHandler() {
     ipcRenderer.send('nn:get', {});
 }
 

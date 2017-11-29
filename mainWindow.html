@@ -21,12 +21,13 @@
                     <input id="report-input" class="report-input" type="text" placeholder="New report" />
                 </div>
             </div>
-            <button class="save-button" onclick="saveNewReport()">save</button>
+            <button class="save-button" onclick="saveNewReportHandler()">save</button>
             <div class="worked-block">
-                <!--  <div class="manage-buttons">
-                    <button class="startNewDay-button">start</button>
-                    <button class="minimize-button">minimize</button>
-                </div> -->
+                <div class="manage-buttons">
+                    <button class="minimize-button"  onclick="minimazeHandler()">minimize</button>
+                    <button class="startNewDay-button"  onclick="startNewDayHandler()">start</button>
+                    <button class="pauseDay-button"  onclick="pauseDayHandler()">pause</button>
+                </div>
                 <div class="flipTimer">
                     <div class="hours">
                         <div class="digit-set">
@@ -134,7 +135,7 @@
 
     $("#report-input").on("mousedown", function(event){
     if(event.button==2){
-        handlerNueralClick();
+        nueralClickHandler();
     }
 });
 </script>
