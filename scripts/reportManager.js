@@ -31,6 +31,7 @@ class reportManager {
         }
 
         this._start_day = new Date(this.settings.timeStamp);
+        this._workDaysInMonth = getWorkDaysInMonth(this._start_day);
 
         const elapsed_day = new Date() - this._start_day;
         const workedHours = Math.floor(elapsed_day / oneHour);
@@ -136,12 +137,7 @@ class reportManager {
     _updateTrackedTime() {
         const trackedDay = ((100 * this.statistics.TodayEffort) / this.settings.workTime) || 0.1;
         const trackedWeek = ((100 * this.statistics.WeekEffort) / (this.settings.workTime * 5)) || 0.1;
-
-        const y = this._start_day.getFullYear(), m = this._start_day.getMonth();
-        const firstDay = new Date(y, m, 1);
-        const lastDay = new Date(y, m + 1, 0);
-        const daysInMonth = moment().isoWeekdayCalc(firstDay, lastDay, [1, 2, 3, 4, 5]);
-        const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * daysInMonth)) || 0.1;
+        const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * this._workDaysInMonth)) || 0.1;
 
         progress.update([trackedDay, trackedWeek, trackedMonth]);
 
@@ -174,4 +170,35 @@ function fillSelect(selectField, projects) {
         option.text = projectName;
         selectField.appendChild(option);
     });
+}
+
+function getWorkDaysInMonth (newDate) {
+    let dayNumber = new Date(newDate.getFullYear(), newDate.getMonth()+1, 0).getDate();
+
+    let currentDay = 1;
+    let holydays = 0;
+
+    let firstDay = new Date(newDate.getFullYear(), newDate.getMonth(), currentDay);
+    let weekDay = firstDay.getDay();
+    let isSat = true;
+
+    if (weekDay === 0) {
+        isSat = false;
+    } else if (weekDay !== 6) {
+        currentDay = currentDay + (6 - weekDay);
+    }
+
+    while (currentDay <= dayNumber) {
+        holydays++;
+
+        if(isSat) {
+            currentDay++;
+        } else {
+            currentDay+=6;
+        }
+
+        isSat = !isSat;
+    }
+
+    return dayNumber - holydays;
 }

@@ -2,6 +2,7 @@
   "name": "reportkeeper",
   "version": "1.0.0",
   "description": "Report Keeper crossplatform app.",
+  "repository": "https://github.com/iamusualguy/NeuroReports.git",
   "main": "main.js",
   "scripts": {
     "start": "electron .",
