@@ -66,8 +66,6 @@
                         renderList(d.list);
                     })
                     .append('div').attr('class', 'circle').text(function (d) {
-                         // Select monday by default
-            $('li').click();
                         return d.day;
                     })
                     .each(function (d, i) {
@@ -92,6 +90,10 @@
                             
                         });
                     });
+
+                // Set current day as active
+                var currentDay = (new Date()).getDay();
+                $('li')[currentDay].click();
             });
 
             // Return some chronological dates
