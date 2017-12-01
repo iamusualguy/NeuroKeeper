@@ -159,10 +159,9 @@ function getWeekDescriptions(stats) {
 
     var curr = new Date; // get current date
     var first = curr.getDate() - curr.getDay(); // First day is the day of the month - the day of the week
-    var last = first + 6; // last day is the first day + 6
 
     var firstday = new Date(curr.setDate(first));
-    var lastday = new Date(curr.setDate(last));
+    var lastday = new Date(firstday.getTime() + 6*24*60*60*1000);
 
     firstday = firstday.setHours(0, 0, 0, 0);
     lastday = lastday.setHours(23, 59, 59, 999);

@@ -6,6 +6,7 @@
     <title>Report Keeper</title>
     <link rel="stylesheet" href="./styles/main.css">
     <link href="styles/flipTimer.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/font-awesome.min.css">
 </head>
 
 <body>
@@ -24,9 +25,10 @@
             <button class="save-button" onclick="saveNewReportHandler()">save</button>
             <div class="worked-block">
                 <div class="manage-buttons">
-                    <button class="minimize-button"  onclick="minimazeHandler()">minimize</button>
-                    <button class="startNewDay-button"  onclick="startNewDayHandler()">start</button>
-                    <button class="pauseDay-button"  onclick="pauseDayHandler()">pause</button>
+                    <span class="startNewDay-button"  onclick="startNewDayHandler()"><i class="fa fa-refresh" aria-hidden="true"></i></span>
+                    <span class="pauseDay-button"  onclick="pauseDayHandler()"><i class="fa fa-pause" aria-hidden="true"></i></span>
+                    <span class="minimize-button"  onclick="minimazeHandler()"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
+                    
                 </div>
                 <div class="flipTimer">
                     <div class="hours">
@@ -100,7 +102,6 @@
 <script src="./scripts/excel.js"></script>
 <script src="./scripts/reportManager.js"></script>
 <script src="./scripts/mainWindowScript.js"></script>
-<script src="./scripts/neuro.js"></script>
 <script>
     const $ = require('jquery');
 
@@ -132,12 +133,6 @@
 
         statisticsButton.addEventListener('click', onStatisticsButtonClicked);
     });
-
-    $("#report-input").on("mousedown", function(event){
-    if(event.button==2){
-        nueralClickHandler();
-    }
-});
 </script>
 
 </html>

@@ -1,6 +1,12 @@
 body{
     background-color: #333;
     color: white;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 input:focus {
@@ -95,16 +101,16 @@ button {
 .manage-buttons {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
-.manage-buttons button {
+.manage-buttons span {
     -webkit-app-region: no-drag;
-    border-right-width: 2px;
+    font-size: 10px;
 }
 
-.manage-buttons button:hover {
-    background:#444;
+.manage-buttons span:hover {
+    color:#777;
 }
 
 .worked-block {
