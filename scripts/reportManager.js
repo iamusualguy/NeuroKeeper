@@ -86,7 +86,7 @@ class reportManager {
         this._updateMinute();
     }
 
-    _updateWorkedTime(workedHours, workedMinutes) {
+    _updateWorkedTime() {
         const elapsed_day = new Date() - this._start_day;
         let workedHours = Math.floor(elapsed_day / oneHour);
         let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
