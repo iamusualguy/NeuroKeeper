@@ -33,11 +33,7 @@ class reportManager {
         this._start_day = new Date(this.settings.timeStamp);
         this._workDaysInMonth = getWorkDaysInMonth(this._start_day);
 
-        const elapsed_day = new Date() - this._start_day;
-        const workedHours = Math.floor(elapsed_day / oneHour);
-        const workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
-        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
-
+        this._updateWorkedTime();
         this.resetFields();
 
         if (this.minuteTimer) {
@@ -48,11 +44,8 @@ class reportManager {
     }
 
     resetFields() {
-        this.durationField.value = this.settings.notificationTime;
         this.reportField.value = "";
         this.dateField.value = formatDate(this._start_day);
-
-        this._start_task = new Date();
 
         if (this.notificationTimer) {
             clearInterval(this.notificationTimer);
@@ -63,6 +56,7 @@ class reportManager {
 
         getStatistics().then(statObj => {
             this.statistics = statObj;
+            this._updateDurationField();
             this._updateTrackedTime();
         });
     }
@@ -81,21 +75,8 @@ class reportManager {
     }
 
     _updateMinute() {
-        const elapsed = new Date() - this._start_task;
-        const durationMinutes = Math.round((elapsed % oneHour) / oneMinute);
-        this.durationField.value = roundNumber(elapsed / oneHour) + "." + (durationMinutes - durationMinutes % 6) / 6;
-
-        const elapsed_day = new Date() - this._start_day;
-        let workedHours = Math.floor(elapsed_day / oneHour);
-        let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
-
-        // TODO fix by other way
-        if (workedMinutes === 60) {
-            workedHours += 1;
-            workedMinutes = 0;
-        }
-
-        this._updateWorkedTime(workedHours.toString(), workedMinutes.toString());
+        this._updateDurationField();;
+        this._updateWorkedTime();
     }
 
     _notifyUser() {
@@ -106,6 +87,19 @@ class reportManager {
     }
 
     _updateWorkedTime(workedHours, workedMinutes) {
+        const elapsed_day = new Date() - this._start_day;
+        let workedHours = Math.floor(elapsed_day / oneHour);
+        let workedMinutes = Math.round((elapsed_day % oneHour) / oneMinute);
+
+        // TODO fix by other way
+        if (workedMinutes === 60) {
+            workedHours += 1;
+            workedMinutes = 0;
+        }
+
+        workedHours = workedHours.toString();
+        workedMinutes = workedMinutes.toString();
+
         let firstHour = "0";
         let secondHour = workedHours[0];
 
@@ -140,8 +134,16 @@ class reportManager {
         const trackedMonth = ((100 * this.statistics.MonthEffort) / (this.settings.workTime * this._workDaysInMonth)) || 0.1;
 
         progress.update([trackedDay, trackedWeek, trackedMonth]);
+        
+        $(".rbc-center-text > tspan").text(roundNumber(this.statistics.TodayEffort).toString());
+    }
 
-        $(".rbc-center-text > tspan").text((Math.round(this.statistics.TodayEffort * 10) / 10).toString())
+    _updateDurationField() {
+        const elapsed_day = new Date() - this._start_day;
+        const workedTime = roundNumber(elapsed_day / oneHour);
+        const durationTime = workedTime - this.statistics.TodayEffort;
+
+        this.durationField.value = durationTime >= 0 ? roundNumber(durationTime) : "0";
     }
 }
 
@@ -158,7 +160,7 @@ function formatDate(date) {
 }
 
 function roundNumber(number) {
-    return number.toFixed(0);
+    return (Math.round(number * 10) / 10);
 }
 
 function fillSelect(selectField, projects) {
