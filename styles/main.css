@@ -101,12 +101,14 @@ button {
 .manage-buttons {
     display: flex;
     justify-content: space-around;
-    margin-bottom: 8px;
 }
 
 .manage-buttons span {
     -webkit-app-region: no-drag;
     font-size: 10px;
+    text-align: center;
+    cursor: pointer;
+    padding: 8px 10px;
 }
 
 .manage-buttons span:hover {
