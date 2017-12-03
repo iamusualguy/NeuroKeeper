@@ -27,7 +27,7 @@ function minimazeHandler() {
 }
 
 function pauseDayHandler() {
-    console.log("pause Day");
+    mainManager.pause();
 }
 
 function nueralClickHandler() {

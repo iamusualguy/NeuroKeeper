@@ -11,6 +11,7 @@ class reportManager {
         this.durationField = document.getElementById('duration-input');
         this.reportField = document.getElementById('report-input');
         this.dateField = document.getElementById('date-input');
+        this.pauseButtonIcon = document.getElementById('pauseButton-icon');
 
         this.workedFirstHour = document.querySelectorAll('.first-hour');
         this.workedSecondHour = document.querySelectorAll('.second-hour');
@@ -22,10 +23,11 @@ class reportManager {
     }
 
     startNewDay() {
-        const timestampDate = new Date(this.settings.timeStamp);
-        const timestamp = "" + timestampDate.getDay() + timestampDate.getMonth() + timestampDate.getFullYear();
-        const nowDate = "" + new Date().getDay() + new Date().getMonth() + new Date().getFullYear();
-        if (timestamp != nowDate) {
+        const timestamp = new Date(this.settings.timeStamp);
+        const timestampDate = "" + timestamp.getDay() + timestamp.getMonth() + timestamp.getFullYear();
+        const nowTime = new Date();
+        const nowDate = "" + nowTime.getDay() + nowTime.getMonth() + nowTime.getFullYear();
+        if (timestampDate != nowDate) {
             this.settings.timeStamp = new Date();
             ipcRenderer.send('settings:save', [this.settings, true]);
         }
@@ -72,6 +74,22 @@ class reportManager {
 
     neuralReport(str) {
         this.reportField.value = str;
+    }
+
+    pause() {
+        this.isPaused = !this.isPaused;
+
+        if(this.isPaused){
+            this.pauseButtonIcon.classList.add('fa-play');
+            this.pauseButtonIcon.classList.remove('fa-pause');
+
+            this._startPause();
+        } else {
+            this.pauseButtonIcon.classList.add('fa-pause');
+            this.pauseButtonIcon.classList.remove('fa-play');
+
+            this._endPause();
+        }
     }
 
     _updateMinute() {
@@ -144,6 +162,29 @@ class reportManager {
         const durationTime = workedTime - this.statistics.TodayEffort;
 
         this.durationField.value = durationTime >= 0 ? roundNumber(durationTime) : "0";
+    }
+
+    _startPause() {
+        this._start_pause = new Date();
+
+        if (this.minuteTimer) {
+            clearInterval(this.minuteTimer);
+        }
+
+        if (this.notificationTimer) {
+            clearInterval(this.notificationTimer);
+        }
+    }
+
+    _endPause() {
+        const pauseDuration = new Date() - this._start_pause;
+        const newStartDay = this._start_day.getTime() + pauseDuration;
+
+        this.settings.timeStamp = new Date(newStartDay);
+        ipcRenderer.send('settings:save', [this.settings, true]);
+
+        this._start_pause = 0;
+        this.startNewDay();
     }
 }
 
