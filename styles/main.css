@@ -98,21 +98,37 @@ button {
     background:#444;
 }
 
+.save-button:disabled {
+    color:#666;
+    cursor: initial;
+    background:#333;
+}
+
 .manage-buttons {
     display: flex;
     justify-content: space-around;
 }
 
-.manage-buttons span {
+.manage-buttons button {
     -webkit-app-region: no-drag;
     font-size: 10px;
     text-align: center;
-    cursor: pointer;
     padding: 8px 10px;
+    border: none;
+    height: auto;
 }
 
-.manage-buttons span:hover {
-    color:#777;
+.manage-buttons button:hover {
+    color:#aaa;
+}
+
+.manage-buttons button:active {
+    color:#666;
+}
+
+.manage-buttons button:disabled {
+    color:#666;
+    cursor: initial;
 }
 
 .worked-block {

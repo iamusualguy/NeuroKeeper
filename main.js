@@ -65,7 +65,7 @@ function createWindow() {
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
-        mainWindow.webContents.openDevTools();
+        //mainWindow.webContents.openDevTools();
 
         tray.setToolTip('Report Keeper')
         const trayContextMenu = createContextMenu(mainWindow)

@@ -11,7 +11,11 @@ class reportManager {
         this.durationField = document.getElementById('duration-input');
         this.reportField = document.getElementById('report-input');
         this.dateField = document.getElementById('date-input');
+
         this.pauseButtonIcon = document.getElementById('pauseButton-icon');
+        this.saveButton = document.getElementById('save-button');
+        this.restartButton = document.getElementById('restart-button');
+        this.minimizeButton = document.getElementById('minimize-button');
 
         this.workedFirstHour = document.querySelectorAll('.first-hour');
         this.workedSecondHour = document.querySelectorAll('.second-hour');
@@ -28,7 +32,7 @@ class reportManager {
         const nowTime = new Date();
         const nowDate = "" + nowTime.getDay() + nowTime.getMonth() + nowTime.getFullYear();
         if (timestampDate != nowDate) {
-            this.settings.timeStamp = new Date();
+            this.settings.timeStamp = nowTime;
             ipcRenderer.send('settings:save', [this.settings, true]);
         }
 
@@ -78,6 +82,7 @@ class reportManager {
 
     pause() {
         this.isPaused = !this.isPaused;
+        this._changeDisablingState(this.isPaused);
 
         if(this.isPaused){
             this.pauseButtonIcon.classList.add('fa-play');
@@ -185,6 +190,12 @@ class reportManager {
 
         this._start_pause = 0;
         this.startNewDay();
+    }
+
+    _changeDisablingState(value) {
+        this.saveButton.disabled = value;
+        this.restartButton.disabled = value;
+        this.minimizeButton.disabled = value;
     }
 }
 
