@@ -131,6 +131,10 @@ button {
     cursor: initial;
 }
 
+.statistics-button {
+    height: 20px;
+}
+
 .worked-block {
     -webkit-app-region: no-drag;
     width: 160px;

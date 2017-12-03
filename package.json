@@ -17,11 +17,13 @@
     "brain.js": "^1.0.0-rc.3",
     "electron": "^1.7.9",
     "electron-json-storage": "^4.0.2",
+    "electron-spellchecker": "^1.1.2",
     "exceljs": "^0.7.1",
     "jquery": "^3.2.1",
     "xls-to-json": "^0.4.0"
   },
   "devDependencies": {
-    "electron-packager": "^10.1.0"
+    "electron-packager": "^10.1.0",
+    "electron-rebuild": "^1.6.0"
   }
 }

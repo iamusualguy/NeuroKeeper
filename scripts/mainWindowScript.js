@@ -34,6 +34,10 @@ function nueralClickHandler() {
     ipcRenderer.send('nn:get', {});
 }
 
+function openStatisticsHandler() {
+    ipcRenderer.send('statistics:open', {});
+}
+
 ipcRenderer.on('nn:to', (e, str) => {
     console.log(str);
     mainManager.neuralReport(str);

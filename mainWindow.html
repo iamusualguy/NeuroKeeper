@@ -92,7 +92,7 @@
             </div>
         </div>
 
-        <button class="statistics-button" style="height: 20px;">...</button>
+        <button class="statistics-button" onclick="openStatisticsHandler()">...</button>
     </div>
 
 </body>
@@ -123,16 +123,8 @@
 
             mainManager = new reportManager(currentSettings);
         });
-
-        const statisticsButton = document.querySelector('.statistics-button');
-
-        function onStatisticsButtonClicked(e) {
-            e.preventDefault();
-            ipcRenderer.send('statistics:open', {});
-        }
-
-        statisticsButton.addEventListener('click', onStatisticsButtonClicked);
     });
 </script>
+<script src="./scripts/spellChecker.js"></script>
 
 </html>
