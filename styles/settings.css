@@ -1,124 +1,125 @@
 body {
-font: 14px/1.5 "Helveticat Neue", Helvetica, Arial;
-margin: 10px;
-
+    font: 14px/1.5 "Helveticat Neue", Helvetica, Arial;
+    margin: 10px;
     background-color: #333;
     color: white;
 }
 
 input:focus {
-    
-    background:#333;
+    background: #333;
 }
 
-input, select, textarea, button{
+input,
+select,
+textarea,
+button {
     color: white;
-    background:#333;
+    background: #333;
 }
 
-input, button {
+input,
+button {
     outline: 0;
     border-width: 0 0 2px 0;
     border-color: white
-  }
-
+}
 
 .projects-container {
-border: 1px solid gray;
-overflow: auto;
-min-height: 100px;
-max-height: 210px;
-padding: 5px;
-margin-bottom: 5px;
+    border: 1px solid gray;
+    overflow: auto;
+    min-height: 100px;
+    max-height: 210px;
+    padding: 5px;
+    margin-bottom: 5px;
 }
 
 .settings-container {
-margin-bottom: 5px;
+    margin-bottom: 5px;
 }
 
 .settings-separated-container {
-margin-bottom: 15px;
+    margin-bottom: 15px;
 }
 
 .centered {
-text-align: center;
+    text-align: center;
 }
 
 #path-textbox {
-font-size: 14px;
-width: 244px;
+    font-size: 14px;
+    width: 244px;
 }
 
 #path-button {
-padding: 2px;
-width: 20px;
+    padding: 2px;
+    width: 20px;
 }
 
 .settings-checkbox {
-height: 20px;
-vertical-align: bottom;
-width: 20px;
+    height: 20px;
+    vertical-align: bottom;
+    width: 20px;
 }
 
 .label-container {
-display: inline-block;
-width: 90px;
+    display: inline-block;
+    width: 90px;
 }
 
 .controls-container {
-bottom: 0;
-margin: 10px;
-position: absolute;
-right: 0;
+    bottom: 0;
+    margin: 10px;
+    position: absolute;
+    right: 0;
 }
 
 .tags {
-font: 12px/1.5;
-list-style: none;
-margin: 0;
-overflow: hidden; 
-padding: 0;
+    font: 12px/1.5;
+    list-style: none;
+    margin: 0;
+    overflow: hidden;
+    padding: 0;
 }
 
 .tags li {
-float: left; 
+    float: left;
 }
 
 .tag {
-background: #222;
-border-radius: 3px 0 0 3px;
-color: #999;
-display: inline-block;
-font-size: 12px;
-height: 20px;
-line-height: 20px;
-padding: 0 10px 0 18px;
-position: relative;
-margin: 0 6px 6px 0;
-text-decoration: none;
--webkit-transition: color 0.2s;
+    background: #222;
+    border-radius: 3px 0 0 3px;
+    color: #999;
+    display: inline-block;
+    font-size: 12px;
+    height: 20px;
+    line-height: 20px;
+    padding: 0 10px 0 18px;
+    position: relative;
+    margin: 0 6px 6px 0;
+    text-decoration: none;
+    -webkit-transition: color 0.2s;
 }
 
 .tag::before {
-background: #fff;
-border-radius: 5px;
-box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
-content: '';
-height: 6px;
-left: 6px;
-position: absolute;
-width: 6px;
-top: 7px;
+    background: #fff;
+    border-radius: 5px;
+    box-shadow: inset 0 1px rgba(0, 0, 0, 0.25);
+    content: '';
+    height: 6px;
+    left: 6px;
+    position: absolute;
+    width: 6px;
+    top: 7px;
 }
 
 .tag:hover {
-background-color: rgb(37, 159, 207);
-color: white;
+    background-color: rgb(37, 159, 207);
+    color: white;
 }
 
 .tag.project-enabled {
-background-color: #4786A0;
-color: white;
+    background-color: #4786A0;
+    color: white;
 }
 
 .tag.project-enabled:hover {
@@ -126,8 +127,8 @@ color: white;
 }
 
 input.time-input {
-width: 40px;
-text-align: center;
+    width: 40px;
+    text-align: center;
 }
 
 .controls-container button {
@@ -136,30 +137,30 @@ text-align: center;
 }
 
 .controls-container button:hover {
-    background:#444;
+    background: #444;
 }
 
-::-webkit-scrollbar{
-    width:12px;
-  }
-  
-  ::-webkit-scrollbar-thumb{
-    border-width:1px 1px 1px 2px;
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-thumb {
+    border-width: 1px 1px 1px 2px;
     border-color: #777;
     background-color: #aaa;
-  }
-  
-  ::-webkit-scrollbar-thumb:hover{
+}
+
+::-webkit-scrollbar-thumb:hover {
     border-width: 1px 1px 1px 2px;
     border-color: #555;
     background-color: #777;
-  }
-  
-  ::-webkit-scrollbar-track{
-    border-width:0;
-  }
-  
-  ::-webkit-scrollbar-track:hover{
+}
+
+::-webkit-scrollbar-track {
+    border-width: 0;
+}
+
+::-webkit-scrollbar-track:hover {
     border-left: solid 1px #aaa;
     background-color: #eee;
-  }
+}

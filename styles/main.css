@@ -1,4 +1,4 @@
-body{
+body {
     background-color: #333;
     color: white;
     -webkit-touch-callout: none;
@@ -10,23 +10,26 @@ body{
 }
 
 input:focus {
-    
-    background:#333;
+    background: #333;
 }
 
-input, select, textarea, button{
+input,
+select,
+textarea,
+button {
     color: white;
-    background:#333;
+    background: #333;
 }
 
-input, button {
+input,
+button {
     outline: 0;
     border-width: 0 0 2px 0;
     border-color: white
 }
 
 .rbc-center-text {
-    fill:white !important;
+    fill: white !important;
     font-size: 35px !important;
 }
 
@@ -45,16 +48,17 @@ input, button {
 }
 
 .report-block {
-    -webkit-app-region: no-drag;    
+    -webkit-app-region: no-drag;
 }
 
 .time-block {
-    -webkit-app-region: no-drag;    
+    -webkit-app-region: no-drag;
     display: flex;
     margin-bottom: 5px;
 }
 
-input, button {
+input,
+button {
     height: 25px;
     box-sizing: border-box;
 }
@@ -95,13 +99,13 @@ button {
 }
 
 .save-button:hover {
-    background:#444;
+    background: #444;
 }
 
 .save-button:disabled {
-    color:#666;
+    color: #666;
     cursor: initial;
-    background:#333;
+    background: #333;
 }
 
 .manage-buttons {
@@ -119,15 +123,15 @@ button {
 }
 
 .manage-buttons button:hover {
-    color:#aaa;
+    color: #aaa;
 }
 
 .manage-buttons button:active {
-    color:#666;
+    color: #666;
 }
 
 .manage-buttons button:disabled {
-    color:#666;
+    color: #666;
     cursor: initial;
 }
 
@@ -172,7 +176,7 @@ button {
 
 .rbc-center-text {
     font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
-    fill:black;
+    fill: black;
     font-size: 25px;
 }
 

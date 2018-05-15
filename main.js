@@ -11,12 +11,21 @@ const os = require('os');
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
+const WindowsArray = {
+    Main: "main",
+    Statistics: "statistics",
+    Mode: {
+        Hide: "hide",
+        Show: "show",
+    },
+}
+
 let mainWindow;
 let statisticsWindow;
 
 function loadStatistics() {
     // Load HTML into the window.
-    statisticsWindow.loadURL(url.format({
+    statisticsWindow && statisticsWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'statisticsWindow.html'),
         protocol: 'file',
         slashes: true
@@ -24,25 +33,34 @@ function loadStatistics() {
 }
 
 function createStatisticsWindow() {
-    settings.loadSettings().then(() => {
-        statisticsWindow = new BrowserWindow({
-            width: 650,
-            height: 0,
-            title: 'Statistics',
-            //   parent: mainWindow,
-            frame: false,
-            //   modal: true,
-            skipTaskbar: true,
-            backgroundColor: '#333',
+    return new Promise((resolve, reject) => {
+        settings.loadSettings().then(() => {
+            statisticsWindow = new BrowserWindow({
+                width: 650,
+                height: 0,
+                title: 'Statistics',
+                   parent: mainWindow,
+                frame: false,
+                //   modal: true,
+                skipTaskbar: true,
+                backgroundColor: '#333',
+                show: false,
+            });
+
+            statisticsWindow.webContents.openDevTools();
+            loadStatistics();
+            resolve();
         });
-
-        //statisticsWindow.webContents.openDevTools();
-        let pos = mainWindow.getPosition();
-        statisticsWindow.setPosition(pos[0], pos[1] + 135);
-        statisticsWindow.setSize(650, 300, true);
-
-        loadStatistics();
     });
+}
+
+function setStatisticsWindowPosition() {
+    if (!statisticsWindow) {
+        return;
+    }
+    let pos = mainWindow.getPosition();
+    statisticsWindow.setPosition(pos[0], pos[1] + 135);
+    statisticsWindow.setSize(650, 300, true);
 }
 
 function createWindow() {
@@ -68,7 +86,7 @@ function createWindow() {
         tray.setContextMenu(trayContextMenu)
 
         tray.on('click', () => {
-            mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show();
+            switchMainAndStatisticsWindows();
         })
 
         // and load the index.html of the app.
@@ -88,7 +106,7 @@ function createContextMenu(appWindow) {
         Menu.buildFromTemplate([{
                 label: 'Show/Hide',
                 click: function () {
-                    mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
+                    switchMainAndStatisticsWindows();
                 }
             },
             {
@@ -108,44 +126,79 @@ function createContextMenu(appWindow) {
     );
 }
 
-function hideMainWindow() {
-    mainWindow.hide();
-
+function switchMainAndStatisticsWindows(mainMode, statisticsMode = WindowsArray.Mode.Hide) {
+    if (!mainWindow.isVisible()) {
+        loadStatistics();
+    }
+    switchWindow(WindowsArray.Main, mainMode);
+    setStatisticsWindowPosition();
+    switchWindow(WindowsArray.Statistics, statisticsMode);
 }
 
-function showMainWindow() {
-    mainWindow.show();
+function switchWindow(window, mode) {
+    let currentWindow;
+    switch (window) {
+        case WindowsArray.Main:
+            currentWindow = mainWindow;
+            break;
+        case WindowsArray.Statistics:
+            currentWindow = statisticsWindow;
+            break;
+        default:
+            throw Error("This window doesn't exist");
+    }
+    if (!currentWindow) {
+        return;
+    }
+    switch (mode) {
+        case WindowsArray.Mode.Show:
+            currentWindow.show();
+            break;
+        case WindowsArray.Mode.Hide:
+            currentWindow.hide();
+            break;
+        default:
+            currentWindow.isVisible() ? currentWindow.hide() : currentWindow.show();
+    }
 }
 
 app.on('activate', () => {
     // On macOS it's common to re-create a window in the app when the
     // dock icon is clicked and there are no other windows open.
     if (mainWindow === null) {
-        createWindow()
+        createWindow();
     }
 })
 
 app.on('ready', createWindow);
 
 app.on('window-all-closed', function () {
+    //закрытие окна и сворачивание в док если это OS X
     if (process.platform !== 'darwin') {
         app.quit();
     }
-}); //закрытие окна и сворачивание в док если это OS X
+});
 
-ipcMain.on('statistics:open', (e, args) => {
+ipcMain.on('statistics:switch', (e, args) => {
+
+    let promise = new Promise((resolve, reject) => resolve());
+    if (!statisticsWindow) {
+        promise = createStatisticsWindow();
+    }
+    promise.then(() => {
+        setStatisticsWindowPosition();
+        switchWindow(WindowsArray.Statistics);
+    });
+});
+
+ipcMain.on('statistics:update', (e, args) => {
 
     if (!statisticsWindow) {
         createStatisticsWindow();
         return;
     }
 
-    if (statisticsWindow.isVisible()) {
-        statisticsWindow.hide();
-    } else {
-        loadStatistics();
-        statisticsWindow.show();
-    }
+    loadStatistics();
 });
 
 ipcMain.on('settings:opened', (e, args) => {
@@ -165,14 +218,11 @@ ipcMain.on('settings:save', (e, args) => {
 });
 
 ipcMain.on('mainWindow:hide', (e, args) => {
-    hideMainWindow();
-    if (statisticsWindow && statisticsWindow.isVisible()) {
-        statisticsWindow.hide();
-    }
+    switchMainAndStatisticsWindows(WindowsArray.Mode.Hide);
 });
 
 ipcMain.on('mainWindow:show', (e, args) => {
-    showMainWindow();
+    switchMainAndStatisticsWindows(WindowsArray.Mode.Show);
 });
 
 ipcMain.on('main:opened', (e, args) => {

@@ -1,112 +1,120 @@
+html {
+  -webkit-app-region: drag;
+  min-height: 100%
+}
 body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
-  
-      background-color: #333;
-      color: white;
-  }
-  
-  input:focus {
-      
-      background:#333;
-  }
-  
-  input, select, textarea, button{
-      color: white;
-      background:#333;
-  }
-  
-  input, button {
-      outline: 0;
-      border-width: 0 0 2px 0;
-      border-color: white
-    }
-  
-    .rbc-center-text {
-      fill:white !important;
-  }
+  font-family: 'Helvetica Neue', Helvetica, Arial, Verdana, sans-serif;
+  background-color: #333;
+  color: white;
+}
 
-    ul {
-      margin: 0;
-      padding: 0;
-    }
+input:focus {
+  background: #333;
+}
 
-    li {
-      display: inline-block;
-      margin: 2px 10px;
-    }
+input,
+select,
+textarea,
+button {
+  color: white;
+  background: #333;
+}
 
-    hr {
-      border-color: #565656;
-    }
+input,
+button {
+  outline: 0;
+  border-width: 0 0 2px 0;
+  border-color: white
+}
 
-    svg {
-      display: block;
-      margin: 0 auto;
-    }
+.rbc-center-text {
+  fill: white !important;
+}
 
-    .container {
-      margin: 0 auto;
-      padding: 5px;
-    }
+ul {
+  margin: 0;
+  padding: 0;
+}
 
-    .week {
-      text-align: center;
-    }
+li {
+  -webkit-app-region: no-drag;
+  display: inline-block;
+  margin: 2px 10px;
+  cursor: pointer;
+}
 
-    ul.week li svg {
-      width: 8vw;
-      max-width: 80px;
-    }
+hr {
+  border-color: #565656;
+}
 
-    .date {
-      font-size: 20px;
-      font-weight: 100;
-      text-align: center;
-      margin-bottom: 15px;
-    }
+svg {
+  display: block;
+  margin: 0 auto;
+}
 
-    .report {
-      display: flex;
-      font-size: 15px;
-      font-weight: 100;
-      text-align: left;
-      margin-bottom: 15px;
-    }
+.container {
+  margin: 0 auto;
+  padding: 5px;
+}
 
-    .circle {
-      margin: 3px auto;
-      border-radius: 50%;
-      width: 27px;
-      height: 27px;
-      line-height: 27px;
-      text-align: center;
-      color: #565656;
-      font-size: 14px;
-      font-weight: 300;
-    }
+.week {
+  text-align: center;
+}
 
-    li:hover .circle {
-      color: black;
-      background-color: #a9a9a9;
+ul.week li svg {
+  width: 8vw;
+  max-width: 80px;
+}
 
-    }
+.date {
+  font-size: 20px;
+  font-weight: 100;
+  text-align: center;
+  margin-bottom: 15px;
+}
 
-    .active {
-      color: black;
-      background-color: #05e9ab !important;
-    }
+.report {
+  -webkit-app-region: no-drag;
+  display: flex;
+  font-size: 15px;
+  font-weight: 100;
+  text-align: left;
+  margin-bottom: 15px;
+}
 
-    .rbc-label-start {
-      font-family: fontawesome;
-      font-weight: bold;
-      font-size: 30px;
-    }
+.circle {
+  margin: 3px auto;
+  border-radius: 50%;
+  width: 27px;
+  height: 27px;
+  line-height: 27px;
+  text-align: center;
+  color: #565656;
+  font-size: 14px;
+  font-weight: 300;
+}
 
-    .rbc-center-text {
-      font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
-      fill:black;
-      font-size: 20px;
-  }
+li:hover .circle {
+  color: black;
+  background-color: #a9a9a9;
+}
+
+.active {
+  color: black;
+  background-color: #05e9ab !important;
+}
+
+.rbc-label-start {
+  font-family: fontawesome;
+  font-weight: bold;
+  font-size: 30px;
+}
+
+.rbc-center-text {
+  font-family: 'Roboto', 'Myriad Set Pro', 'Lucida Grande', 'Helvetica Neue', Helvetica, Arial;
+  fill: black;
+  font-size: 20px;
+}
 
 .report-project {
   overflow: hidden;
@@ -131,27 +139,27 @@ body {
   white-space: nowrap;
 }
 
-::-webkit-scrollbar{
-  width:12px;
+::-webkit-scrollbar {
+  width: 12px;
 }
 
-::-webkit-scrollbar-thumb{
-  border-width:1px 1px 1px 2px;
+::-webkit-scrollbar-thumb {
+  border-width: 1px 1px 1px 2px;
   border-color: #777;
   background-color: #aaa;
 }
 
-::-webkit-scrollbar-thumb:hover{
+::-webkit-scrollbar-thumb:hover {
   border-width: 1px 1px 1px 2px;
   border-color: #555;
   background-color: #777;
 }
 
-::-webkit-scrollbar-track{
-  border-width:0;
+::-webkit-scrollbar-track {
+  border-width: 0;
 }
 
-::-webkit-scrollbar-track:hover{
+::-webkit-scrollbar-track:hover {
   border-left: solid 1px #aaa;
   background-color: #eee;
 }

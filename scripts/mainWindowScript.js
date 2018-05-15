@@ -8,8 +8,8 @@ function saveNewReportHandler() {
         && newRepoprt.every(reportElement => reportElement != "")) {
         writeRow(newRepoprt)
             .then(() => {
-                console.log('File is written');
-                ipcRenderer.send('mainWindow:hide', {});
+                updateStatisticsHandler();
+                minimazeHandler();
                 mainManager.resetFields();
             })
             .catch(err => alert("Error of record saving. Try to close report file and save record again.\r\n" + err));
@@ -34,8 +34,12 @@ function nueralClickHandler() {
     ipcRenderer.send('nn:get', {});
 }
 
-function openStatisticsHandler() {
-    ipcRenderer.send('statistics:open', {});
+function switchStatisticsHandler() {
+    ipcRenderer.send('statistics:switch', {});
+}
+
+function updateStatisticsHandler() {
+    ipcRenderer.send('statistics:update', {});
 }
 
 ipcRenderer.on('nn:to', (e, str) => {

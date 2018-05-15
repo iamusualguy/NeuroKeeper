@@ -4,3 +4,4 @@ release-builds
 *.xls
 *.xlsx
 settings.json
+settings
