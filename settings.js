@@ -1,14 +1,13 @@
 const AutoLaunch = require('auto-launch');
-const electron = require('electron');
+const { BrowserWindow, dialog, app } = require('electron');
 const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const xlsj = require("xls-to-json");
 
 const storage = require('electron-json-storage');
-storage.setDataPath(__dirname + "\\settings");
+storage.setDataPath(app.getAppPath() + "\\settings");
 
-const { BrowserWindow, dialog } = electron;
 
 let settingsWindow;
 let currentSettings;

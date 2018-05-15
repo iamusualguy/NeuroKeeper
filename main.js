@@ -47,7 +47,7 @@ function createStatisticsWindow() {
                 show: false,
             });
 
-            statisticsWindow.webContents.openDevTools();
+            //statisticsWindow.webContents.openDevTools();
             loadStatistics();
             resolve();
         });
