@@ -1,6 +1,6 @@
 {
   "name": "reportkeeper",
-  "version": "1.3.0",
+  "version": "1.4.0",
   "description": "Report Keeper crossplatform app.",
   "repository": "https://github.com/iamusualguy/NeuroReports.git",
   "main": "main.js",
