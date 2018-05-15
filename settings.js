@@ -4,7 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const xlsj = require("xls-to-json");
+
 const storage = require('electron-json-storage');
+storage.setDataPath(__dirname + "\\settings");
 
 const { BrowserWindow, dialog } = electron;
 
@@ -14,8 +16,6 @@ let currentSettings;
 function cancelSettings() {
     settingsWindow.close();
 }
-
-
 
 function createSettingsWindow(mainWindow) {
     // Create setting window.
@@ -41,9 +41,9 @@ function createSettingsWindow(mainWindow) {
 function getProjects(inputFilePath) {
     const getProjectsPromise = new Promise((resolve, reject) => {
         xlsj({
-            input: inputFilePath,  // input xls 
+            input: inputFilePath, // input xls 
             output: null, // output json 
-            sheet: "Projects"  // specific sheetname 
+            sheet: "Projects" // specific sheetname 
         }, function (err, result) {
             if (err) {
                 console.error(err);
@@ -114,8 +114,8 @@ function saveSettings(settingsToSave, timeStamp, app) {
 
 function selectPath() {
     dialog.showOpenDialog({
-        properties: ['openDirectory']
-    },
+            properties: ['openDirectory']
+        },
         (directoryPaths) => {
             if (directoryPaths) {
                 settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
@@ -129,8 +129,8 @@ function openSettings() {
 
 function uploadProjects() {
     dialog.showOpenDialog({
-        properties: ['openFile']
-    },
+            properties: ['openFile']
+        },
         (filePaths) => {
             if (!filePaths) return;
             const getProjectsPromise = getProjects(filePaths[0]);
@@ -150,8 +150,7 @@ function uploadProjects() {
 }
 
 defaultSettings = {
-    projects: [
-        {
+    projects: [{
             name: 'Internal.Communication',
             enabled: true
         },

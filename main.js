@@ -7,11 +7,7 @@ const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
 const nn = require("./neuralNetwork.js");
-
 const os = require('os');
-const storage = require('electron-json-storage');
-
-storage.setDataPath(os.tmpdir());
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
@@ -89,19 +85,21 @@ function createWindow() {
 
 function createContextMenu(appWindow) {
     return (
-        Menu.buildFromTemplate([
-            {
-                label: 'Show/Hide', click: function () {
+        Menu.buildFromTemplate([{
+                label: 'Show/Hide',
+                click: function () {
                     mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()
                 }
             },
             {
-                label: 'Settings', click: function () {
+                label: 'Settings',
+                click: function () {
                     settings.createSettingsWindow(mainWindow);
                 }
             },
             {
-                label: 'Quit', click: function () {
+                label: 'Quit',
+                click: function () {
                     app.isQuiting = true;
                     app.quit();
                 }
@@ -133,7 +131,7 @@ app.on('window-all-closed', function () {
     if (process.platform !== 'darwin') {
         app.quit();
     }
-});  //закрытие окна и сворачивание в док если это OS X
+}); //закрытие окна и сворачивание в док если это OS X
 
 ipcMain.on('statistics:open', (e, args) => {
 
@@ -144,8 +142,7 @@ ipcMain.on('statistics:open', (e, args) => {
 
     if (statisticsWindow.isVisible()) {
         statisticsWindow.hide();
-    }
-    else {
+    } else {
         loadStatistics();
         statisticsWindow.show();
     }
@@ -193,5 +190,7 @@ ipcMain.on('statistics:opened', (e, args) => {
 });
 
 ipcMain.on('nn:get', (e, args) => {
-    nn.getNextString().then((i) => { mainWindow.webContents.send("nn:to", i); });
+    nn.getNextString().then((i) => {
+        mainWindow.webContents.send("nn:to", i);
+    });
 });
