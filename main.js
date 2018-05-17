@@ -1,13 +1,11 @@
 const fs = require('fs');
 const Excel = require('exceljs');
-
 const electron = require('electron');
 const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
 const nn = require("./neuralNetwork.js");
-const os = require('os');
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 

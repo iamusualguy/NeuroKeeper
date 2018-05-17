@@ -4,9 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const url = require('url');
 const xlsj = require("xls-to-json");
-
 const storage = require('electron-json-storage');
-storage.setDataPath(app.getAppPath() + "\\settings");
 
 
 let settingsWindow;
