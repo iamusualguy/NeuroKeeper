@@ -30,10 +30,6 @@ function pauseDayHandler() {
     mainManager.pause();
 }
 
-function nueralClickHandler() {
-    ipcRenderer.send('nn:get', {});
-}
-
 function switchStatisticsHandler() {
     ipcRenderer.send('statistics:switch', {});
 }
@@ -41,10 +37,5 @@ function switchStatisticsHandler() {
 function updateStatisticsHandler() {
     ipcRenderer.send('statistics:update', {});
 }
-
-ipcRenderer.on('nn:to', (e, str) => {
-    console.log(str);
-    mainManager.neuralReport(str);
-});
 
 

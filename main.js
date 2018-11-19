@@ -5,7 +5,6 @@ const url = require('url');
 const path = require('path');
 var $ = require('jquery');
 const settings = require("./settings.js");
-const nn = require("./neuralNetwork.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
@@ -94,9 +93,6 @@ function createWindow() {
             slashes: true
         }));
     });
-    // nn.createNN();
-    // nn.openNN();
-    //nn.createLSTN();
 }
 
 function createContextMenu(appWindow) {
@@ -235,10 +231,4 @@ ipcMain.on('settings:selectPath', (e, args) => {
 ipcMain.on('statistics:opened', (e, args) => {
     const settingsToSend = settings.getSettings();
     statisticsWindow.webContents.send('settings:sent', settingsToSend);
-});
-
-ipcMain.on('nn:get', (e, args) => {
-    nn.getNextString().then((i) => {
-        mainWindow.webContents.send("nn:to", i);
-    });
 });
