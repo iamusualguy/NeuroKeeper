@@ -1,6 +1,5 @@
 node_modules
 release-builds
-.vscode
 *.xls
 *.xlsx
 settings.json

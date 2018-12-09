@@ -8,6 +8,11 @@ const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
+require('update-electron-app')({
+    repo: 'https://github.com/Nekkiton/NeuroReports',
+    updateInterval: '24 hour',
+  })
+
 const WindowsArray = {
     Main: "main",
     Statistics: "statistics",
