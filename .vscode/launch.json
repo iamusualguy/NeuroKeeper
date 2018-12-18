@@ -2,19 +2,15 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Launch",
-            "type": "node",
-            "request": "launch",
-            "cwd": "${workspaceRoot}",
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
-            "windows": {
-                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
-            },
-            "console": "externalTerminal",
-            "stopOnEntry": false,
-            "args": [
-                "."
-            ]
+          "name": "Launch",
+          "type": "node",
+          "request": "launch",
+          "cwd": "${workspaceRoot}",
+          "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
+          "windows": {
+            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+          },
+          "args" : ["."]
         },
         {
             "name": "Attach",

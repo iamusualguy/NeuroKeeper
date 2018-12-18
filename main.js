@@ -8,10 +8,11 @@ const settings = require("./settings.js");
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
-require('update-electron-app')({
-    repo: 'https://github.com/Nekkiton/NeuroReports',
-    updateInterval: '24 hour',
-  })
+const { autoUpdater } = require("electron-updater")
+
+// require('update-electron-app')({
+//     updateInterval: '24 hour',
+//   })
 
 const WindowsArray = {
     Main: "main",
@@ -169,7 +170,10 @@ app.on('activate', () => {
     }
 })
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+});
 
 app.on('window-all-closed', function () {
     //закрытие окна и сворачивание в док если это OS X
