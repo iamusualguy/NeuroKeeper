@@ -5,7 +5,7 @@
   "repository": "https://github.com/Nekkiton/ReportKeeper.git",
   "main": "main.js",
   "scripts": {
-    "postinstall": "./node_modules/.bin/electron-rebuild",
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
     "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true",
@@ -28,8 +28,7 @@
   "devDependencies": {
     "electron": "^3.0.10",
     "electron-builder": "^20.38.3",
-    "electron-packager": "^13.0.0",
-    "electron-rebuild": "^1.8.2"
+    "electron-packager": "^13.0.0"
   },
   "build": {
     "appId": "com.github.nekkiton.reportkeeper",
