@@ -4,15 +4,10 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 var $ = require('jquery');
-const settings = require("./settings.js");
+const settings = require('./settings.js');
+const { autoUpdater } = require('electron-updater');
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
-
-const { autoUpdater } = require("electron-updater")
-
-// require('update-electron-app')({
-//     updateInterval: '24 hour',
-//   })
 
 const WindowsArray = {
     Main: "main",
