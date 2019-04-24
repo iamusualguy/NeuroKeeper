@@ -4,8 +4,8 @@ let currentSettings = null;
 
 function saveNewReportHandler() {
     const newRepoprt = mainManager.getReport();
-    if (newRepoprt.length === 5
-        && newRepoprt.every(reportElement => reportElement != "")) {
+    if (newRepoprt.length === 5 &&
+        newRepoprt.every(reportElement => reportElement != "")) {
         writeRow(newRepoprt)
             .then(() => {
                 updateStatisticsHandler();
@@ -37,5 +37,3 @@ function switchStatisticsHandler() {
 function updateStatisticsHandler() {
     ipcRenderer.send('statistics:update', {});
 }
-
-
