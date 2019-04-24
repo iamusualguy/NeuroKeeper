@@ -182,13 +182,17 @@ class reportManager {
     }
 
     _endPause() {
-        const pauseDuration = new Date() - this._start_pause;
-        const newStartDay = this._start_day.getTime() + pauseDuration;
+        const newDate = new Date();
+        if (newDate.getDate() === this._start_pause.getDate())
+        {
+            const pauseDuration = newDate - this._start_pause;
+            const newStartDay = this._start_day.getTime() + pauseDuration;
 
-        this.settings.timeStamp = new Date(newStartDay);
-        ipcRenderer.send('settings:save', [this.settings, true]);
-
+            this.settings.timeStamp = new Date(newStartDay);
+            ipcRenderer.send('settings:save', [this.settings, true]);
+        }
         this._start_pause = 0;
+
         this.startNewDay();
     }
 
