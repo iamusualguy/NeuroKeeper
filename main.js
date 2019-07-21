@@ -6,6 +6,7 @@ const path = require('path');
 var $ = require('jquery');
 const settings = require('./settings.js');
 const { autoUpdater } = require('electron-updater');
+const utils = require('./utils.js');
 
 const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
 
@@ -63,7 +64,8 @@ function setStatisticsWindowPosition() {
 
 function createWindow() {
     settings.loadSettings().then(() => {
-        tray = new Tray(__dirname + '/icon.png');
+        const iconName = utils.isWindows() ? '/win-icon.png' : '/icon.png';
+        tray = new Tray(__dirname + iconName);
         // Create the browser window.
         mainWindow = new BrowserWindow({
             width: 650,
