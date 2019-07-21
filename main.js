@@ -64,7 +64,7 @@ function setStatisticsWindowPosition() {
 
 function createWindow() {
     settings.loadSettings().then(() => {
-        const iconName = utils.isWindows() ? '/win-icon.png' : '/icon.png';
+        const iconName = utils.isWindows() ? '/icon.png' : '/mac-icon.png';
         tray = new Tray(__dirname + iconName);
         // Create the browser window.
         mainWindow = new BrowserWindow({
