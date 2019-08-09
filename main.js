@@ -8,7 +8,7 @@ const settings = require('./settings.js');
 const { autoUpdater } = require('electron-updater');
 const utils = require('./utils.js');
 
-const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = electron;
 
 const WindowsArray = {
     Main: "main",
@@ -81,13 +81,13 @@ function createWindow() {
 
         //mainWindow.webContents.openDevTools();
 
-        tray.setToolTip('Report Keeper')
-        const trayContextMenu = createContextMenu(mainWindow)
+        tray.setToolTip('Report Keeper');
+        const trayContextMenu = createContextMenu(mainWindow);
         tray.setContextMenu(trayContextMenu)
 
         tray.on('click', () => {
             switchMainAndStatisticsWindows();
-        })
+        });
 
         // and load the index.html of the app.
         mainWindow.loadURL(url.format({
@@ -170,6 +170,9 @@ app.on('activate', () => {
 app.on('ready', () => {
     createWindow();
     autoUpdater.checkForUpdatesAndNotify();
+    globalShortcut.register('Alt+R', () => {
+        switchMainAndStatisticsWindows();
+      });
 });
 
 app.on('window-all-closed', function () {
