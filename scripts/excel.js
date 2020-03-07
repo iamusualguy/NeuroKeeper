@@ -35,17 +35,17 @@ function writeRow(newReport) {
 }
 
 function writeEmptyFile(newReport) {
-    var workbook = new Excel.Workbook();
-    var sheet = workbook.addWorksheet('Efforts');
+    const workbook = new Excel.Workbook();
+    workbook.addWorksheet('Efforts');
     filename = getFileName();
     return workbook.xlsx.writeFile(filename)
         .then(function () {
-            workbook.getWorksheet("Efforts").addRow(["Project-Task", "Effort", "Description", "Started Date", "Completion Date"]);
+            workbook.getWorksheet("Efforts").addRow(["Project-Task", "Effort", "Description", "Date (MM/DD/YYYY)"]);
             if (newReport != null) {
                 workbook.getWorksheet("Efforts").addRow(newReport);
             }
+            // console.log('Array added and file saved.');
             return workbook.xlsx.writeFile(filename);
-            console.log('Array added and file saved.')
         });
 }
 

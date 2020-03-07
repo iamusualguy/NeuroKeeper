@@ -1,6 +1,6 @@
 {
   "name": "reportkeeper",
-  "version": "1.4.5",
+  "version": "1.5.0",
   "description": "Report Keeper crossplatform app.",
   "repository": "https://github.com/Nekkiton/ReportKeeper.git",
   "main": "main.js",

@@ -3,10 +3,10 @@ let mainManager = null;
 let currentSettings = null;
 
 function saveNewReportHandler() {
-    const newRepoprt = mainManager.getReport();
-    if (newRepoprt.length === 5 &&
-        newRepoprt.every(reportElement => reportElement != "")) {
-        writeRow(newRepoprt)
+    const newReport = mainManager.getReport();
+    if (newReport.length === 4 &&
+        newReport.every(reportElement => reportElement != "")) {
+        writeRow(newReport)
             .then(() => {
                 updateStatisticsHandler();
                 minimazeHandler();

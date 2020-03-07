@@ -73,7 +73,7 @@ class reportManager {
         const reportText = this.reportField.value;
         const reportDate = new Date(this.dateField.value + ' 12:00');
 
-        return [reportTask, reportDuration, reportText, reportDate, reportDate];
+        return [reportTask, reportDuration, reportText, reportDate];
     }
 
     neuralReport(str) {
