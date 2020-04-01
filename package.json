@@ -14,7 +14,6 @@
     "publish": "build --win -p always",
     "test": "echo \"Error: no test specified\" && exit 1",
     "create-debian-installer": "electron-installer-debian --src release-builds/reportkeeper-linux-x64/ --arch amd64 --config debian.json"
-
   },
   "author": "Anton Stepanov, Andrey Kovanov, Ovsov Nikita, Michail Lipin",
   "license": "ISC",
