@@ -74,7 +74,7 @@ function createWindow() {
             width: 650,
             height: 135,
             frame: false,
-            resizable: true,
+            resizable: false,
             skipTaskbar: true,
             show: true,
             alwaysOnTop: settings.getSettings().topMost,
