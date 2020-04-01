@@ -26,6 +26,9 @@ function createSettingsWindow(mainWindow) {
         frame: false,
         skipTaskbar: true,
         backgroundColor: '#333',
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     // Load HTML into the window.

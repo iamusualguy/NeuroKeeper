@@ -44,6 +44,9 @@ function createStatisticsWindow() {
                 skipTaskbar: true,
                 backgroundColor: '#333',
                 show: false,
+                webPreferences: {
+                    nodeIntegration: true
+                }
             });
 
             //statisticsWindow.webContents.openDevTools();
@@ -71,11 +74,14 @@ function createWindow() {
             width: 650,
             height: 135,
             frame: false,
-            resizable: false,
+            resizable: true,
             skipTaskbar: true,
             show: true,
             alwaysOnTop: settings.getSettings().topMost,
             backgroundColor: '#333',
+            webPreferences: {
+                nodeIntegration: true
+            }
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
