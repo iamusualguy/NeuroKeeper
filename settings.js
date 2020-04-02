@@ -5,6 +5,7 @@ const path = require('path');
 const url = require('url');
 const xlsj = require("xls-to-json");
 const storage = require('electron-json-storage');
+const utils = require('./utils.js');
 
 
 let settingsWindow;
@@ -25,6 +26,9 @@ function createSettingsWindow(mainWindow) {
         frame: false,
         skipTaskbar: true,
         backgroundColor: '#333',
+        webPreferences: {
+            nodeIntegration: true
+        }
     });
 
     // Load HTML into the window.
@@ -115,7 +119,7 @@ function selectPath() {
         },
         (directoryPaths) => {
             if (directoryPaths) {
-                settingsWindow.webContents.send('settings:pathSelected', directoryPaths[0] + "\\");
+                settingsWindow.webContents.send('settings:pathSelected', `${directoryPaths[0]}${utils.isWindows() ? "\\" : "\/"}`);
             }
         });
 }
@@ -178,7 +182,7 @@ defaultSettings = {
     ],
     realTime: false,
     topMost: true,
-    filePath: __dirname + "\\",
+    filePath: `${__dirname}${utils.isWindows() ? "\\" : "\/"}`,
     notificationTime: 1.0,
     newFileEveryWeek: false,
     workTime: 8.0,

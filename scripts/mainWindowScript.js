@@ -3,10 +3,10 @@ let mainManager = null;
 let currentSettings = null;
 
 function saveNewReportHandler() {
-    const newRepoprt = mainManager.getReport();
-    if (newRepoprt.length === 5
-        && newRepoprt.every(reportElement => reportElement != "")) {
-        writeRow(newRepoprt)
+    const newReport = mainManager.getReport();
+    if (newReport.length === 4 &&
+        newReport.every(reportElement => reportElement != "")) {
+        writeRow(newReport)
             .then(() => {
                 updateStatisticsHandler();
                 minimazeHandler();
@@ -30,10 +30,6 @@ function pauseDayHandler() {
     mainManager.pause();
 }
 
-function nueralClickHandler() {
-    ipcRenderer.send('nn:get', {});
-}
-
 function switchStatisticsHandler() {
     ipcRenderer.send('statistics:switch', {});
 }
@@ -41,10 +37,3 @@ function switchStatisticsHandler() {
 function updateStatisticsHandler() {
     ipcRenderer.send('statistics:update', {});
 }
-
-ipcRenderer.on('nn:to', (e, str) => {
-    console.log(str);
-    mainManager.neuralReport(str);
-});
-
-

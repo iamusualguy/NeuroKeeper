@@ -25,10 +25,12 @@
             <button id="save-button" class="save-button" onclick="saveNewReportHandler()">save</button>
             <div class="worked-block">
                 <div class="manage-buttons">
-                    <button id="restart-button" class="startNewDay-button"  onclick="startNewDayHandler()"><i class="fa fa-refresh" aria-hidden="true"></i></button>
-                    <button class="pauseDay-button"  onclick="pauseDayHandler()"><i id="pauseButton-icon" class="fa fa-pause" aria-hidden="true"></i></button>
-                    <button id="minimize-button" class="minimize-button"  onclick="minimazeHandler()"><i class="fa fa-arrow-down" aria-hidden="true"></i></button>
-                    
+                    <button id="restart-button" class="startNewDay-button" onclick="startNewDayHandler()">
+                        <i class="fa fa-refresh" aria-hidden="true"></i></button>
+                    <button class="pauseDay-button" onclick="pauseDayHandler()">
+                        <i id="pauseButton-icon" class="fa fa-pause" aria-hidden="true"></i></button>
+                    <button id="minimize-button" class="minimize-button" onclick="minimazeHandler()">
+                        <i class="fa fa-arrow-down" aria-hidden="true"></i></button>
                 </div>
                 <div class="flipTimer">
                     <div class="hours">
@@ -44,7 +46,7 @@
                                 <div class="shadow-bottom"></div>
                             </div>
                         </div><!--
-                     --><div class="digit-set">
+                        --><div class="digit-set">
                             <div class="digit active">
                                 <div class="digit-top">
                                     <span class="digit-wrap second-hour">0</span>
@@ -57,7 +59,7 @@
                             </div>
                         </div>
                     </div><!--
-                  --><div class="minutes">
+                    --><div class="minutes">
                         <div class="digit-set">
                             <div class="digit active">
                                 <div class="digit-top">
@@ -70,7 +72,7 @@
                                 <div class="shadow-bottom"></div>
                             </div>
                         </div><!--
-                    --><div class="digit-set">
+                        --><div class="digit-set">
                             <div class="digit active">
                                 <div class="digit-top">
                                     <span class="digit-wrap second-minute">0</span>
@@ -91,7 +93,6 @@
                 </div>
             </div>
         </div>
-
         <button class="statistics-button" onclick="switchStatisticsHandler()">...</button>
     </div>
 
@@ -123,6 +124,26 @@
 
             mainManager = new reportManager(currentSettings);
         });
+    });
+
+    const inputs = [
+        $("#report-input"),
+        $("#task-input"),
+        $("#duration-input"),
+        $("#date-input"),
+    ];
+    inputs.forEach((input) => {
+        input.keypress((event) => {
+            if (event.keyCode === 13) {
+                $("#save-button").click();
+            }
+        });
+    });
+
+    $(document).keydown((event) => {
+        if (event.keyCode === 27) {
+            minimazeHandler();
+        }
     });
 </script>
 <script src="./scripts/spellChecker.js"></script>

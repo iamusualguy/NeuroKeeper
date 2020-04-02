@@ -4,10 +4,11 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 var $ = require('jquery');
-const settings = require("./settings.js");
-const nn = require("./neuralNetwork.js");
+const settings = require('./settings.js');
+const { autoUpdater } = require('electron-updater');
+const utils = require('./utils.js');
 
-const { app, BrowserWindow, ipcMain, Tray, Menu } = electron;
+const { app, BrowserWindow, ipcMain, Tray, Menu, globalShortcut } = electron;
 
 const WindowsArray = {
     Main: "main",
@@ -43,6 +44,9 @@ function createStatisticsWindow() {
                 skipTaskbar: true,
                 backgroundColor: '#333',
                 show: false,
+                webPreferences: {
+                    nodeIntegration: true
+                }
             });
 
             //statisticsWindow.webContents.openDevTools();
@@ -63,7 +67,8 @@ function setStatisticsWindowPosition() {
 
 function createWindow() {
     settings.loadSettings().then(() => {
-        tray = new Tray(__dirname + '/icon.png');
+        const iconName = utils.isWindows() ? '/icon.png' : '/mac-icon.png';
+        tray = new Tray(__dirname + iconName);
         // Create the browser window.
         mainWindow = new BrowserWindow({
             width: 650,
@@ -74,18 +79,21 @@ function createWindow() {
             show: true,
             alwaysOnTop: settings.getSettings().topMost,
             backgroundColor: '#333',
+            webPreferences: {
+                nodeIntegration: true
+            }
         });
         mainWindow.setVisibleOnAllWorkspaces(true);
 
         //mainWindow.webContents.openDevTools();
 
-        tray.setToolTip('Report Keeper')
-        const trayContextMenu = createContextMenu(mainWindow)
+        tray.setToolTip('Report Keeper');
+        const trayContextMenu = createContextMenu(mainWindow);
         tray.setContextMenu(trayContextMenu)
 
         tray.on('click', () => {
             switchMainAndStatisticsWindows();
-        })
+        });
 
         // and load the index.html of the app.
         mainWindow.loadURL(url.format({
@@ -94,9 +102,6 @@ function createWindow() {
             slashes: true
         }));
     });
-    // nn.createNN();
-    // nn.openNN();
-    //nn.createLSTN();
 }
 
 function createContextMenu(appWindow) {
@@ -168,7 +173,13 @@ app.on('activate', () => {
     }
 })
 
-app.on('ready', createWindow);
+app.on('ready', () => {
+    createWindow();
+    autoUpdater.checkForUpdatesAndNotify();
+    globalShortcut.register('Alt+R', () => {
+        switchMainAndStatisticsWindows();
+      });
+});
 
 app.on('window-all-closed', function () {
     //закрытие окна и сворачивание в док если это OS X
@@ -235,10 +246,4 @@ ipcMain.on('settings:selectPath', (e, args) => {
 ipcMain.on('statistics:opened', (e, args) => {
     const settingsToSend = settings.getSettings();
     statisticsWindow.webContents.send('settings:sent', settingsToSend);
-});
-
-ipcMain.on('nn:get', (e, args) => {
-    nn.getNextString().then((i) => {
-        mainWindow.webContents.send("nn:to", i);
-    });
 });

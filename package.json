@@ -1,30 +1,51 @@
 {
   "name": "reportkeeper",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "description": "Report Keeper crossplatform app.",
-  "repository": "https://github.com/iamusualguy/NeuroReports.git",
+  "repository": "https://github.com/Nekkiton/ReportKeeper.git",
   "main": "main.js",
   "scripts": {
+    "postinstall": "electron-builder install-app-deps",
     "start": "electron .",
     "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --prune=true --out=release-builds",
-    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"NeuroReports\"",
+    "package-linux": "electron-packager . --overwrite --asar=true --platform=linux --arch=x64 --prune=true --out=release-builds",
+    "package-win": "electron-packager . --overwrite --asar=true --platform=win32 --arch=ia32 --prune=true --out=release-builds",
     "package-win64": "electron-packager . --overwrite --asar=true --platform=win32 --arch=x64 --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"NeuroReports\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "publish": "build --win -p always",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "create-debian-installer": "electron-installer-debian --src release-builds/reportkeeper-linux-x64/ --arch amd64 --config debian.json"
   },
-  "author": "Anton Stepanov",
+  "author": "Anton Stepanov, Andrey Kovanov, Ovsov Nikita, Michail Lipin",
   "license": "ISC",
   "dependencies": {
-    "auto-launch": "^5.0.3",
-    "brain.js": "^1.0.0-rc.3",
-    "electron": "^1.7.9",
-    "electron-json-storage": "^4.0.2",
-    "electron-spellchecker": "^1.1.2",
-    "exceljs": "^0.7.1",
-    "jquery": "^3.2.1",
-    "xls-to-json": "^0.4.0"
+    "auto-launch": "^5.0.5",
+    "electron-json-storage": "^4.1.5",
+    "electron-spellchecker": "^2.2.1",
+    "electron-updater": "^4.0.6",
+    "exceljs": "^1.6.3",
+    "jquery": "^3.3.1",
+    "xls-to-json": "^0.5.1"
   },
   "devDependencies": {
-    "electron-packager": "^10.1.0",
-    "electron-rebuild": "^1.6.0"
+    "electron": "^5.0.13",
+    "electron-builder": "^22.4.1",
+    "electron-packager": "^13.0.0",
+    "electron-installer-debian": "^3.0.0"
+  },
+  "build": {
+    "appId": "com.github.nekkiton.reportkeeper",
+    "mac": {
+      "category": "neural.report.keeper.type",
+      "target": [
+        "zip",
+        "dmg"
+      ]
+    },
+    "win": {
+      "target": [
+        "zip",
+        "nsis"
+      ]
+    }
   }
 }
